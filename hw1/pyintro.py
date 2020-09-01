@@ -1,21 +1,19 @@
 #############################################################################################################
 #
 #  Homework 1 (Python Intro)
+#  MUS105
 #  Types, Loops, Conditionals, Functions
 #
 #  Instructions:
-#    * for each of the functions below, read the docstring and implement the function as described.
+#    * For each of the functions below, read the docstring and implement the function as described.
+#    * Feel free to to add helper functions, but DO NOT MODIFY the descriptions of the original functions.
 #
-#    * feel free to to add helper functions, but DO NOT MODIFY the descriptions of the original functions.
-#
-#    * absolutely NO import statements should be added, they will result in an automatic 0 (the autograder
+#    * Absolutely NO import statements should be added, they will result in an automatic 0 (the autograder
 #    will break)
 #
-#    * Some functions specify that certain built in functions may not be used. BE MINDFUL OF THIS.
+#    * Some functions specify that certain built in functions may not be used. BE WARY OF THIS.
 #
-#    * If for whatever reason, an implementation detail is unclear, feel free to email for clarification.
-#
-#    * Have Fun!
+#    * Have fun!
 #
 #############################################################################################################
 
@@ -34,7 +32,10 @@ def power(base, exp):
     :rtype: float
     """
     # replace the line below with your code
-    pass
+    out = base
+    for x in range(1, exp):
+        out *= base
+    return float(out)
 
 def list_sum(l):
     """
@@ -46,7 +47,7 @@ def list_sum(l):
     :rtype: float
     """
     # replace the line below with your code
-    pass
+    return float(sum(l))
 
 def str_to_int(num_string):
     """
@@ -72,7 +73,15 @@ def str_to_int(num_string):
     :rtype: int
     """
     # replace the line below with your code
-    pass
+    if(num_string[0:2] == "0b"):
+        return int(num_string, 2)
+    elif(num_string[0:2] == "0o"):
+        return int(num_string, 8)
+    elif(num_string[0:2] == "0x"):
+        return int(num_string, 16)
+    elif(num_string[1:2].isdigit()):
+        return int(num_string)
+    return int(-1)
 
 def print_christmas_tree(size):
     """
@@ -101,7 +110,12 @@ def print_christmas_tree(size):
     :rtype: str
     """
     # replace the line below with your code
-    pass
+    out = ""
+    for i in range(1, size):
+        out += " " * (size - i)
+        out += "*" * (i * 2 - 1)+ "\n"
+    out += (" " * (size - 1)) + "*"
+    return out
 
 def list_to_str(l):
     """
@@ -127,7 +141,17 @@ def list_to_str(l):
     :rtype: str
     """
     # replace the line below with your code
-    pass
+    out = "["
+    for x in l[0:-1]:
+        if(type(x) == str):
+            out += "\'" + str(x) + "\',"
+        else:
+            out += str(x) + ","
+    if(type(l[-1]) == str):
+        out += "\'" + str(l[-1]) + "\']"
+    else:
+        out += str(l[-1]) + "]"
+    return out
 
 def remove_substring_instances(in_str, substr):
     """
@@ -145,4 +169,8 @@ def remove_substring_instances(in_str, substr):
     :rtype: tuple
     """
     # replace the line below with your code
-    pass
+    count = 0
+    while substr in in_str:
+        in_str = in_str.replace(substr, "", 1)
+        count += 1
+    return (count, in_str)
