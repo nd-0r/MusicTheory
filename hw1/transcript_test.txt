@@ -36,7 +36,7 @@
 Total raw score: (27/37)
 
 ----------------------
-Base score (if you do nothing but just turn in the starter code): 0
+Base score (if you do nothing but just turn in the starter code): 7
 Extra credit (if applicable): 0
-Adjusted score (Final): 27/37
+Adjusted score (Final): 20/30
 
