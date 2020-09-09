@@ -32,10 +32,20 @@ def power(base, exp):
     :rtype: float
     """
     # replace the line below with your code
-    out = base
-    for x in range(1, exp):
-        out *= base
-    return float(out)
+    out = float(base)
+    if(exp < 0):
+        if(base == 0):
+            raise ValueError("You can't raise 0 to a negative power")
+        out = 1
+        for x in range(-1, exp - 1, -1):
+            out *= (1 / base)
+    elif(exp == 0):
+        return 1.0
+    else:
+        for x in range(1, exp):
+            out *= base
+    
+    return out
 
 def list_sum(l):
     """
@@ -111,7 +121,7 @@ def print_christmas_tree(size):
     """
     # replace the line below with your code
     out = ""
-    for i in range(1, size):
+    for i in range(1, size + 1):
         out += " " * (size - i)
         out += "*" * (i * 2 - 1)+ "\n"
     out += (" " * (size - 1)) + "*"
@@ -144,9 +154,9 @@ def list_to_str(l):
     out = "["
     for x in l[0:-1]:
         if(type(x) == str):
-            out += "\'" + str(x) + "\',"
+            out += "\'" + str(x) + "\', "
         else:
-            out += str(x) + ","
+            out += str(x) + ", "
     if(type(l[-1]) == str):
         out += "\'" + str(l[-1]) + "\']"
     else:
