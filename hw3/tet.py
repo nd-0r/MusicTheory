@@ -10,9 +10,9 @@ _default = ('C','C#','D','Eb','E','F','F#','G','Ab', 'A','Bb','B')
 
 # GOOD
 def hertz_to_midi(hertz):
-    if not isinstance(hertz, float) or (hertz < 0):
+    if not isinstance(hertz, (float, int)) or (hertz < 0):
         raise ValueError(f'You must provide a frequency as a positive float')
-    out = math.floor(69 + math.log2(hertz / 440.0) * 12)
+    out = int(round(69 + math.log2(float(hertz) / 440.0) * 12))
     if not (0 <= out < 128):
         raise ValueError(f'{out} is not a valid midi key number')
     return out
@@ -21,7 +21,7 @@ def hertz_to_midi(hertz):
 def midi_to_hertz(midi):
     if type(midi) is not int or not (0 <= midi < 128):
         raise ValueError(f'{midi} is not a valid midi key number')
-    return 440 * 2 ** ((midi-69)/12)
+    return float(440 * 2 ** ((midi-69)/12))
 
 # GOOD
 def midi_to_pc(midi):
@@ -81,6 +81,8 @@ def midi_to_pitch(midi, accidental=None):
         raise ValueError(f'{accidental} is not a valid accidental')
 
     octave = (midi // 12) - 1
+    if (octave < 0):
+        octave = '00'
     pc = midi_to_pc(midi)
     if __name__ == '__main__':
         print(pc)
@@ -97,15 +99,15 @@ def midi_to_pitch(midi, accidental=None):
 
     return  letter + accidental + str(octave)
 
-
+# test
 def hertz_to_pitch(hertz):
-    if not isinstance(hertz, float) or (hertz < 20 or hertz > 20000):
-        raise ValueError(f'Please provide the frequency as a float between 20 and 20,000 hertz')
+    if not isinstance(hertz, (float, int)) or (hertz < 1 or hertz > 20000):
+        raise ValueError(f'Please provide the frequency as a float between 1 and 20,000 hertz')
     midi = hertz_to_midi(hertz)
     assert(isinstance(midi, int))
     return midi_to_pitch(midi)
 
-
+# test
 def pitch_to_hertz(pitch):
     if not isinstance(pitch, str):
         raise ValueError(f'please provide the pitch as a string')
@@ -116,6 +118,16 @@ def pitch_to_hertz(pitch):
 
 if __name__ == '__main__':
     print("Testing...")
+
+    print("midi_to_pitch:\n\n\n")
+    # tests = [[66], [72], [60, '#'], [48, '##'], [84, 'b'], [96, 'bb'], [80], [80, ''], [80, 'b'], [80, 'bb'], [80, '#'], [80, '##'], [70], [70, 'b'], [70, 'bb'], [70, 'bbb']]
+    tests = [[66], [72], [60, '#'], [96, 'bb'], [80], [80, 'b'], [80, '#'], [70], [70, 'b'], [70, 'bb']]
+    for test in tests:
+        if len(test) == 2:
+            print(midi_to_pitch(test[0], test[1]), end="\n\n")
+        else:
+            print(midi_to_pitch(test[0]), end="\n\n")
+        
 
     # print("pitch_to_midi:")
     # print(pitch_to_midi("A4"), end="\n\n")
