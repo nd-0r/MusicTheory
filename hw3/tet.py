@@ -67,7 +67,7 @@ def pitch_to_midi(pitch):
         print("octave: " + str(octave))
     return midi_key
 
-# test this
+# refactor
 def midi_to_pitch(midi, accidental=None):
 
     if (not isinstance(midi, int)):
@@ -80,11 +80,13 @@ def midi_to_pitch(midi, accidental=None):
     elif (accidental not in {"bb", "ff", "b", "f", "#", "s", "##", "ss"} and accidental != None):
         raise ValueError(f'{accidental} is not a valid accidental')
 
-    octave = midi // 12
+    octave = (midi // 12) - 1
     pc = midi_to_pc(midi)
+    if __name__ == '__main__':
+        print(pc)
 
-    if ((pc == (1, 6, 8) and (accidental == "bb" or accidental == "ff")) or (pc == (0, 3, 5, 8, 10) and (accidental == "##" or accidental == "ss"))):
-        raise ValueError(f'Cannot apply express pitch class {pc} with the accidental {accidental}')
+    if ( (pc in {1, 4, 6, 8, 11} and (accidental in {"bb", "ff"})) or (pc in {0, 3, 5, 8, 10} and (accidental in {"##", "ss"})) or (pc in {0, 2, 5, 7, 9} and (accidental in {"b", "f"})) or (pc in {2, 4, 7, 9, 11} and (accidental in {"#", "s"})) ):
+        raise ValueError(f'Cannot express pitch class {pc} with the accidental {accidental}')
 
     if (accidental == None):
         return _default[pc] + str(octave)
@@ -115,9 +117,6 @@ def pitch_to_hertz(pitch):
 if __name__ == '__main__':
     print("Testing...")
 
-    print("midi_to_pitch:")
-    print(midi_to_pitch(70, "bb"), end="\n\n")
-    
     # print("pitch_to_midi:")
     # print(pitch_to_midi("A4"), end="\n\n")
 
