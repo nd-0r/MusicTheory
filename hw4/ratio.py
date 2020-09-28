@@ -6,6 +6,9 @@ from math import gcd, pow
 from decimal import Decimal
 from collections import namedtuple
 
+# def tup(self, num):
+#     self.num
+#     return Ratio(num, whatever)
 
 # A namedtuple base class for Ratio with num and den properties.
 RatioBase = namedtuple('RatioBase', ['num', 'den'])
@@ -13,20 +16,52 @@ RatioBase = namedtuple('RatioBase', ['num', 'den'])
 
 class Ratio (RatioBase):
 
+    # implement gcd and accomodation of negatives
     def __new__(cls, num, den=None):
-        pass
+        hnum = None
+        hden = None
+
+        if den == 0:
+            raise ZeroDivisionError
+
+        if isinstance(num, float) and den == None:
+            tmp = Decimal(str(num)).as_integer_ratio()
+            hnum = tmp[0]
+            hden = tmp[1]
+        elif isinstance(num, int) and den == None:
+            hnum = num
+            hden = 1
+        elif isinstance((num, den), (int, int)):
+            hnum = num
+            hden = den
+        elif isinstance(num, str) and den == None:
+            tmp = num.split('/')
+            hnum = int(tmp[0])
+            hden = int(tmp[1])
+        else:
+            raise TypeError(f'Ratio with {num}, {den} is not a valid ratio')
+
+        self = super(Ratio, cls).__new__(cls, hnum, hden)
+        return self
 
     
     def __str__(self):
-        pass
+        print(f'<Ratio: {self.num}/{self.den} {hex(id(self))}>')
 
 
     def __repr__(self):
-        pass
+        print(f'Ratio("{self.num}/{self.den}")')
 
 
     def __mul__(self, other):
-        pass
+        if isinstance(other, Ratio):
+            return Ratio(self.num * other.num, self.den * other.den)
+        elif isinstance(other, int):
+            return Ratio(self.num * other, self.den)
+        elif isinstance(other, float):
+            return Ratio((self.num / self.den) * other)
+        else:
+            raise TypeError(f'Ratio cannot be multiplied by {type(other)}')
 
     
     # Implements right side multiplication (same code as __mul__)
@@ -34,31 +69,58 @@ class Ratio (RatioBase):
 
 
     def __truediv__(self, other):
-        pass
+        if isinstance(other, Ratio):
+            return Ratio(self.num * other.den, self.den * other.num)
+        elif isinstance(other, int):
+            return Ratio(self.num, self.den * other)
+        elif isinstance(other, float):
+            return Ratio((self.num / self.den) / other)
+        else:
+            raise TypeError(f'Ratio cannot be divided by {type(other)}')
 
-
+    # Ratio / Ratio, int / Ratio, float / Ratio - check for divide by 0
     def __rtruediv__(self, other):
-        pass
+        if isinstance(other, Ratio):
+            return Ratio(self.den * other.num, self.num * other.den)
+        elif isinstance(other, int):
+            return Ratio(self.den * other, self.num)
+        elif isinstance(other, float):
+            return Ratio(other / (self.num / self.den))
+        else:
+            raise TypeError(f'{type(other)} cannot be divided by Ratio')
 
     
     def __invert__(self):
-        pass
+        return Ratio(self.den, self.num)
 
 
     def __add__(self, other):
-        pass
-
+        if isinstance(other, Ratio):
+            return Ratio((self.num * other.den) + (other.num * self.den), (self.den * other.den))
+        elif isinstance(other, int):
+            return Ratio(self.den * other, self.num)
+        elif isinstance(other, float):
+            return Ratio(other / (self.num / self.den))
+        else:
+            raise TypeError(f'{type(other)} cannot be added to Ratio')
     
     # Implements right side addition (same code as __add__)
     __radd__ = __add__
 
 
     def __neg__(self):
-        pass
+        return Ratio(- self.num, self.den)
     
 
     def __sub__(self, other):
-        pass
+        if isinstance(other, Ratio):
+            return Ratio((self.num * other.den) - (other.num * self.den), (self.den * other.den))
+        elif isinstance(other, int):
+            return Ratio(self.num - (other * self.den), self.den)
+        elif isinstance(other, float):
+            return Ratio((self.num / self.den) - other)
+        else:
+            raise TypeError(f'{type(other)} cannot be subtracted from Ratio')
     
 
     def __rsub__(self, other):
@@ -105,10 +167,11 @@ class Ratio (RatioBase):
         pass
     
 
+    # if less, return -1; if equal, return 0; if greater than, return 1
     def compare(self, other):
         pass
 
-
+    # generators and closures
     @staticmethod
     def lcm(a, b):
         pass
