@@ -32,13 +32,13 @@ class Ratio (RatioBase):
         elif isinstance(num, int) and den == None:
             hnum = num
             hden = 1
-        elif isinstance((num, den), (int, int)):
+        elif isinstance(num, int) and isinstance(den, int):
             hnum = num
             hden = den
         elif isinstance(num, str) and den == None:
             tmp = num.split('/')
-            hnum = int(tmp[0])
-            hden = int(tmp[1])
+            hnum = int(tmp[0].strip())
+            hden = int(tmp[1].strip())
         else:
             raise TypeError(f'Ratio with {num}, {den} is not a valid ratio')
         
@@ -254,7 +254,7 @@ class Ratio (RatioBase):
             if self.num % 10 == 0:
                 ntmp = tens[self.num // 10 - 2]
             else:
-                ntmp = tens[self.num // 10 - 2], "-", counts[self.num % 10 - 1]
+                ntmp = tens[self.num // 10 - 2] + "-" + counts[self.num % 10 - 1]
         else:
             raise ValueError(f'Cannot convert numerator to natural string')
 
@@ -268,21 +268,21 @@ class Ratio (RatioBase):
             elif abs(self.den) == 4:
                 dtmp = "quarter"
             elif abs(self.num) != 1:
-                dtmp = ints[self.den - 1], "s"
+                dtmp = ints[self.den - 1] + "s"
             else:
                 dtmp = ints[self.den - 1]
         elif abs(self.den) < 20:
             if abs(self.num) != 1:
-                dtmp = teens[self.den % 10], "s"
+                dtmp = teens[self.den % 10] + "s"
             else:
                 dtmp = teens[self.den % 10]
         elif abs(self.den) < 100:
             if abs(self.den) % 10 == 0:
-                dtmp = tens[self.den // 10 - 2][0:-1], "ieth"
+                dtmp = tens[self.den // 10 - 2][0:-1] + "ieth"
             else:
-                dtmp = tens[self.den // 10 - 2], "-", ints[self.den % 10 - 1]
+                dtmp = tens[self.den // 10 - 2] + "-" + ints[self.den % 10 - 1]
             if abs(self.num) != 1:
-                dtemp = dtemp, "s"
+                dtemp = dtemp + "s"
         else:
             raise ValueError(f'Cannot convert denominator to natural string')
         
