@@ -53,7 +53,7 @@ class Ratio (RatioBase):
 
     
     def __str__(self):
-        print(f'<Ratio: {self.num}/{self.den} {hex(id(self))}>')
+        return str(f'<Ratio: {self.num}/{self.den} {hex(id(self))}>')
 
 
     def __repr__(self):
@@ -66,7 +66,7 @@ class Ratio (RatioBase):
         elif isinstance(other, int):
             return Ratio(self.num * other, self.den)
         elif isinstance(other, float):
-            return Ratio((self.num / self.den) * other)
+            return self.float() * other
         else:
             raise TypeError(f'Ratio cannot be multiplied by {type(other)}')
 
