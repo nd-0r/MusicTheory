@@ -57,7 +57,7 @@ class Ratio (RatioBase):
 
 
     def __repr__(self):
-        print(f'Ratio("{self.num}/{self.den}")')
+        return str(f'Ratio("{self.num}/{self.den}")')
 
 
     def __mul__(self, other):
@@ -81,7 +81,7 @@ class Ratio (RatioBase):
         elif isinstance(other, int):
             return Ratio(self.num, self.den * other)
         elif isinstance(other, float):
-            return Ratio((self.num / self.den) / other)
+            return Ratio(self.float() / other)
         else:
             raise TypeError(f'Ratio cannot be divided by {type(other)}')
 
@@ -318,25 +318,39 @@ class Ratio (RatioBase):
     def dotted(self, dots=1):
         if not (isinstance(dots, int)):
             raise TypeError(f'Cannot accept dots as type {type(dots)}')
-        elif dots > 0:
+        elif dots < 0:
             raise ValueError(f'Cannot have a negative amount of dots')
         return Ratio.dotter(self, dots)
 
-    # do this
-    def tuplets(self, num, intimeof=1):
-        pass
 
-    # do this
+    def tuplets(self, num, intimeof=1):
+        self *= intimeof
+        return tuple(self.tup(num) for _ in range(0, num))
+
+    
     def tup(self, num):
-        pass
+        if not (isinstance(num, int)):
+            raise TypeError(f'Cannot accept number of divisions as type {type(num)}')
+        elif num < 0:
+            raise ValueError(f'Cannot have negative divisions')
+        return self / num
 
     
     def float(self):
         return float(self.num / self.den)
 
-    # do this
+
     def seconds(self, tempo=60, beat=None):
-        pass
+        if not ((isinstance(beat, int) or beat == None) and isinstance(tempo, int)):
+            raise TypeError(f'Cannot calculate time with tempo type: {type(tempo)} and beat type {type(beat)}')
+        if (beat != None and beat < 0) or tempo < 0:
+            raise ValueError(f'Cannot calculate time when beat or tempo is less than zero')
+        bps = tempo * 60
+        if beat != None:
+            beats = self / beat
+        else:
+            beats = self.num
+        return float(bps * beats)
 
     @staticmethod
     def dotter(frac, dots):
