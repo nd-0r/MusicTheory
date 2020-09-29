@@ -16,10 +16,11 @@ RatioBase = namedtuple('RatioBase', ['num', 'den'])
 
 class Ratio (RatioBase):
 
-    # implement gcd and accomodation of negatives
+    # implement gcd
     def __new__(cls, num, den=None):
         hnum = None
         hden = None
+        gcdiv = None
 
         if den == 0:
             raise ZeroDivisionError
@@ -40,6 +41,16 @@ class Ratio (RatioBase):
             hden = int(tmp[1])
         else:
             raise TypeError(f'Ratio with {num}, {den} is not a valid ratio')
+        
+        if hden < 0:
+            hnum = -hnum
+            hden = -hden
+
+        gcdiv = gcd(hnum, hden)
+        hnum = hnum // gcdiv
+        hden = hden // gcdiv
+
+        assert hden > 0, f'There is a problem with hden: {hden}'
 
         self = super(Ratio, cls).__new__(cls, hnum, hden)
         return self
@@ -124,65 +135,170 @@ class Ratio (RatioBase):
     
 
     def __rsub__(self, other):
-        pass
+        if isinstance(other, Ratio):
+            return Ratio((other.num * self.den) - (self.num * other.den), (self.den * other.den))
+        elif isinstance(other, int):
+            return Ratio((other * self.den) - self.num, self.den)
+        elif isinstance(other, float):
+            return Ratio(other - (self.num / self.den))
+        else:
+            raise TypeError(f'Ratio cannot be subtracted from {type(other)}')
 
 
     def __mod__(self, other):
-        pass
+        if not isinstance(other, Ratio):
+            raise TypeError(f'Cannot perform modular arithmetic with Ratio and {type(other)}')
+        dtmp = other.den * self.den
+        ntmpself = self.num * other.den
+        ntmpother = other.num * self.den
+        return Ratio(ntmpself - (ntmpother * (ntmpself // ntmpother)), dtmp)
 
-
+    ### do this ###
     def __pow__(self, other):
         pass
 
-
+    ### do this ###
     def __rpow__(self, other):
         pass
 
 
     def __lt__(self, other):
-        pass
+        if self.compare(other) < 0:
+            return True
+        return False
 
     
     def __le__(self, other):
-        pass
+        if self.compare(other) <= 0:
+            return True
+        return False
 
     
     def __eq__(self, other):
-        pass
+        if self.compare(other) == 0:
+            return True
+        return False
 
 
     def __ne__(self, other):
-        pass
+        if self.compare(other) != 0:
+            return True
+        return False
 
 
     def __ge__(self, other):
-        pass
+        if self.compare(other) >= 0:
+            return True
+        return False
 
 
     def __gt__(self, other):
-        pass
+        if self.compare(other) > 0:
+            return True
+        return False
 
 
     def __hash__(self):
-        pass
+        return hash(tuple(self.num, self.den))
     
 
     # if less, return -1; if equal, return 0; if greater than, return 1
+    # this method might present rounding issues because I convert the float 
+    #   to a ratio and then compare the ratio
     def compare(self, other):
-        pass
+        tmp = None
+        if isinstance(other, Ratio):
+            tmp = other
+        elif isinstance(other, int):
+            tmp = Ratio(other * self.den, self.den)
+        elif isinstance(other, float):
+            tmp = Ratio(other)
+        else:
+            raise TypeError(f'Ratio cannot be compared to {type(other)}')
+        diff = (self.num * tmp.den) - (tmp.num * self.den)
+        if diff < 0:
+            return -1
+        elif diff == 0:
+            return 0
+        else:
+            return 1
 
     # generators and closures
     @staticmethod
     def lcm(a, b):
-        pass
+        if isinstance(a, int) and isinstance(b, int):
+            return int((a * b) // gcd(a, b))
+        else:
+            raise TypeError(f'Cannot find the least common multiple of a type {type(a)} and a type {type(b)}')
 
     
     def string(self):
-        pass
+        if self.num == 0:
+            return "zero"
+        
+        counts = ('one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine')
+        teencounts = ('ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventen', 'eighteen', 'nineteen')
+        ints = ('first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth')
+        teens = ('tenth', 'eleventh', 'twelth', 'thirteenth', 'fourteenth', 'fifteenth', 'sixteenth', 'seventeenth', 'eighteenth', 'nineteenth')
+        tens = ('twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety')
+
+        out = None
+        ntmp = None
+        dtmp = None
+
+        if abs(self.num) < 10:
+            ntmp = counts[self.num - 1]
+        elif abs(self.num) < 20:
+            ntmp = teencounts[self.num % 10]
+        elif abs(self.num) < 100:
+            if self.num % 10 == 0:
+                ntmp = tens[self.num // 10 - 2]
+            else:
+                ntmp = tens[self.num // 10 - 2], "-", counts[self.num % 10 - 1]
+        else:
+            raise ValueError(f'Cannot convert numerator to natural string')
+
+        if abs(self.den) < 10 and abs(self.den) > 1:
+            if abs(self.den) == 2 and abs(self.num) > 1:
+                dtmp = "halves"
+            elif abs(self.den) == 2:
+                dtmp = "half"
+            elif abs(self.den) == 4 and abs(self.num) > 1:
+                dtmp = "quarters"
+            elif abs(self.den) == 4:
+                dtmp = "quarter"
+            elif abs(self.num) != 1:
+                dtmp = ints[self.den - 1], "s"
+            else:
+                dtmp = ints[self.den - 1]
+        elif abs(self.den) < 20:
+            if abs(self.num) != 1:
+                dtmp = teens[self.den % 10], "s"
+            else:
+                dtmp = teens[self.den % 10]
+        elif abs(self.den) < 100:
+            if abs(self.den) % 10 == 0:
+                dtmp = tens[self.den // 10 - 2][0:-1], "ieth"
+            else:
+                dtmp = tens[self.den // 10 - 2], "-", ints[self.den % 10 - 1]
+            if abs(self.num) != 1:
+                dtemp = dtemp, "s"
+        else:
+            raise ValueError(f'Cannot convert denominator to natural string')
+        
+        assert isinstance(ntmp, str) and isinstance(dtmp, str), f'ntmp: {type(ntmp)} \n dtmp: {type(dtmp)}'
+
+        out = ntmp + " " + dtmp
+        if self.num < 0:
+            out = "negative " + out
+        
+        return out
+
+        
 
 
     def reciprocal(self):
-        pass
+        return Ratio(self.den, self.num)
 
 
     def dotted(self, dots=1):
