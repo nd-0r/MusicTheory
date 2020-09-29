@@ -6,10 +6,6 @@ from math import gcd, pow
 from decimal import Decimal
 from collections import namedtuple
 
-# def tup(self, num):
-#     self.num
-#     return Ratio(num, whatever)
-
 # A namedtuple base class for Ratio with num and den properties.
 RatioBase = namedtuple('RatioBase', ['num', 'den'])
 
@@ -153,13 +149,33 @@ class Ratio (RatioBase):
         ntmpother = other.num * self.den
         return Ratio(ntmpself - (ntmpother * (ntmpself // ntmpother)), dtmp)
 
-    ### do this ###
-    def __pow__(self, other):
-        pass
 
-    ### do this ###
+    def __pow__(self, other):
+        out = None
+        if isinstance(other, int):
+            out = Ratio(int(pow(self.num, abs(other))), abs(int(pow(self.den, other))))
+            if other < 0:
+                return out.reciprocal()
+            return out
+        elif isinstance(other, Ratio):
+            out = Ratio(pow(self.num, abs(other.float())), pow(self.den, abs(other.float())))
+            if other.float() < 0:
+                return out.reciprocal()
+            return out
+        elif isinstance(other, float):
+            out = Ratio(pow(self.num, abs(other)), pow(self.den, abs(other)))
+            if other.float() < 0:
+                return out.reciprocal()
+            return out
+        else:
+            raise TypeError(f'Cannot raise a ratio to the power of type {type(other)}')
+
+
     def __rpow__(self, other):
-        pass
+        if isinstance(other, int) or isinstance(other, float):
+            return pow(other, self.float())
+        else:
+            raise TypeError(f'Cannot raise type {type(other)} to fractional power')
 
 
     def __lt__(self, other):
@@ -282,7 +298,7 @@ class Ratio (RatioBase):
             else:
                 dtmp = tens[self.den // 10 - 2] + "-" + ints[self.den % 10 - 1]
             if abs(self.num) != 1:
-                dtemp = dtemp + "s"
+                dtmp = dtmp + "s"
         else:
             raise ValueError(f'Cannot convert denominator to natural string')
         
@@ -294,31 +310,40 @@ class Ratio (RatioBase):
         
         return out
 
-        
-
 
     def reciprocal(self):
-        return Ratio(self.den, self.num)
+        return self.__invert__()
 
 
     def dotted(self, dots=1):
-        pass
+        if not (isinstance(dots, int)):
+            raise TypeError(f'Cannot accept dots as type {type(dots)}')
+        elif dots > 0:
+            raise ValueError(f'Cannot have a negative amount of dots')
+        return Ratio.dotter(self, dots)
 
-
+    # do this
     def tuplets(self, num, intimeof=1):
         pass
 
-
+    # do this
     def tup(self, num):
         pass
 
-
+    
     def float(self):
-        pass
+        return float(self.num / self.den)
 
-
+    # do this
     def seconds(self, tempo=60, beat=None):
         pass
+
+    @staticmethod
+    def dotter(frac, dots):
+        assert isinstance(dots, int), f'dots is not an integer.'
+        if dots == 0:
+            return frac
+        return Ratio.dotter(frac + (frac / 2), dots - 1)
 
 
 if __name__ == '__main__':
