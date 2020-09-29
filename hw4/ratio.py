@@ -81,7 +81,7 @@ class Ratio (RatioBase):
         elif isinstance(other, int):
             return Ratio(self.num, self.den * other)
         elif isinstance(other, float):
-            return Ratio(self.float() / other)
+            return self.float() / other
         else:
             raise TypeError(f'Ratio cannot be divided by {type(other)}')
 
@@ -92,7 +92,7 @@ class Ratio (RatioBase):
         elif isinstance(other, int):
             return Ratio(self.den * other, self.num)
         elif isinstance(other, float):
-            return Ratio(other / (self.num / self.den))
+            return other / self.float()
         else:
             raise TypeError(f'{type(other)} cannot be divided by Ratio')
 
@@ -105,9 +105,9 @@ class Ratio (RatioBase):
         if isinstance(other, Ratio):
             return Ratio((self.num * other.den) + (other.num * self.den), (self.den * other.den))
         elif isinstance(other, int):
-            return Ratio(self.den * other, self.num)
+            return Ratio((self.den * other) + self.num, self.den)
         elif isinstance(other, float):
-            return Ratio(other / (self.num / self.den))
+            return other + self.float()
         else:
             raise TypeError(f'{type(other)} cannot be added to Ratio')
     
@@ -125,7 +125,7 @@ class Ratio (RatioBase):
         elif isinstance(other, int):
             return Ratio(self.num - (other * self.den), self.den)
         elif isinstance(other, float):
-            return Ratio((self.num / self.den) - other)
+            return self.float() - other
         else:
             raise TypeError(f'{type(other)} cannot be subtracted from Ratio')
     
@@ -136,7 +136,7 @@ class Ratio (RatioBase):
         elif isinstance(other, int):
             return Ratio((other * self.den) - self.num, self.den)
         elif isinstance(other, float):
-            return Ratio(other - (self.num / self.den))
+            return other - self.float()
         else:
             raise TypeError(f'Ratio cannot be subtracted from {type(other)}')
 
@@ -158,15 +158,17 @@ class Ratio (RatioBase):
                 return out.reciprocal()
             return out
         elif isinstance(other, Ratio):
-            out = Ratio(pow(self.num, abs(other.float())), pow(self.den, abs(other.float())))
-            if other.float() < 0:
-                return out.reciprocal()
-            return out
+            # out = Ratio(pow(self.num, abs(other.float())), pow(self.den, abs(other.float())))
+            # if other.float() < 0:
+            #     return out.reciprocal()
+            # return out
+            return pow(self.float(), other.float())
         elif isinstance(other, float):
-            out = Ratio(pow(self.num, abs(other)), pow(self.den, abs(other)))
-            if other.float() < 0:
-                return out.reciprocal()
-            return out
+            # out = Ratio(pow(self.num, abs(other)), pow(self.den, abs(other)))
+            # if other.float() < 0:
+            #     return out.reciprocal()
+            # return out
+            return pow(self.float(), other)
         else:
             raise TypeError(f'Cannot raise a ratio to the power of type {type(other)}')
 
@@ -222,16 +224,15 @@ class Ratio (RatioBase):
     # this method might present rounding issues because I convert the float 
     #   to a ratio and then compare the ratio
     def compare(self, other):
-        tmp = None
         if isinstance(other, Ratio):
-            tmp = other
+            diff = (self.num * other.den) - (other.num * self.den)
         elif isinstance(other, int):
             tmp = Ratio(other * self.den, self.den)
+            diff = (self.num * tmp.den) - (tmp.num * self.den)
         elif isinstance(other, float):
-            tmp = Ratio(other)
+            diff = (self.float() - other)
         else:
             raise TypeError(f'Ratio cannot be compared to {type(other)}')
-        diff = (self.num * tmp.den) - (tmp.num * self.den)
         if diff < 0:
             return -1
         elif diff == 0:
@@ -341,23 +342,24 @@ class Ratio (RatioBase):
 
 
     def seconds(self, tempo=60, beat=None):
-        if not ((isinstance(beat, int) or beat == None) and isinstance(tempo, int)):
+        if not ((isinstance(beat, Ratio) or beat == None) and (isinstance(tempo, int) or isinstance(tempo, float))):
             raise TypeError(f'Cannot calculate time with tempo type: {type(tempo)} and beat type {type(beat)}')
-        if (beat != None and beat < 0) or tempo < 0:
+        if (isinstance(beat, Ratio) and beat.float() < 0) or tempo < 0:
             raise ValueError(f'Cannot calculate time when beat or tempo is less than zero')
-        bps = tempo * 60
-        if beat != None:
+        # Convert BPM to seconds per beat
+        bps = 60 / tempo
+        if isinstance(beat, Ratio):
             beats = self / beat
         else:
-            beats = self.num
+            beats = self / Ratio(1, 4)
         return float(bps * beats)
 
     @staticmethod
-    def dotter(frac, dots):
+    def dotter(sum, frac, dots):
         assert isinstance(dots, int), f'dots is not an integer.'
         if dots == 0:
-            return frac
-        return Ratio.dotter(frac + (frac / 2), dots - 1)
+            return sum
+        return Ratio.dotter(sum + (frac / 2), frac / 2, dots - 1)
 
 
 if __name__ == '__main__':
