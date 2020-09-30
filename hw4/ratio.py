@@ -321,7 +321,7 @@ class Ratio (RatioBase):
             raise TypeError(f'Cannot accept dots as type {type(dots)}')
         elif dots < 0:
             raise ValueError(f'Cannot have a negative amount of dots')
-        return Ratio.dotter(self, dots)
+        return Ratio.dotter(self, self, dots)
 
 
     def tuplets(self, num, intimeof=1):
