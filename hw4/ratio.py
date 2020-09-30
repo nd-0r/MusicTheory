@@ -12,7 +12,7 @@ RatioBase = namedtuple('RatioBase', ['num', 'den'])
 
 class Ratio (RatioBase):
 
-    # implement gcd
+
     def __new__(cls, num, den=None):
         hnum = None
         hden = None
@@ -84,6 +84,7 @@ class Ratio (RatioBase):
             return self.float() / other
         else:
             raise TypeError(f'Ratio cannot be divided by {type(other)}')
+
 
     # Ratio / Ratio, int / Ratio, float / Ratio - check for divide by 0
     def __rtruediv__(self, other):
@@ -158,16 +159,8 @@ class Ratio (RatioBase):
                 return out.reciprocal()
             return out
         elif isinstance(other, Ratio):
-            # out = Ratio(pow(self.num, abs(other.float())), pow(self.den, abs(other.float())))
-            # if other.float() < 0:
-            #     return out.reciprocal()
-            # return out
             return pow(self.float(), other.float())
         elif isinstance(other, float):
-            # out = Ratio(pow(self.num, abs(other)), pow(self.den, abs(other)))
-            # if other.float() < 0:
-            #     return out.reciprocal()
-            # return out
             return pow(self.float(), other)
         else:
             raise TypeError(f'Cannot raise a ratio to the power of type {type(other)}')
@@ -239,6 +232,7 @@ class Ratio (RatioBase):
             return 0
         else:
             return 1
+
 
     # generators and closures
     @staticmethod
@@ -360,11 +354,3 @@ class Ratio (RatioBase):
         if dots == 0:
             return sum
         return Ratio.dotter(sum + (frac / 2), frac / 2, dots - 1)
-
-
-if __name__ == '__main__':
-    print("Testing...")
-    
-    # add whatever test code you want here!
-
-    print("Done!")
