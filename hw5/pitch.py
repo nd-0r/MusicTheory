@@ -14,28 +14,63 @@ from collections import namedtuple
 
 # Create the namedtuple super class for Pitch with three attributes:
 # letter, accidental, and octave.  See your ratio.py file for an example.
-PitchBase = None
+PitchBase = namedtuple('PitchBase', ['let', 'acc', 'oct'])
 
 
 class Pitch (PitchBase):
 
+    _letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
+    _octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+    _accidentals = ('bb', 'ff', 'b', 'f', '', 'n', '#', 's', '##', 'ss')
+
 
     # Create the pnum class here, see documentation in pitch.html
-    pnums = None
+    pnums = IntEnum('Pnum', [('Cff', )])
  
 
     def __new__(cls, arg=None):
-        pass
+        if isinstance(arg, list) and (len(arg) == 3) and all(type(e, int) for e in arg):
+            cls._values_to_pitch(arg[1], arg[2], arg[3])
+        elif isinstance(arg, str):
+            cls._string_to_pitch(arg)
 
 
     @classmethod
     def _string_to_pitch(cls, arg):
-        pass
+        try:
+            letter = arg[0:1]
+            if (arg[-2:] == '00'):
+                octave = '00'
+                if len(arg) > 4:
+                    raise ValueError(f'{arg} is not a valid pitch')
+                accidental = arg[1:-2]
+            else:
+                octave = arg[-1]
+                if len(arg) > 3:
+                    raise ValueError(f'{arg} is not a valid pitch')
+                accidental = arg[1:-1]
+        except Exception:
+            raise ValueError(f'{arg} is not a valid pitch')
+        
+        return cls._values_to_pitch(letter, accidental, octave)
 
 
     @classmethod
-    def _values_to_pitch(cls, let, acc, ova):
-        pass
+    def _values_to_pitch(cls, let, acc, ova): 
+        if (let not in cls._letters):
+            raise ValueError(f'{let} is not a valid pitch')
+        if (ova not in cls._octaves):
+            raise ValueError(f'{ova} is not a valid octave')
+        if acc not in cls._accidentals:
+            raise ValueError(f'{acc} is not a valid accidental')
+        lnum = cls._letters.index(let)
+        anum = cls._letters.index(acc)
+        onum = cls._letters.index(ova)
+        if (onum == 0 and (anum // 2 < 2 and lnum == 0)) or (onum == 9 and (anum // 2 > 2 and lnum == 4) or (anum // 2 > 0 and lnum == 5) or lnum == 6):
+            raise ValueError(f'Pitch is out of midi range')
+
+        super(Pitch, cls).__new__(cls, let, acc, ova)
+
 
 
     def __str__(self):
