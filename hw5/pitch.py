@@ -16,16 +16,14 @@ from collections import namedtuple
 # letter, accidental, and octave.  See your ratio.py file for an example.
 PitchBase = namedtuple('PitchBase', ['let', 'acc', 'oct'])
 
+_letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
+_octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+_accidentals = ('bb', 'ff', 'b', 'f', '', 'n', '#', 's', '##', 'ss')
 
 class Pitch (PitchBase):
 
-    _letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
-    _octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-    _accidentals = ('bb', 'ff', 'b', 'f', '', 'n', '#', 's', '##', 'ss')
-
-
     # Create the pnum class here, see documentation in pitch.html
-    pnums = IntEnum('Pnum', [('Cff', )])
+    pnums = IntEnum('Pnum', [(str(l) + str(a), i<<4 + j) for j,a in enumerate(_accidentals[::2]) for i,l in enumerate(_letters)])
  
 
     def __new__(cls, arg=None):
