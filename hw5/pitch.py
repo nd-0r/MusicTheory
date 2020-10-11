@@ -19,6 +19,8 @@ PitchBase = namedtuple('PitchBase', ['let', 'acc', 'oct'])
 _letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
 _octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 _accidentals = ('ff', 'bb', 'f', 'b', 'n', '', 's', '#', 'ss', '##')
+_template = ('C','','D','','E','F','','G','', 'A','','B')
+_default = ('C','C#','D','Eb','E','F','F#','G','Ab', 'A','Bb','B')
 
 class Pitch (PitchBase):
 
@@ -150,7 +152,10 @@ class Pitch (PitchBase):
 
 
     def keynum(self):
-        pass
+        midi_key = ((12 * (_octaves.index(self.oct) + 1)) + (2 * _letters.index(self.let)) + ((_accidentals.index(self.acc) // 2) - 2))
+        if not (0 <= midi_key < 128):
+            raise ValueError(f'{self.string()} does not correspond to a valid midi key {midi_key}')
+        return midi_key
 
 
     def pnum(self):
@@ -158,16 +163,43 @@ class Pitch (PitchBase):
 
     
     def pc(self):
-        pass
+        return self.keynum() % 12
 
     
     def hertz(self):
-        pass
+        return float(440 * 2 ** ((self.keynum() - 69) / 12))
 
 
     @classmethod
-    def from_keynum(cls, keynum, acci=None):
-        pass
+    def from_keynum(cls, midi, accidental=None):
+        if (not isinstance(midi, int)):
+            raise ValueError(f'Please provide midi key as an integer')
+        if (accidental != None and not isinstance(accidental, str)):
+            raise ValueError(f'Please provide accidental as a string')
+
+        if (midi > 127 or midi < 0):
+            raise ValueError(f'{midi} is not a valid midi key number')
+        elif (accidental not in _accidentals and accidental != None):
+            raise ValueError(f'{accidental} is not a valid accidental')
+
+        octave = (midi // 12) - 1
+        if (octave < 0):
+            octave = '00'
+        pc = midi % 12
+        if __name__ == '__main__':
+            print(pc)
+
+        if ( (pc in {1, 4, 6, 8, 11} and (accidental in {"bb", "ff"})) or (pc in {0, 3, 5, 8, 10} and (accidental in {"##", "ss"})) or (pc in {0, 2, 5, 7, 9} and (accidental in {"b", "f"})) or (pc in {2, 4, 7, 9, 11} and (accidental in {"#", "s"})) ):
+            raise ValueError(f'Cannot express pitch class {pc} with the accidental {accidental}')
+
+        if (accidental == None):
+            return Pitch(_default[pc] + str(octave))
+        
+        offset = ((_accidentals.index(accidental) // 2) - 2)
+        letter = _template[((pc - offset) + 12) % 12]
+        octave += (pc - offset) // 12
+
+        return  Pitch(letter + accidental + str(octave))
 
 
 
