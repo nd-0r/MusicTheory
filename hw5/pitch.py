@@ -18,19 +18,25 @@ PitchBase = namedtuple('PitchBase', ['let', 'acc', 'oct'])
 
 _letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
 _octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-_accidentals = ('bb', 'ff', 'b', 'f', '', 'n', '#', 's', '##', 'ss')
+_accidentals = ('ff', 'bb', 'f', 'b', 'n', '', 's', '#', 'ss', '##')
 
 class Pitch (PitchBase):
 
     # Create the pnum class here, see documentation in pitch.html
-    pnums = IntEnum('Pnum', [(str(l) + str(a), i<<4 + j) for j,a in enumerate(_accidentals[::2]) for i,l in enumerate(_letters)])
+    # toPnums = []
+    # for i,l in enumerate(_letters):
+    #     print('1', str(i))
+    #     for j,a in enumerate(_accidentals[::2]):
+    #         print('2', str(j))
+    #         toPnums.append((str(l) + str(a), (i<<4) + j))
+    pnums = IntEnum('Pnum', [(str(l) + str(a), (i<<4) + j) for j,a in enumerate(_accidentals[::2]) for i,l in enumerate(_letters)])
  
 
     def __new__(cls, arg=None):
         if isinstance(arg, list) and (len(arg) == 3) and all(type(e, int) for e in arg):
-            cls._values_to_pitch(arg[1], arg[2], arg[3])
+            return cls._values_to_pitch(arg[1], arg[2], arg[3])
         elif isinstance(arg, str):
-            cls._string_to_pitch(arg)
+            return cls._string_to_pitch(arg)
 
 
     @classmethod
@@ -55,19 +61,22 @@ class Pitch (PitchBase):
 
     @classmethod
     def _values_to_pitch(cls, let, acc, ova): 
-        if (let not in cls._letters):
+        if (let not in _letters):
             raise ValueError(f'{let} is not a valid pitch')
-        if (ova not in cls._octaves):
+        if (ova not in _octaves):
             raise ValueError(f'{ova} is not a valid octave')
-        if acc not in cls._accidentals:
+        if acc not in _accidentals:
             raise ValueError(f'{acc} is not a valid accidental')
-        lnum = cls._letters.index(let)
-        anum = cls._letters.index(acc)
-        onum = cls._letters.index(ova)
+        print(let)
+        print(acc)
+        print(ova)
+        lnum = _letters.index(str(let))
+        anum = _accidentals.index(str(acc))
+        onum = _octaves.index(str(ova))
         if (onum == 0 and (anum // 2 < 2 and lnum == 0)) or (onum == 9 and (anum // 2 > 2 and lnum == 4) or (anum // 2 > 0 and lnum == 5) or lnum == 6):
             raise ValueError(f'Pitch is out of midi range')
 
-        super(Pitch, cls).__new__(cls, let, acc, ova)
+        return super(Pitch, cls).__new__(cls, let, acc, ova)
 
 
 
@@ -82,7 +91,9 @@ class Pitch (PitchBase):
         #     '<Pitch: C#6 0x7fdb17e2e950>'
         #     >>> str(Pitch())
         #     '<Pitch: empty 0x7fdb1898fa70>'
-        return ''
+        if self.is_empty():
+            return str(f'<Pitch: empty {hex(id(self))}>')
+        return str(f'<Pitch: {self.string()} {hex(id(self))}>')
 
 
     def __repr__(self):
@@ -97,43 +108,45 @@ class Pitch (PitchBase):
         #     '<Pitch: C#6 0x7fdb17e2e950>'
         #     >>> repr(Pitch("Bbb3"))
         #     'Pitch("Bbb3")'
-        return ''
+        return str(f'Pitch("{self.string()}")')
 
 
     def __lt__(self, other):
-        pass
+        return self.pnum() < other.pnum()
 
 
     def __le__(self, other):
-        pass
+        return self.pnum() <= other.pnum()
 
 
     def __eq__(self, other):
-        pass
+        return self.pnum() == other.pnum()
 
 
     def __ne__(self, other):
-        pass
+        return self.pnum() != other.pnum()
 
 
     def __ge__(self, other):
-        pass
+        return self.pnum() >= other.pnum()
 
 
     def __gt__(self, other):
-        pass
+        return self.pnum() > other.pnum()
 
 
     def pos(self):
-        pass
+        return (_octaves.index(self.oct)<<8) + (_letters.index(self.let)<<4) + _accidentals.index(self.acc)
 
 
     def is_empty(self):
-        pass
+        if self.let == None or self.acc == None or self.oct == None:
+            return True
+        return False
 
 
     def string(self):
-        pass
+        return f'{self.let}{self.acc}{self.oct}'
 
 
     def keynum(self):
@@ -141,7 +154,7 @@ class Pitch (PitchBase):
 
 
     def pnum(self):
-        pass
+        return Pitch.pnums[self.let + _accidentals[_accidentals.index(self.acc) - (_accidentals.index(self.acc) % 2)]]
 
     
     def pc(self):
