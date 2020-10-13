@@ -1,17 +1,17 @@
-      [  input = Pitch()  ]  your_output = None  desired_output = <Pitch: empty>  (0/2)
+      
       [  input = Pitch('C4')  ]  your_output = <Pitch: C4>  desired_output = <Pitch: C4>  (0/2)
-      [  input = Pitch('A8')  ]  your_output = $exception$  desired_output = <Pitch: A8>  (0/2)
-      [  input = Pitch('F##2')  ]  your_output = $exception$  desired_output = <Pitch: F##2>  (0/2)
-      [  input = Pitch('Gs8')  ]  your_output = $exception$  desired_output = <Pitch: G#8>  (0/2)
-      [  input = Pitch('Bb3')  ]  your_output = $exception$  desired_output = <Pitch: Bb3>  (0/2)
-      [  input = Pitch('Df00')  ]  your_output = <Pitch: Df00>  desired_output = <Pitch: Db00>  (0/2)
-      [  input = Pitch('fff4')  ]  your_output = $exception$  desired_output = <Pitch: Fbb4>  (0/2)
-      [  input = Pitch('bbb0')  ]  your_output = $exception$  desired_output = <Pitch: Bbb0>  (0/2)
-      [  input = Pitch('cn00')  ]  your_output = $exception$  desired_output = <Pitch: C00>  (0/2)
-      [  input = Pitch('Abb9')  ]  your_output = $exception$  desired_output = <Pitch: Abb9>  (0/2)
-      [  input = Pitch([0,3,6])  ]  your_output = $exception$  desired_output = <Pitch: C#5>  (0/2)
-      [  input = Pitch([1,2,3])  ]  your_output = $exception$  desired_output = <Pitch: D2>  (0/2)
-      [  input = Pitch([5,4,3])  ]  your_output = $exception$  desired_output = <Pitch: A##2>  (0/2)
+
+
+
+
+
+
+
+
+
+
+
+
       [  input = Pitch(1)  ]  your_output = None  desired_output = $exception$  (0/2)
       [  input = Pitch(1.0)  ]  your_output = None  desired_output = $exception$  (0/2)
       [  input = Pitch([])  ]  your_output = None  desired_output = $exception$  (0/2)

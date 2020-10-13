@@ -35,8 +35,11 @@ class Pitch (PitchBase):
  
 
     def __new__(cls, arg=None):
-        if isinstance(arg, list) and (len(arg) == 3) and all(type(e, int) for e in arg):
-            return cls._values_to_pitch(arg[1], arg[2], arg[3])
+        if isinstance(arg, list) and (len(arg) == 3) and all(isinstance(e, int) for e in arg):
+            try:
+                return super(Pitch, cls).__new__(cls, _letters[arg[0]], _accidentals[arg[1] * 2], _octaves[arg[2]])
+            except IndexError:
+                raise ValueError(f'input list out of range')
         elif isinstance(arg, str):
             return cls._string_to_pitch(arg)
         elif arg == None:
