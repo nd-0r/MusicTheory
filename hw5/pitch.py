@@ -56,7 +56,7 @@ class Pitch (PitchBase):
                 accidental = arg[1:-2]
             else:
                 octave = arg[-1]
-                if len(arg) > 3:
+                if len(arg) > 4:
                     raise ValueError(f'{arg} is not a valid pitch')
                 accidental = arg[1:-1]
         except Exception:
@@ -73,13 +73,18 @@ class Pitch (PitchBase):
             raise ValueError(f'{ova} is not a valid octave')
         if acc not in _accidentals:
             raise ValueError(f'{acc} is not a valid accidental')
-        print(let)
-        print(acc)
-        print(ova)
+        if (__name__ == '__main__'):
+            print(let)
+            print(acc)
+            print(ova, end='\n\n')
         lnum = _letters.index(str(let))
         anum = _accidentals.index(str(acc))
         onum = _octaves.index(str(ova))
-        if (onum == 0 and (anum // 2 < 2 and lnum == 0)) or (onum == 9 and (anum // 2 > 2 and lnum == 4) or (anum // 2 > 0 and lnum == 5) or lnum == 6):
+        if (__name__ == '__main__'):
+            print(lnum)
+            print(anum)
+            print(onum)
+        if (onum == 0 and (anum // 2 < 2 and lnum == 0)) or (onum == 10 and ((anum // 2 > 2 and lnum == 4) or (anum // 2 > 0 and lnum == 5) or lnum == 6)):
             raise ValueError(f'Pitch is out of midi range')
 
         return super(Pitch, cls).__new__(cls, let, acc, ova)
@@ -214,5 +219,5 @@ class Pitch (PitchBase):
 
 if __name__ == '__main__':
     # Add your testing code here!
-    pass
-
+    for p in ['F##2', 'Gs8', 'Bb3', 'Df00', 'fff4', 'bbb0', 'cn00', 'Abb9', [0,3,6], [1,2,3], [5,4,3], 1, 1.0, [], [1,2,3,4]]:
+        print(Pitch(p), end='\n\n\n')
