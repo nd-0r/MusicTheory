@@ -1,7 +1,7 @@
 ============= aorals2.hw5 transcript [test] =============
   module: pitch
     [import]: success  (1/1)
-      [  input = Pitch()  ]  your_output = None  desired_output = <Pitch: empty>  (0/2)
+      [  input = Pitch()  ]  your_output = <Pitch: empty>  desired_output = <Pitch: empty>  (2/2)
       [  input = Pitch('C4')  ]  your_output = <Pitch: C4>  desired_output = <Pitch: C4>  (0/2)
       [  input = Pitch('A8')  ]  your_output = $exception$  desired_output = <Pitch: A8>  (0/2)
       [  input = Pitch('F##2')  ]  your_output = $exception$  desired_output = <Pitch: F##2>  (0/2)
@@ -31,16 +31,16 @@
       [  input = Pitch([1,2,3])  ]  your_output = $exception$  desired_output = <Pitch: D2>  (0/2)
       [  input = Pitch([5,4,3])  ]  your_output = $exception$  desired_output = <Pitch: A##2>  (0/2)
       [  input = Pitch([0,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-      [  input = Pitch(1)  ]  your_output = None  desired_output = $exception$  (0/2)
-      [  input = Pitch(1.0)  ]  your_output = None  desired_output = $exception$  (0/2)
-      [  input = Pitch([])  ]  your_output = None  desired_output = $exception$  (0/2)
+      [  input = Pitch(1)  ]  your_output = $exception$  desired_output = $exception$  (2/2)
+      [  input = Pitch(1.0)  ]  your_output = $exception$  desired_output = $exception$  (2/2)
+      [  input = Pitch([])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([-1,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,-1,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,0,-1])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([7,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,5,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,0,11])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-      [  input = Pitch([1,2,3,4])  ]  your_output = None  desired_output = $exception$  (0/2)
+      [  input = Pitch([1,2,3,4])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([6,6,6])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([-1,-1,-1])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch('C4') < Pitch('A4')  ]  your_output = $exception$  desired_output = True  (0/2)
@@ -123,10 +123,10 @@
       [  input = Pitch.from_keynum(70,'b')  ]  your_output = $exception$  desired_output = <Pitch: Bb4>  (0/2)
       [  input = Pitch.from_keynum(70,'bb')  ]  your_output = $exception$  desired_output = <Pitch: Cbb5>  (0/2)
       [  input = Pitch.from_keynum(70,'bbb')  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-Total raw score: (81/245)
+Total raw score: (91/245)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 70
 Extra credit (if applicable): 0
-Adjusted score (Final): 11/175
+Adjusted score (Final): 21/175
 
