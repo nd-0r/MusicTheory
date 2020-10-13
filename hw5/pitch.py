@@ -48,7 +48,7 @@ class Pitch (PitchBase):
     @classmethod
     def _string_to_pitch(cls, arg):
         try:
-            letter = arg[0:1]
+            letter = arg[0:1].upper()
             if (arg[-2:] == '00'):
                 octave = '00'
                 if len(arg) > 4:
@@ -162,7 +162,10 @@ class Pitch (PitchBase):
 
 
     def string(self):
-        return f'{self.let}{self.acc}{self.oct}'
+        if (_accidentals.index(self.acc) % 2 == 1):
+            return f'{self.let}{self.acc}{self.oct}'
+        else:
+            return f'{self.let}{_accidentals[_accidentals.index(self.acc) + 1]}{self.oct}'
 
 
     def keynum(self):
