@@ -131,27 +131,32 @@ class Pitch (PitchBase):
 
 
     def __lt__(self, other):
-        return self.pnum() < other.pnum()
-
+        # return self.pnum() < other.pnum()
+        return self.pos() < other.pos()
 
     def __le__(self, other):
-        return self.pnum() <= other.pnum()
+        # return self.pnum() <= other.pnum()
+        return self.pos() <= other.pos()
 
 
     def __eq__(self, other):
-        return self.pnum() == other.pnum()
+        # return self.pnum() == other.pnum()
+        return self.pos() == other.pos()
 
 
     def __ne__(self, other):
-        return self.pnum() != other.pnum()
+        # return self.pnum() != other.pnum()
+        return self.pos() != other.pos()
 
 
     def __ge__(self, other):
-        return self.pnum() >= other.pnum()
+        # return self.pnum() >= other.pnum()
+        return self.pos() >= other.pos()
 
 
     def __gt__(self, other):
-        return self.pnum() > other.pnum()
+        # return self.pnum() > other.pnum()
+        return self.pos() > other.pos()
 
 
     def pos(self):
@@ -225,5 +230,42 @@ class Pitch (PitchBase):
 
 if __name__ == '__main__':
     # Add your testing code here!
-    for p in ['F##2', 'Gs8', 'Bb3', 'Df00', 'fff4', 'bbb0', 'cn00', 'Abb9', [0,3,6], [1,2,3], [5,4,3], 1, 1.0, [], [1,2,3,4]]:
-        print(Pitch(p), end='\n\n\n')
+    # for p in ['F##2', 'Gs8', 'Bb3', 'Df00', 'fff4', 'bbb0', 'cn00', 'Abb9', [0,3,6], [1,2,3], [5,4,3]]:
+    #     print(Pitch(p), end='\n\n\n')
+    print(Pitch('C4') < Pitch('A4'))
+    print(Pitch('C4') <= Pitch('A4'))
+    print(Pitch('C4') > Pitch('A4'))
+    print(Pitch('C4') >= Pitch('A4'))
+    print(Pitch('C4') == Pitch('A4'))
+    print(Pitch('C4') != Pitch('A4'))
+    print(Pitch('C4') < Pitch('A3'))
+    print(Pitch('C4') <= Pitch('A3'))
+    print(Pitch('C4') > Pitch('A3'))
+    print(Pitch('C4') >= Pitch('A3'))
+    print(Pitch('C4') == Pitch('A3'))
+    print(Pitch('C4') != Pitch('A3'))
+    print(Pitch('E##3') < Pitch('Fbb3'))
+    print(Pitch('E##3') <= Pitch('Fbb3'))
+    print(Pitch('E##3') > Pitch('Fbb3'))
+    print(Pitch('E##3') >= Pitch('Fbb3'))
+    print(Pitch('E##3') == Pitch('Fbb3'))
+    print(Pitch('E##3') != Pitch('Fbb3'))
+    print(Pitch('B#5') < Pitch('C6'))
+    print(Pitch('B#5') <= Pitch('C6'))
+    print(Pitch('B#5') > Pitch('C6'))
+    print(Pitch('B#5') >= Pitch('C6'))
+    print(Pitch('B#5') == Pitch('C6'))
+    print(Pitch('B#5') != Pitch('C6'))
+    print(Pitch('B#5') < Pitch('C5'))
+    print(Pitch('B#5') <= Pitch('C5'))
+    print(Pitch('B#5') > Pitch('C5'))
+    print(Pitch('B#5') >= Pitch('C5'))
+    print(Pitch('B#5') == Pitch('C5'))
+    print(Pitch('B#5') != Pitch('C5'))
+    print(Pitch('B#5') < Pitch('B#5'))
+    print(Pitch('B#5') <= Pitch('B#5'))
+    print(Pitch('B#5') > Pitch('B#5'))
+    print(Pitch('B#5') >= Pitch('B#5'))
+    print(Pitch('B#5') == Pitch('B#5'))
+    print(Pitch('B#5') != Pitch('B#5'))
+    print(Pitch('Fss4') == Pitch([3,4,5]))
