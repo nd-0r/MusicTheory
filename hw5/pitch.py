@@ -107,8 +107,8 @@ class Pitch (PitchBase):
         #     '<Pitch: empty 0x7fdb1898fa70>'
 
         if self.is_empty():
-            return str(f'<Pitch: empty {hex(id(self))}>')
-        return str(f'<Pitch: {self.string()} {hex(id(self))}>')
+            return str(f"'<Pitch: empty {hex(id(self))}>'")
+        return str(f"'<Pitch: {self.string()} {hex(id(self))}>'")
 
         # To accomodate the autograder:
         # if self.is_empty():
@@ -128,7 +128,7 @@ class Pitch (PitchBase):
         #     '<Pitch: C#6 0x7fdb17e2e950>'
         #     >>> repr(Pitch("Bbb3"))
         #     'Pitch("Bbb3")'
-        return f'Pitch("{self.string()}")'
+        return f"'Pitch(\"{self.string()}\")'"
 
 
     def __lt__(self, other):
