@@ -14,7 +14,7 @@ from collections import namedtuple
 
 # Create the namedtuple super class for Pitch with three attributes:
 # letter, accidental, and octave.  See your ratio.py file for an example.
-PitchBase = namedtuple('PitchBase', ['let', 'acc', 'oct'])
+PitchBase = namedtuple('PitchBase', ['letter', 'accidental', 'octave'])
 
 _letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
 _octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
@@ -175,31 +175,31 @@ class Pitch (PitchBase):
 
 
     def pos(self):
-        return (_octaves.index(self.oct)<<8) + (_letters.index(self.let)<<4) + _accidentals.index(self.acc)
+        return (_octaves.index(self.octave)<<8) + (_letters.index(self.letter)<<4) + _accidentals.index(self.accidental)
 
 
     def is_empty(self):
-        if self.let == None or self.acc == None or self.oct == None:
+        if self.letter == None or self.accidental == None or self.octave == None:
             return True
         return False
 
 
     def string(self):
-        if (_accidentals.index(self.acc) % 2 == 1):
-            return f'{self.let}{self.acc}{self.oct}'
+        if (_accidentals.index(self.accidental) % 2 == 1):
+            return f'{self.letter}{self.accidental}{self.octave}'
         else:
-            return f'{self.let}{_accidentals[_accidentals.index(self.acc) + 1]}{self.oct}'
+            return f'{self.letter}{_accidentals[_accidentals.index(self.accidental) + 1]}{self.octave}'
 
 
     def keynum(self):
-        midi_key = ((12 * _octaves.index(self.oct)) + _template.index(self.let) + ((_accidentals.index(self.acc) // 2) - 2))
+        midi_key = ((12 * _octaves.index(self.octave)) + _template.index(self.letter) + ((_accidentals.index(self.accidental) // 2) - 2))
         if not (0 <= midi_key < 128):
             raise ValueError(f'{self.string()} does not correspond to a valid midi key {midi_key}')
         return midi_key
 
 
     def pnum(self):
-        return Pitch.pnums[self.let + _accidentals[_accidentals.index(self.acc) - (_accidentals.index(self.acc) % 2)]]
+        return Pitch.pnums[self.letter + _accidentals[_accidentals.index(self.accidental) - (_accidentals.index(self.accidental) % 2)]]
 
     
     def pc(self):
