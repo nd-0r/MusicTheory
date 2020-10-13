@@ -37,6 +37,8 @@ class Pitch (PitchBase):
     def __new__(cls, arg=None):
         if isinstance(arg, list) and (len(arg) == 3) and all(isinstance(e, int) for e in arg):
             try:
+                if (arg[0] < 0 or arg[1] <= 0 or arg[2] <= 0):
+                    raise ValueError(f'invalid list')
                 return super(Pitch, cls).__new__(cls, _letters[arg[0]], _accidentals[arg[1] * 2], _octaves[arg[2]])
             except IndexError:
                 raise ValueError(f'input list out of range')
