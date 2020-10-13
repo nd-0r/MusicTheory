@@ -131,30 +131,42 @@ class Pitch (PitchBase):
 
 
     def __lt__(self, other):
+        if (not isinstance(other, Pitch)):
+            raise TypeError(f'Cannot compare Pitch with {type(other)}')
         # return self.pnum() < other.pnum()
         return self.pos() < other.pos()
 
     def __le__(self, other):
+        if (not isinstance(other, Pitch)):
+            raise TypeError(f'Cannot compare Pitch with {type(other)}')
         # return self.pnum() <= other.pnum()
         return self.pos() <= other.pos()
 
 
     def __eq__(self, other):
+        if (not isinstance(other, Pitch)):
+            raise TypeError(f'Cannot compare Pitch with {type(other)}')
         # return self.pnum() == other.pnum()
         return self.pos() == other.pos()
 
 
     def __ne__(self, other):
+        if (not isinstance(other, Pitch)):
+            raise TypeError(f'Cannot compare Pitch with {type(other)}')
         # return self.pnum() != other.pnum()
         return self.pos() != other.pos()
 
 
     def __ge__(self, other):
+        if (not isinstance(other, Pitch)):
+            raise TypeError(f'Cannot compare Pitch with {type(other)}')
         # return self.pnum() >= other.pnum()
         return self.pos() >= other.pos()
 
 
     def __gt__(self, other):
+        if (not isinstance(other, Pitch)):
+            raise TypeError(f'Cannot compare Pitch with {type(other)}')
         # return self.pnum() > other.pnum()
         return self.pos() > other.pos()
 
