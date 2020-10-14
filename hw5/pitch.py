@@ -175,7 +175,7 @@ class Pitch (PitchBase):
 
 
     def pos(self):
-        return (_octaves.index(self.octave)<<8) + (_letters.index(self.letter)<<4) + _accidentals.index(self.accidental)
+        return (_octaves.index(self.octave)<<8) + (_letters.index(self.letter)<<4) + (_accidentals.index(self.accidental) // 2)
 
 
     def is_empty(self):
