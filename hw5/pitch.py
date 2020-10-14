@@ -31,7 +31,7 @@ class Pitch (PitchBase):
     #     for j,a in enumerate(_accidentals[::2]):
     #         print('2', str(j))
     #         toPnums.append((str(l) + str(a), (i<<4) + j))
-    pnums = IntEnum('Pnum', [(str(l) + str(a), (i<<4) + j) for j,a in enumerate(_accidentals[::2]) for i,l in enumerate(_letters)])
+    pnums = IntEnum('Pnum', [(str(l) + str(a), (i<<4) + j) for j,a in enumerate(_accidentals[1::2]) for i,l in enumerate(_letters)])
  
 
     def __new__(cls, arg=None):
@@ -66,7 +66,10 @@ class Pitch (PitchBase):
                 accidental = arg[1:-1]
         except Exception:
             raise ValueError(f'{arg} is not a valid pitch')
-        
+        if (__name__ == '__main__'):
+            print(letter)
+            print(accidental)
+            print(octave, end='\n\n')
         return cls._values_to_pitch(_letters.index(letter), _accidentals.index(accidental) // 2, _octaves.index(octave))
 
 
@@ -82,7 +85,7 @@ class Pitch (PitchBase):
             print(let)
             print(acc)
             print(ova, end='\n\n')
-        if (let == 0 and (acc < 2 and let == 0)) or (ova == 10 and ((acc > 2 and let == 4) or (acc > 0 and let == 5) or let == 6)):
+        if (let == 0 and (acc < 2 and ova == 0)) or (ova == 10 and ((acc > 2 and let == 4) or (acc > 0 and let == 5) or let == 6)):
             raise ValueError(f'Pitch is out of midi range')
 
         return super(Pitch, cls).__new__(cls, let, acc, ova)
@@ -232,7 +235,12 @@ class Pitch (PitchBase):
         letter = _template[((pc - offset) + 12) % 12]
         octave += (pc - offset) // 12
 
-        return  Pitch(_letters.index(letter) + (_accidentals.index(accidental) // 2) + _octaves.index(octave))
+        # print(letter)
+        # print(accidental)
+        # print(octave)
+
+        # return  Pitch([_letters.index(str(letter)), (_accidentals.index(str(accidental)) // 2), _octaves.index(str(octave))])
+        return  Pitch(f'{str(letter)}{str(accidental)}{str(octave)}')
 
 def test():
     # Add your testing code here!
