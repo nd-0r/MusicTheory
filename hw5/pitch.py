@@ -18,7 +18,7 @@ PitchBase = namedtuple('PitchBase', ['letter', 'accidental', 'octave'])
 
 _letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
 _octaves = ('00', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-_accidentals = ('ff', 'bb', 'f', 'b', 'n', '', 's', '#', 'ss', '##')
+_accidentals = ('bb', 'ff', 'b', 'f', '', 'n', '#', 's', '##', 'ss')
 _template = ('C','','D','','E','F','','G','', 'A','','B')
 _default = ('C','C#','D','Eb','E','F','F#','G','Ab', 'A','Bb','B')
 
@@ -39,7 +39,7 @@ class Pitch (PitchBase):
             try:
                 if (arg[0] < 0 or arg[1] <= 0 or arg[2] < 0):
                     raise ValueError(f'invalid list')
-                return super(Pitch, cls).__new__(cls, _letters[arg[0]], _accidentals[arg[1] * 2], _octaves[arg[2]])
+                return super(Pitch, cls).__new__(cls, arg[0], arg[1], arg[2])
             except IndexError:
                 raise ValueError(f'input list out of range')
         elif isinstance(arg, str):
@@ -67,29 +67,22 @@ class Pitch (PitchBase):
         except Exception:
             raise ValueError(f'{arg} is not a valid pitch')
         
-        return cls._values_to_pitch(letter, accidental, octave)
+        return cls._values_to_pitch(_letters.index(letter), _accidentals.index(accidental) // 2, _octaves.index(octave))
 
 
     @classmethod
     def _values_to_pitch(cls, let, acc, ova): 
-        if (let not in _letters):
+        if (let < 0 or let > 6):
             raise ValueError(f'{let} is not a valid pitch')
-        if (ova not in _octaves):
+        if (ova < 0 or ova > 10):
             raise ValueError(f'{ova} is not a valid octave')
-        if acc not in _accidentals:
+        if (acc < 0 or acc > 4):
             raise ValueError(f'{acc} is not a valid accidental')
         if (__name__ == '__main__'):
             print(let)
             print(acc)
             print(ova, end='\n\n')
-        lnum = _letters.index(str(let))
-        anum = _accidentals.index(str(acc))
-        onum = _octaves.index(str(ova))
-        if (__name__ == '__main__'):
-            print(lnum)
-            print(anum)
-            print(onum)
-        if (onum == 0 and (anum // 2 < 2 and lnum == 0)) or (onum == 10 and ((anum // 2 > 2 and lnum == 4) or (anum // 2 > 0 and lnum == 5) or lnum == 6)):
+        if (let == 0 and (acc < 2 and let == 0)) or (ova == 10 and ((acc > 2 and let == 4) or (acc > 0 and let == 5) or let == 6)):
             raise ValueError(f'Pitch is out of midi range')
 
         return super(Pitch, cls).__new__(cls, let, acc, ova)
@@ -175,7 +168,7 @@ class Pitch (PitchBase):
 
 
     def pos(self):
-        return (_octaves.index(self.octave)<<8) + (_letters.index(self.letter)<<4) + (_accidentals.index(self.accidental) // 2)
+        return (self.octave<<8) + (self.letter<<4) + self.accidental
 
 
     def is_empty(self):
@@ -185,21 +178,21 @@ class Pitch (PitchBase):
 
 
     def string(self):
-        if (_accidentals.index(self.accidental) % 2 == 1):
-            return f'{self.letter}{self.accidental}{self.octave}'
-        else:
-            return f'{self.letter}{_accidentals[_accidentals.index(self.accidental) + 1]}{self.octave}'
+        # if (_accidentals.index(self.accidental) % 2 == 1):
+        #     return f'{self.letter}{self.accidental}{self.octave}'
+        # else:
+        return f'{_letters[self.letter]}{_accidentals[self.accidental * 2]}{_octaves[self.octave]}'
 
 
     def keynum(self):
-        midi_key = ((12 * _octaves.index(self.octave)) + _template.index(self.letter) + ((_accidentals.index(self.accidental) // 2) - 2))
+        midi_key = ((12 * self.octave) + _template.index(_letters[self.letter]) + (self.accidental - 2))
         if not (0 <= midi_key < 128):
             raise ValueError(f'{self.string()} does not correspond to a valid midi key {midi_key}')
         return midi_key
 
 
     def pnum(self):
-        return Pitch.pnums[self.letter + _accidentals[_accidentals.index(self.accidental) - (_accidentals.index(self.accidental) % 2)]]
+        return Pitch.pnums[_letters[self.letter] + _accidentals[(self.accidental * 2) - 1]]
 
     
     def pc(self):
@@ -239,7 +232,7 @@ class Pitch (PitchBase):
         letter = _template[((pc - offset) + 12) % 12]
         octave += (pc - offset) // 12
 
-        return  Pitch(letter + accidental + str(octave))
+        return  Pitch(_letters.index(letter) + (_accidentals.index(accidental) // 2) + _octaves.index(octave))
 
 def test():
     # Add your testing code here!
