@@ -38,10 +38,10 @@
       [  input = Pitch([0,-1,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,0,-1])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([7,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-      [  input = Pitch([0,5,0])  ]  your_output = $__str__exception$  desired_output = $exception$  (0/2)
+      [  input = Pitch([0,5,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,0,11])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([1,2,3,4])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-      [  input = Pitch([6,6,6])  ]  your_output = $__str__exception$  desired_output = $exception$  (0/2)
+      [  input = Pitch([6,6,6])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([-1,-1,-1])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch('C4') < Pitch('A4')  ]  your_output = True  desired_output = True  (2/2)
       [  input = Pitch('C4') <= Pitch('A4')  ]  your_output = True  desired_output = True  (2/2)
@@ -91,11 +91,11 @@
       [  input = Pitch('A##4').keynum()  ]  your_output = 71  desired_output = 71  (2/2)
       [  input = Pitch('Ab4').keynum()  ]  your_output = 68  desired_output = 68  (2/2)
       [  input = Pitch('Abb4').keynum()  ]  your_output = 67  desired_output = 67  (2/2)
-      [  input = Pitch('C0').pnum()  ]  your_output = Pnum.Cf  desired_output = Pnum.C  (0/2)
-      [  input = Pitch('C#0').pnum()  ]  your_output = Pnum.Cn  desired_output = Pnum.Cs  (0/2)
-      [  input = Pitch('C##0').pnum()  ]  your_output = Pnum.Cs  desired_output = Pnum.Css  (0/2)
-      [  input = Pitch('Cb0').pnum()  ]  your_output = Pnum.Cff  desired_output = Pnum.Cf  (0/2)
-      [  input = Pitch('Cbb0').pnum()  ]  your_output = Pnum.Css  desired_output = Pnum.Cff  (0/2)
+      [  input = Pitch('C0').pnum()  ]  your_output = Pnum.Cn  desired_output = Pnum.C  (2/2)
+      [  input = Pitch('C#0').pnum()  ]  your_output = Pnum.Cs  desired_output = Pnum.Cs  (2/2)
+      [  input = Pitch('C##0').pnum()  ]  your_output = Pnum.Css  desired_output = Pnum.Css  (2/2)
+      [  input = Pitch('Cb0').pnum()  ]  your_output = Pnum.Cf  desired_output = Pnum.Cf  (2/2)
+      [  input = Pitch('Cbb0').pnum()  ]  your_output = Pnum.Cff  desired_output = Pnum.Cff  (2/2)
       [  input = Pitch('B7').pc()  ]  your_output = 11  desired_output = 11  (2/2)
       [  input = Pitch('B#7').pc()  ]  your_output = 0  desired_output = 0  (2/2)
       [  input = Pitch('B##7').pc()  ]  your_output = 1  desired_output = 1  (2/2)
@@ -123,10 +123,10 @@
       [  input = Pitch.from_keynum(70,'b')  ]  your_output = <Pitch: Bb4>  desired_output = <Pitch: Bb4>  (2/2)
       [  input = Pitch.from_keynum(70,'bb')  ]  your_output = <Pitch: Cbb5>  desired_output = <Pitch: Cbb5>  (2/2)
       [  input = Pitch.from_keynum(70,'bbb')  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-Total raw score: (231/245)
+Total raw score: (245/245)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 70
 Extra credit (if applicable): 0
-Adjusted score (Final): 161/175
+Adjusted score (Final): 175/175
 
