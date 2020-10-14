@@ -37,7 +37,7 @@ class Pitch (PitchBase):
     def __new__(cls, arg=None):
         if isinstance(arg, list) and (len(arg) == 3) and all(isinstance(e, int) for e in arg):
             try:
-                if (arg[0] < 0 or arg[1] <= 0 or arg[2] < 0):
+                if (arg[0] < 0 or arg[0] > 6 or arg[1] <= 0 or arg[1] > 4 or arg[2] < 0 or arg[2] > 10):
                     raise ValueError(f'invalid list')
                 return super(Pitch, cls).__new__(cls, arg[0], arg[1], arg[2])
             except IndexError:
@@ -195,7 +195,7 @@ class Pitch (PitchBase):
 
 
     def pnum(self):
-        return Pitch.pnums[_letters[self.letter] + _accidentals[(self.accidental * 2) - 1]]
+        return Pitch.pnums[_letters[self.letter] + _accidentals[(self.accidental * 2) + 1]]
 
     
     def pc(self):
