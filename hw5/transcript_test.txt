@@ -30,19 +30,19 @@
       [  input = Pitch([0,3,6])  ]  your_output = <Pitch: C#5>  desired_output = <Pitch: C#5>  (0/2)
       [  input = Pitch([1,2,3])  ]  your_output = <Pitch: D2>  desired_output = <Pitch: D2>  (0/2)
       [  input = Pitch([5,4,3])  ]  your_output = <Pitch: A##2>  desired_output = <Pitch: A##2>  (0/2)
-      [  input = Pitch([0,0,0])  ]  your_output = <Pitch: Cbb00>  desired_output = $exception$  (0/2)
+      [  input = Pitch([0,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch(1)  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch(1.0)  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-      [  input = Pitch([-1,0,0])  ]  your_output = <Pitch: Bbb00>  desired_output = $exception$  (0/2)
-      [  input = Pitch([0,-1,0])  ]  your_output = <Pitch: C##00>  desired_output = $exception$  (0/2)
-      [  input = Pitch([0,0,-1])  ]  your_output = <Pitch: Cbb9>  desired_output = $exception$  (0/2)
+      [  input = Pitch([-1,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
+      [  input = Pitch([0,-1,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
+      [  input = Pitch([0,0,-1])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([7,0,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,5,0])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([0,0,11])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([1,2,3,4])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch([6,6,6])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-      [  input = Pitch([-1,-1,-1])  ]  your_output = <Pitch: B##9>  desired_output = $exception$  (0/2)
+      [  input = Pitch([-1,-1,-1])  ]  your_output = $exception$  desired_output = $exception$  (2/2)
       [  input = Pitch('C4') < Pitch('A4')  ]  your_output = True  desired_output = True  (2/2)
       [  input = Pitch('C4') <= Pitch('A4')  ]  your_output = True  desired_output = True  (2/2)
       [  input = Pitch('C4') > Pitch('A4')  ]  your_output = False  desired_output = False  (2/2)
@@ -123,10 +123,10 @@
       [  input = Pitch.from_keynum(70,'b')  ]  your_output = <Pitch: Bb4>  desired_output = <Pitch: Bb4>  (0/2)
       [  input = Pitch.from_keynum(70,'bb')  ]  your_output = <Pitch: Cbb5>  desired_output = <Pitch: Cbb5>  (0/2)
       [  input = Pitch.from_keynum(70,'bbb')  ]  your_output = $exception$  desired_output = $exception$  (2/2)
-Total raw score: (189/245)
+Total raw score: (199/245)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 70
 Extra credit (if applicable): 0
-Adjusted score (Final): 119/175
+Adjusted score (Final): 129/175
 
