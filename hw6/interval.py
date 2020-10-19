@@ -6,11 +6,13 @@ class Interval:
 
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
-            return Interval._init_from_string(arg)
+            self._init_from_string(arg)
         elif (isinstance(arg, list)):
-            return Interval._init_from_list(arg)
+            #add more checks
+            self._init_from_list(arg)
         elif (isinstance(arg, Pitch) and isinstance(other, Pitch)):
-            return Interval._init_from_pitches(arg, other)
+            self._init_from_pitches(arg, other)
+        raise TypeError("Invalid input")
 
     
     def _init_from_list(self, span, qual, xoct, sign):
