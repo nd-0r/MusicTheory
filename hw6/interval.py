@@ -1,6 +1,6 @@
 ###############################################################################
 
-from .pitch import Pitch
+
 import random
 
 class Interval:
@@ -10,11 +10,14 @@ class Interval:
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
             self._init_from_string(arg)
-        elif (isinstance(arg, list) and all((isinstance(e, int) for e in arg)) and len(arg) == 4):
+            return
+        elif (isinstance(arg, list) and all(isinstance(e, int) for e in arg) and len(arg) == 4):
             self._init_from_list(arg[0], arg[1], arg[2], arg[3])
+            return
         elif (isinstance(arg, Pitch) and isinstance(other, Pitch)):
             self._init_from_pitches(arg, other)
-        raise TypeError("Invalid input")
+            return
+        raise TypeError(f'Invalid input: {arg}')
 
     
     def _init_from_list(self, span, qual, xoct, sign):
@@ -36,7 +39,7 @@ class Interval:
     
 
     def __str__(self):
-        return f'<Interval: {self.string()} {hex(id(self))}>'
+        return f'<Interval: {self.string()} {self.to_list()} {hex(id(self))}>'
 
 
     def __repr__(self):
@@ -99,7 +102,7 @@ class Interval:
 
 
     def to_list(self):
-        pass
+        return [self.span, self.qual, self.xoct, self.sign]
 
 
     def is_unison(self, qual=None):
