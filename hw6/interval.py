@@ -1,12 +1,16 @@
 ###############################################################################
 
-
+#from .pitch import Pitch
 import random
 
 class Interval:
 
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
-
+    _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'P', 
+    'P', 'M', 'M', 'a', '+', 'aa', '++', 'aaa', '+++', 'aaaa', '++++', 'aaaaa', '+++++')
+    _safe_quals_dict = {e:(i // 2) for i,e in enumerate(_quals)}
+    _spans = {i + 1:i for i in range(0, 8)}
+    
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
             self._init_from_string(arg)
@@ -17,7 +21,7 @@ class Interval:
         elif (isinstance(arg, Pitch) and isinstance(other, Pitch)):
             self._init_from_pitches(arg, other)
             return
-        raise TypeError(f'Invalid input: {arg}')
+        raise TypeError(f'Invalid input: {arg} of type: {type(arg)}')
 
     
     def _init_from_list(self, span, qual, xoct, sign):
@@ -28,10 +32,34 @@ class Interval:
             self.sign = sign
         else:
             raise ValueError(f'Values out of range for Interval.  span: {span} qual: {qual} xoct: {xoct} sign: {sign}')
+        return self
 
     
     def _init_from_string(self, name):
-        pass
+        if not isinstance(name, str):
+            raise TypeError(f'Cannot convert {type(name)} {name} to Interval')
+        try:
+            end = None
+            n = -1
+            while (n >= -len(name) and name[n].isnumeric()):
+                end = name[n:]
+                n -= 1
+            if (end == None):
+                raise ValueError(f'No span provided in {name}')
+            to_span = int(end)
+            to_qual = name[:name.index(end)]
+            
+            print("to_span: ", to_span)
+            print("to_qual: ", to_qual)
+
+            if ((to_span % 7) in self._spans and name[0] == '-' and to_qual[1:] in self._safe_quals_dict):
+                self._init_from_list(self._spans[to_span % 7], self._safe_quals_dict[to_qual[1:]], max(to_span // 9 - 1, 0), -1)
+            elif ((to_span % 7) in self._spans and to_qual in self._safe_quals_dict):
+                self._init_from_list(self._spans[to_span % 7], self._safe_quals_dict[to_qual], max(to_span // 9 - 1, 0), 1)
+            else:
+                raise ValueError(f'Invalid interval name {name}')
+        except Exception:
+            raise ValueError(f'Invalid interval name {name}')
 
     
     def _init_from_pitches(self, pitch1, pitch2):
@@ -75,7 +103,10 @@ class Interval:
 
 
     def string(self):
-        return ''
+        if (self.sign == -1):
+            return '-' + self._quals[self.qual * 2] + str(self.span + 1)
+        else:
+            return self._quals[self.qual * 2] + str(self.span + 1)
 
 
     def full_name(self, *, sign=True):
