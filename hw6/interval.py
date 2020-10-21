@@ -1,6 +1,6 @@
 ###############################################################################
 
-#from .pitch import Pitch
+from pitch import Pitch
 import random
 
 class Interval:
@@ -8,8 +8,10 @@ class Interval:
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
     _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'P', 
     'P', 'M', 'M', 'a', '+', 'aa', '++', 'aaa', '+++', 'aaaa', '++++', 'aaaaa', '+++++')
+    # 2d dictionary for semitones that I look up given a span and a quality levelss
+    _UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH = 0, 2, 4, 5, 7, 9, 11
     _safe_quals_dict = {e:(i // 2) for i,e in enumerate(_quals)}
-    _spans = {i + 1:i for i in range(0, 8)}
+    _semitones = (_UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH)
     
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
@@ -52,10 +54,10 @@ class Interval:
             print("to_span: ", to_span)
             print("to_qual: ", to_qual)
 
-            if ((to_span % 7) in self._spans and name[0] == '-' and to_qual[1:] in self._safe_quals_dict):
-                self._init_from_list(self._spans[to_span % 7], self._safe_quals_dict[to_qual[1:]], max(to_span // 9 - 1, 0), -1)
-            elif ((to_span % 7) in self._spans and to_qual in self._safe_quals_dict):
-                self._init_from_list(self._spans[to_span % 7], self._safe_quals_dict[to_qual], max(to_span // 9 - 1, 0), 1)
+            if ((to_span % 7 - 1) in range(8) and name[0] == '-' and to_qual[1:] in self._safe_quals_dict):
+                self._init_from_list(to_span % 7 - 1, self._safe_quals_dict[to_qual[1:]], max(to_span // 9 - 1, 0), -1)
+            elif ((to_span % 7 - 1) in range(8) and to_qual in self._safe_quals_dict):
+                self._init_from_list(to_span % 7 - 1, self._safe_quals_dict[to_qual], max(to_span // 9 - 1, 0), 1)
             else:
                 raise ValueError(f'Invalid interval name {name}')
         except Exception:
@@ -224,10 +226,24 @@ class Interval:
 
     
     def semitones(self):
-        pass
+        base = self._semitones[self.span]
+        if (base in {_UNISON, _FOURTH, _FIFTH} and (self.qual in range(0, 5))): # if dim
+            return base + (self.qual - 5) + (12 * xoct)
+        elif (base in {_UNISON, _FOURTH, _FIFTH} and self.qual in range(8, 13)): # if aug
+            return base + (self.qual - 7) + (12 * xoct)
+        elif (base in {_SECOND, _THIRD, _SIXTH, _SEVENTH} and (self.qual in range(0, 5))): # if dim
+            return base + (self.qual)
+        elif (base in {_SECOND, _THIRD, _SIXTH, _SEVENTH} and (self.qual in range(8, 13))): # if aug
+
+        elif (base in {_SECOND, _THIRD, _SIXTH, _SEVENTH} and (self.qual in range(5, 8))): # if min/maj/p
+
+        else:
+            return base
+
 
     
     def add(self, other):
+        # figure out what the diatonic span would be, and then look at the semitonal content
         pass
 
     
