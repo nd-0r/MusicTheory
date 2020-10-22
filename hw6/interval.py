@@ -8,10 +8,14 @@ class Interval:
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
     _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'P', 
     'P', 'M', 'M', 'a', '+', 'aa', '++', 'aaa', '+++', 'aaaa', '++++', 'aaaaa', '+++++')
-    # 2d dictionary for semitones that I look up given a span and a quality levelss
-    _UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH = 0, 2, 4, 5, 7, 9, 11
+    # 2d dictionary for semitones that I look up given a span and a quality levels
+    _UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH, _OCTAVE = 0, 1, 2, 3, 4, 5, 6, 7
+    _perfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    _imperfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 5: -1, 6: 0, 7: 1, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    _semitones = {Interval._UNISON:Interval._perfect_intervals_dict, Interval._SECOND:Interval._imperfect_intervals_dict, Interval._THIRD:Interval._imperfect_intervals_dict, 
+    Interval._FOURTH:Interval._perfect_intervals_dict, Interval._FIFTH:Interval._perfect_intervals_dict, Interval._SIXTH:Interval._imperfect_intervals_dict, 
+    Interval._SEVENTH:Interval._imperfect_intervals_dict, Interval._OCTAVE:Interval._perfect_intervals_dict}
     _safe_quals_dict = {e:(i // 2) for i,e in enumerate(_quals)}
-    _semitones = (_UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH)
     
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
@@ -226,19 +230,7 @@ class Interval:
 
     
     def semitones(self):
-        base = self._semitones[self.span]
-        if (base in {_UNISON, _FOURTH, _FIFTH} and (self.qual in range(0, 5))): # if dim
-            return base + (self.qual - 5) + (12 * xoct)
-        elif (base in {_UNISON, _FOURTH, _FIFTH} and self.qual in range(8, 13)): # if aug
-            return base + (self.qual - 7) + (12 * xoct)
-        elif (base in {_SECOND, _THIRD, _SIXTH, _SEVENTH} and (self.qual in range(0, 5))): # if dim
-            return base + (self.qual)
-        elif (base in {_SECOND, _THIRD, _SIXTH, _SEVENTH} and (self.qual in range(8, 13))): # if aug
-
-        elif (base in {_SECOND, _THIRD, _SIXTH, _SEVENTH} and (self.qual in range(5, 8))): # if min/maj/p
-
-        else:
-            return base
+        pass
 
 
     
