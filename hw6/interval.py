@@ -1,6 +1,6 @@
 ###############################################################################
 
-from pitch import Pitch
+from .pitch import Pitch
 import random
 
 class Interval:
@@ -8,15 +8,29 @@ class Interval:
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
     _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'P', 
     'P', 'M', 'M', 'a', '+', 'aa', '++', 'aaa', '+++', 'aaaa', '++++', 'aaaaa', '+++++')
-    # 2d dictionary for semitones that I look up given a span and a quality levels
-    _UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH, _OCTAVE = 0, 1, 2, 3, 4, 5, 6, 7
-    _perfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
-    _imperfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 5: -1, 6: 0, 7: 1, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
-    _semitones = {Interval._UNISON:Interval._perfect_intervals_dict, Interval._SECOND:Interval._imperfect_intervals_dict, Interval._THIRD:Interval._imperfect_intervals_dict, 
-    Interval._FOURTH:Interval._perfect_intervals_dict, Interval._FIFTH:Interval._perfect_intervals_dict, Interval._SIXTH:Interval._imperfect_intervals_dict, 
-    Interval._SEVENTH:Interval._imperfect_intervals_dict, Interval._OCTAVE:Interval._perfect_intervals_dict}
+    # format is {qual_index<0-12> : qual}
     _safe_quals_dict = {e:(i // 2) for i,e in enumerate(_quals)}
-    
+    # index vars for readability
+    _UNISON, _SECOND, _THIRD, _FOURTH, _FIFTH, _SIXTH, _SEVENTH, _OCTAVE = 0, 1, 2, 3, 4, 5, 6, 7
+    # format is {qual_index : offset}
+    _perfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 6: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    # All imperfect intervals default to major
+    # format is {qual_index : offset}
+    _imperfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 5: -1, 6: 0, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    # format is {span_index : default_span}
+    _default_spans = {i:s for i,s in enumerate([0,2,4,5,7,9,11,12])}
+    # format is {span_index : {qual_index : offset}}
+    _semitones = {_UNISON:_perfect_intervals_dict, _SECOND:_imperfect_intervals_dict, 
+    _THIRD:_imperfect_intervals_dict, _FOURTH:_perfect_intervals_dict, 
+    _FIFTH:_perfect_intervals_dict, _SIXTH:_imperfect_intervals_dict, 
+    _SEVENTH:_imperfect_intervals_dict, _OCTAVE:_perfect_intervals_dict}
+    # format is {span_index : span_name}
+    _span_names = {i:n for i,n in enumerate(['unison', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'octave'])}
+    # format is {qual_index : qual_name}
+    _qual_names = {i:n for i,n in enumerate(['quintuply-diminished', 'quadruply-diminished', 'triply-diminished', 'doubly-diminished', 
+    'diminished', 'minor', 'perfect', 'major', 'augmented', 'doubly-augmented', 'triply-augmented', 'quadruply-augmented', 
+    'quintuply-augmented'])}
+
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
             self._init_from_string(arg)
@@ -31,6 +45,11 @@ class Interval:
 
     
     def _init_from_list(self, span, qual, xoct, sign):
+        # checks if it is a valid combo of span and qual
+        try:
+            self._semitones[span][qual]
+        except KeyError:
+            raise ValueError(f'Values out of range for Interval.  span: {span} qual: {qual} xoct: {xoct} sign: {sign}')
         if ((0 <= span <= 7) and (0 <= qual <= 12) and (0 <= xoct <= 10) and (sign == 1 or sign == -1)):
             self.span = span
             self.qual = qual
@@ -81,31 +100,55 @@ class Interval:
 
 
     def __lt__(self, other):
-        pass
+        if (not isinstance(other, Interval)):
+            raise TypeError(f'{type(other)} is not an Interval')
+        if (self.pos() < other.pos()):
+            return True
+        return False
 
 
     def __le__(self, other):
-        pass
+        if (not isinstance(other, Interval)):
+            raise TypeError(f'{type(other)} is not an Interval')
+        if (self.pos() <= other.pos()):
+            return True
+        return False
 
 
     def __eq__(self, other):
-        pass
+        if (not isinstance(other, Interval)):
+            raise TypeError(f'{type(other)} is not an Interval')
+        if (self.pos() == other.pos()):
+            return True
+        return False
 
 
     def __ne__(self, other):
-        pass
+        if (not isinstance(other, Interval)):
+            raise TypeError(f'{type(other)} is not an Interval')
+        if (self.pos() != other.pos()):
+            return True
+        return False
 
 
     def __ge__(self, other):
-        pass
+        if (not isinstance(other, Interval)):
+            raise TypeError(f'{type(other)} is not an Interval')
+        if (self.pos() >= other.pos()):
+            return True
+        return False
 
 
     def __gt__(self, other):
-        pass
+        if (not isinstance(other, Interval)):
+            raise TypeError(f'{type(other)} is not an Interval')
+        if (self.pos() > other.pos()):
+            return True
+        return False
 
   
     def pos(self):
-        pass
+        return (((self.span + (self.xoct * 7)) + 1) << 8) + self.qual
 
 
     def string(self):
@@ -116,22 +159,26 @@ class Interval:
 
 
     def full_name(self, *, sign=True):
-        pass
+        if (sign == True and self.sign == -1):
+            return "descending" + self.quality_name() + self.span_name()
+        return self.quality_name() + self.span_name()
 
 
     def span_name(self):
-        pass
+        return self._span_names[self.span]
 
     def quality_name(self):
-        pass
+        return self._qual_names[self.qual]
 
 
     def matches(self, other):
-        pass
+        if (self.semitones() == other.semitones()):
+            return True
+        return False
 
 
     def lines_and_spaces(self):
-        pass
+        return self.span + 1
 
 
     def _to_iq(self, name):
@@ -141,104 +188,128 @@ class Interval:
     def to_list(self):
         return [self.span, self.qual, self.xoct, self.sign]
 
+    def is_interval(self, span, qual=None):
+        try:
+            if (self.span == span and (qual==None or self._qual == (self._quals.index(qual) // 2))):
+                return True
+        except ValueError:
+            raise ValueError(f'invalid quality: {qual}')
+        return False
 
     def is_unison(self, qual=None):
-        pass
+        self.is_interval(0, qual)
 
 
     def is_second(self, qual=None):
-        pass
+        self.is_interval(1, qual)
     
     def is_third(self, qual=None):
-        pass
+        self.is_interval(2, qual)
 
 
     def is_fourth(self, qual=None):
-        pass
+        self.is_interval(3, qual)
 
 
     def is_fifth(self, qual=None):
-        pass
+        self.is_interval(4, qual)
 
 
     def is_sixth(self, qual=None):
-        pass
+        self.is_interval(5, qual)
 
 
     def is_seventh(self, qual=None):
-        pass
+        self.is_interval(6, qual)
 
     
     def is_octave(self, qual=None):
-        pass
+        self.is_interval(7, qual)
 
 
     def is_diminished(self):
-        pass
-    
+        if (self.qual in [i for i in range(0, 5)]):
+            return True
+        return False
+
 
     def is_minor(self):
-        pass
+        if (self.qual == 5):
+            return True
+        return False
 
     
     def is_perfect(self):
-        pass
+        if (self.qual == 6):
+            return True
+        return False
 
     
     def is_major(self):
-        pass
+        if (self.qual == 7):
+            return True
+        return False
 
     
     def is_augmented(self):
-        pass
+        if (self.qual in [i for i in range(8, 13)]):
+            return True
+        return False
 
     
     def is_perfect_type(self):
-        pass
+        if (self.span in (0, 3, 4, 7)):
+            return True
+        return False
 
     
     def is_imperfect_type(self):
-        pass
+        return not self.is_perfect()
 
         
     def is_simple(self):
-        pass
+        if (self.xoct == 0):
+            return True
+        return False
 
         
     def is_compound(self):
-        pass
+        return not self.is_simple()
 
     
     def is_ascending(self):
-        pass
+        return not self.is_descending()
 
     
     def is_descending(self):
-        pass
+        if (self.qual == -1):
+            return True
+        return False
 
     
     def is_consonant(self):
-        pass
+        return not self.is_dissonant()
 
                    
     def is_dissonant(self):
-        pass
+        if (self.semitones() in (6,1,11)):
+            return True
+        return False
 
-    
+
     def complemented(self):
         pass
 
     
     def semitones(self):
-        pass
+        return self._default_spans[self.span] + self._semitones[self.span][self.qual]
 
 
     
     def add(self, other):
-        # figure out what the diatonic span would be, and then look at the semitonal content
         pass
 
-    
+
     def transpose(self, p):
         pass
 
