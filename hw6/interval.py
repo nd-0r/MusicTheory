@@ -154,10 +154,6 @@ class Interval:
         self._init_from_list(base_interval.span, qual, max(abs(pitch2.octave - pitch1.octave) - 1, 0), base_interval.sign)
             
 
-        
-
-    
-
     def __str__(self):
         return f'<Interval: {self.string()} {self.to_list()} {hex(id(self))}>'
 
@@ -220,9 +216,9 @@ class Interval:
 
     def string(self):
         if (self.sign == -1):
-            return '-' + self._quals[self.qual * 2] + str(self.span + 1)
+            return '-' + self._quals[self.qual * 2 + 1] + str(self.span + 1)
         else:
-            return self._quals[self.qual * 2] + str(self.span + 1)
+            return self._quals[self.qual * 2 + 1] + str(self.span + 1)
 
 
     def full_name(self, *, sign=True):
