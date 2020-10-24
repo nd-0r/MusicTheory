@@ -50,6 +50,8 @@ class Interval:
     _qual_names = {i:n for i,n in enumerate(['quintuply-diminished', 'quadruply-diminished', 'triply-diminished', 'doubly-diminished', 
     'diminished', 'minor', 'perfect', 'major', 'augmented', 'doubly-augmented', 'triply-augmented', 'quadruply-augmented', 
     'quintuply-augmented'])}
+    # reverse _qual_names for iq method
+    _qual_names_reversed = dict(reversed(pair) for pair in _qual_names.items())
     # format is {midi_span<0-12> : interval}
     _diatonic_intervals = {i:interval for i,interval in enumerate(['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8'])}
     # Two-way dictionaries for mapping the indices of qualities (0-12) 
@@ -245,7 +247,7 @@ class Interval:
 
 
     def _to_iq(self, name):
-        pass
+        return self._qual_names_reversed[str(name).lower]
 
 
     def to_list(self):
