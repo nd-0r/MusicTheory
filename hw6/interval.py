@@ -353,10 +353,9 @@ class Interval:
     def semitones(self):
         return self._default_spans[self.span] + self._semitones[self.span][self.qual]
 
-
-    
-    def add(self, other):
         
+    def add(self, other):
+        pass
 
 
     def transpose(self, p):
