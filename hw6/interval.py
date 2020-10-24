@@ -3,6 +3,24 @@
 from .pitch import Pitch
 import random
 
+class TwoWayDict(dict):
+    def __setitem__(self, key, value):
+        # Remove any previous connections with these values
+        if key in self:
+            del self[key]
+        if value in self:
+            del self[value]
+        dict.__setitem__(self, key, value)
+        dict.__setitem__(self, value, key)
+
+    def __delitem__(self, key):
+        dict.__delitem__(self, self[key])
+        dict.__delitem__(self, key)
+
+    def __len__(self):
+        """Returns the number of connections"""
+        return dict.__len__(self) // 2
+
 class Interval:
 
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
@@ -30,6 +48,18 @@ class Interval:
     _qual_names = {i:n for i,n in enumerate(['quintuply-diminished', 'quadruply-diminished', 'triply-diminished', 'doubly-diminished', 
     'diminished', 'minor', 'perfect', 'major', 'augmented', 'doubly-augmented', 'triply-augmented', 'quadruply-augmented', 
     'quintuply-augmented'])}
+    # format is {midi_span<0-12> : interval}
+    _diatonic_intervals = {(i + 1):interval for i,interval in enumerate(['m2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7'])}
+    # two-way dictionaries for mapping the indices of qualities (0-12) 
+    # to a sliding scale for imperfect and perfect intervals to allow 
+    # intuitive stretching and shrinking of intervals
+    _qual_scale_imperfect = TwoWayDict()
+    for i,q in enumerate([0,1,2,3,4,5,7,8,9,10,11]):
+        _qual_scale_imperfect[i] = q
+    _qual_scale_perfect = TwoWayDict()
+    for i,q in enumerate([0,1,2,3,4,6,8,9,10,11,12]):
+        _qual_scale_perfect[i] = q
+
 
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
@@ -66,21 +96,29 @@ class Interval:
         try:
             end = None
             n = -1
+            # find longest number at end of string
             while (n >= -len(name) and name[n].isnumeric()):
                 end = name[n:]
                 n -= 1
             if (end == None):
                 raise ValueError(f'No span provided in {name}')
             to_span = int(end)
+            # if compound
+            if (to_span > 8):
+                to_span = to_span % 7 - 1
+            else:
+                to_span -= 1
             to_qual = name[:name.index(end)]
+            if (to_qual not in ('m', 'P', 'M') and to_qual[1:] not in ('m', 'P', 'M')):
+                to_qual = str.lower(to_qual)
             
             print("to_span: ", to_span)
             print("to_qual: ", to_qual)
 
-            if ((to_span % 7 - 1) in range(8) and name[0] == '-' and to_qual[1:] in self._safe_quals_dict):
-                self._init_from_list(to_span % 7 - 1, self._safe_quals_dict[to_qual[1:]], max(to_span // 9 - 1, 0), -1)
-            elif ((to_span % 7 - 1) in range(8) and to_qual in self._safe_quals_dict):
-                self._init_from_list(to_span % 7 - 1, self._safe_quals_dict[to_qual], max(to_span // 9 - 1, 0), 1)
+            if (to_span in range(8) and name[0] == '-' and to_qual[1:] in self._quals):
+                self._init_from_list(to_span, self._safe_quals_dict[to_qual[1:]], max(to_span // 9 - 1, 0), -1)
+            elif (to_span in range(8) and to_qual in self._quals):
+                self._init_from_list(to_span, self._safe_quals_dict[to_qual], max(to_span // 9 - 1, 0), 1)
             else:
                 raise ValueError(f'Invalid interval name {name}')
         except Exception:
@@ -88,7 +126,26 @@ class Interval:
 
     
     def _init_from_pitches(self, pitch1, pitch2):
-        pass
+        # gets the pitch class of the not without accidentals
+        pitch1_base_pc = Pitch([pitch1.letter, 0, pitch2.octave])
+        pitch2_base_pc = Pitch([pitch2.letter, 0, pitch2.octave])
+        # substracts those pitch classes to get a basic interval to build off
+        pc_span = pitch2_base_pc - pitch1_base_pc
+        if (pc_span < 0):
+            base_interval = Interval("-" + self._diatonic_intervals[abs(pc_span)])
+        else:
+            base_interval = Interval(self._diatonic_intervals[abs(pc_span)])
+        # offset from the diatonic intervals given by the pitches' accidentals
+        qual_offset = (pitch1.accidental - 2) + (pitch2.accidental - 2)
+        if (base_interval.is_perfect()):
+            qual = self._qual_scale_perfect[self._qual_scale_perfect[base_interval.qual] + qual_offset]
+        else:
+            qual = self._qual_scale_imperfect[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
+        self._init_from_list(base_interval.span, qual, abs(pitch2.octave - pitch1.octave), base_interval.sign)
+            
+
+        
+
     
 
     def __str__(self):
@@ -160,8 +217,8 @@ class Interval:
 
     def full_name(self, *, sign=True):
         if (sign == True and self.sign == -1):
-            return "descending" + self.quality_name() + self.span_name()
-        return self.quality_name() + self.span_name()
+            return "descending " + self.quality_name() + " " + self.span_name()
+        return self.quality_name() + " " + self.span_name()
 
 
     def span_name(self):
