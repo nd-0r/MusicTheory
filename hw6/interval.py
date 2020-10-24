@@ -3,6 +3,8 @@
 from .pitch import Pitch
 import random
 
+# !!! fix f to b sharp case
+
 class TwoWayDict(dict):
     def __setitem__(self, key, value):
         # Remove any previous connections with these values
@@ -24,7 +26,7 @@ class TwoWayDict(dict):
 class Interval:
 
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
-    _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'P', 
+    _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'p', 
     'P', 'M', 'M', 'a', '+', 'aa', '++', 'aaa', '+++', 'aaaa', '++++', 'aaaaa', '+++++')
     # format is {qual_index<0-12> : qual}
     _safe_quals_dict = {e:(i // 2) for i,e in enumerate(_quals)}
@@ -49,17 +51,17 @@ class Interval:
     'diminished', 'minor', 'perfect', 'major', 'augmented', 'doubly-augmented', 'triply-augmented', 'quadruply-augmented', 
     'quintuply-augmented'])}
     # format is {midi_span<0-12> : interval}
-    _diatonic_intervals = {(i + 1):interval for i,interval in enumerate(['m2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7'])}
-    # two-way dictionaries for mapping the indices of qualities (0-12) 
+    _diatonic_intervals = {i:interval for i,interval in enumerate(['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8'])}
+    # Two-way dictionaries for mapping the indices of qualities (0-12) 
     # to a sliding scale for imperfect and perfect intervals to allow 
-    # intuitive stretching and shrinking of intervals
-    _qual_scale_imperfect = TwoWayDict()
-    for i,q in enumerate([0,1,2,3,4,5,7,8,9,10,11]):
-        _qual_scale_imperfect[i] = q
-    _qual_scale_perfect = TwoWayDict()
-    for i,q in enumerate([0,1,2,3,4,6,8,9,10,11,12]):
-        _qual_scale_perfect[i] = q
-
+    # intuitive stretching and shrinking of intervals.
+    # Standard takes an interval quality index and maps it to a sliding
+    # scale standard for imperfect/perfect intervals. Reverse does the 
+    # opposite
+    _qual_scale_imperfect = {q:i for i,q in enumerate([0,1,2,3,4,5,7,8,9,10,11,12])}
+    _qual_scale_imperfect_reverse = dict(reversed(pair) for pair in _qual_scale_imperfect.items())
+    _qual_scale_perfect = {q:i for i,q in enumerate([0,1,2,3,4,6,8,9,10,11,12])}
+    _qual_scale_perfect_reverse = dict(reversed(pair) for pair in _qual_scale_perfect.items())
 
     def __init__(self, arg, other=None):
         if (isinstance(arg, str)):
@@ -109,7 +111,7 @@ class Interval:
             else:
                 to_span -= 1
             to_qual = name[:name.index(end)]
-            if (to_qual not in ('m', 'P', 'M') and to_qual[1:] not in ('m', 'P', 'M')):
+            if (to_qual not in ('m', 'M') and to_qual[1:] not in ('m', 'M')):
                 to_qual = str.lower(to_qual)
             
             print("to_span: ", to_span)
@@ -127,21 +129,29 @@ class Interval:
     
     def _init_from_pitches(self, pitch1, pitch2):
         # gets the pitch class of the not without accidentals
-        pitch1_base_pc = Pitch([pitch1.letter, 0, pitch2.octave])
-        pitch2_base_pc = Pitch([pitch2.letter, 0, pitch2.octave])
+        pitch1_base_keynum = Pitch([pitch1.letter, 2, pitch1.octave]).keynum()
+        pitch2_base_keynum = Pitch([pitch2.letter, 2, pitch2.octave]).keynum()
+        print("p1 pc: " + str(pitch1_base_keynum))
+        print("p2 pc: " + str(pitch2_base_keynum))
         # substracts those pitch classes to get a basic interval to build off
-        pc_span = pitch2_base_pc - pitch1_base_pc
-        if (pc_span < 0):
-            base_interval = Interval("-" + self._diatonic_intervals[abs(pc_span)])
+        if (abs(pitch2_base_keynum - pitch1_base_keynum) == 12):
+            keynum_span = (pitch2_base_keynum - pitch1_base_keynum)
         else:
-            base_interval = Interval(self._diatonic_intervals[abs(pc_span)])
+            keynum_span = (pitch2_base_keynum - pitch1_base_keynum) % 12
+        print("pc span: " + str(keynum_span))
+        if (pitch2.keynum() - pitch1.keynum() < 0):
+            base_interval = Interval("-" + self._diatonic_intervals[abs(keynum_span)])
+        else:
+            base_interval = Interval(self._diatonic_intervals[abs(keynum_span)])
+        print("base interval: " + str(base_interval.string())) 
         # offset from the diatonic intervals given by the pitches' accidentals
-        qual_offset = (pitch1.accidental - 2) + (pitch2.accidental - 2)
+        qual_offset = (pitch2.accidental - 2) - (pitch1.accidental - 2)
+        print("qual offset: " + str(qual_offset))
         if (base_interval.is_perfect()):
-            qual = self._qual_scale_perfect[self._qual_scale_perfect[base_interval.qual] + qual_offset]
+            qual = self._qual_scale_perfect_reverse[self._qual_scale_perfect[base_interval.qual] + qual_offset]
         else:
-            qual = self._qual_scale_imperfect[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
-        self._init_from_list(base_interval.span, qual, abs(pitch2.octave - pitch1.octave), base_interval.sign)
+            qual = self._qual_scale_imperfect_reverse[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
+        self._init_from_list(base_interval.span, qual, max(abs(pitch2.octave - pitch1.octave) - 1, 0), base_interval.sign)
             
 
         
