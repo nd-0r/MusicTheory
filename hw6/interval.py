@@ -4,24 +4,7 @@ from .pitch import Pitch
 import random
 
 # !!! fix f to b sharp case
-
-class TwoWayDict(dict):
-    def __setitem__(self, key, value):
-        # Remove any previous connections with these values
-        if key in self:
-            del self[key]
-        if value in self:
-            del self[value]
-        dict.__setitem__(self, key, value)
-        dict.__setitem__(self, value, key)
-
-    def __delitem__(self, key):
-        dict.__delitem__(self, self[key])
-        dict.__delitem__(self, key)
-
-    def __len__(self):
-        """Returns the number of connections"""
-        return dict.__len__(self) // 2
+# !!! fix midi oob error for pitch to interval
 
 class Interval:
 
@@ -373,11 +356,24 @@ class Interval:
 
     
     def add(self, other):
-        pass
+        
 
 
     def transpose(self, p):
-        return Pitch()
+        if (isinstance(p, Pnum):
+            pass
+        elif (isinstance(p, str)):
+            pass
+        elif (isinstance(p, Pitch)):
+            target = p.keynum() + self.semitones()
+            current = p.keynum() + self._default_spans[self.span]
+            accidental = 2 + (target - current)
+            assert (accidental > 0 and accidental < 5)
+            xoct = (target - p.keynum) % 12
+            return Pitch([p.letter + self.span, accidental, p.octave + xoct])
+        else:
+            raise TypeError(f'invalid input {p} with type {type(p)}')
+
 
 
 def test():
