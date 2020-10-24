@@ -294,7 +294,7 @@ class Interval:
 
     def is_diminished(self):
         if (self.qual in [i for i in range(0, 5)]):
-            return True
+            return 5 - self.qual
         return False
 
 
@@ -318,7 +318,7 @@ class Interval:
     
     def is_augmented(self):
         if (self.qual in [i for i in range(8, 13)]):
-            return True
+            return self.qual - 7
         return False
 
     
@@ -376,7 +376,7 @@ class Interval:
 
 
     def transpose(self, p):
-        pass
+        return Pitch()
 
 
 def test():
