@@ -131,6 +131,7 @@ class Interval:
     
     def _init_from_pitches(self, pitch1, pitch2):
         # gets the pitch class of the not without accidentals
+        # fix for midi out of range errors!
         pitch1_base_keynum = Pitch([pitch1.letter, 2, pitch1.octave]).keynum()
         pitch2_base_keynum = Pitch([pitch2.letter, 2, pitch2.octave]).keynum()
         print("p1 pc: " + str(pitch1_base_keynum))
