@@ -246,34 +246,34 @@ class Interval:
         return False
 
     def is_unison(self, qual=None):
-        self.is_interval(0, qual)
+        return self.is_interval(0, qual)
 
 
     def is_second(self, qual=None):
-        self.is_interval(1, qual)
+        return self.is_interval(1, qual)
     
     def is_third(self, qual=None):
-        self.is_interval(2, qual)
+        return self.is_interval(2, qual)
 
 
     def is_fourth(self, qual=None):
-        self.is_interval(3, qual)
+        return self.is_interval(3, qual)
 
 
     def is_fifth(self, qual=None):
-        self.is_interval(4, qual)
+        return self.is_interval(4, qual)
 
 
     def is_sixth(self, qual=None):
-        self.is_interval(5, qual)
+        return self.is_interval(5, qual)
 
 
     def is_seventh(self, qual=None):
-        self.is_interval(6, qual)
+        return self.is_interval(6, qual)
 
     
     def is_octave(self, qual=None):
-        self.is_interval(7, qual)
+        sreturn elf.is_interval(7, qual)
 
 
     def is_diminished(self):
