@@ -364,6 +364,7 @@ class Interval:
         elif (isinstance(p, str)):
             pass
         elif (isinstance(p, Pitch)):
+            new_letter = p.letter + self.span
             print(f'keynum: {p.keynum()}')
             target = p.keynum() + self.semitones()
             print(f'target: {target}')
@@ -371,10 +372,22 @@ class Interval:
             print(f'current: {current}')
             accidental = 2 + (target - current)
             print(f'accidental: {accidental}')
+            if (accidental < 0 and new_letter in (0, 1, 3, 4, 5)):
+                new_letter -= 1
+                accidental += 2
+            elif (accidental < 0):
+                new_letter -= 1
+                accidental += 1
+            elif (accidental > 4 and new_letter in (1, 2, 4, 5, 6)):
+                new_letter += 1
+                accidental -= 2
+            elif (accidental > 4):
+                new_letter += 1
+                accidental -= 1
             assert (accidental >= 0 and accidental < 5)
             xoct = (target - p.keynum()) // 12
-            print(p.letter + self.span)
-            return Pitch([(p.letter + self.span) % 7, accidental, p.octave + xoct])
+            print(new_letter)
+            return Pitch([(new_letter) % 7, accidental, p.octave + xoct])
         else:
             raise TypeError(f'invalid input {p} with type {type(p)}')
 
@@ -382,7 +395,7 @@ class Interval:
 
 def test():
     # Add your testing code here!
-    to_test = Pitch('C7')
+    to_test = Pitch('Fbb5')
     for interval in ['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8']:
         print(Interval(interval).transpose(to_test))
 
