@@ -337,7 +337,7 @@ class Interval:
 
     
     def is_descending(self):
-        if (self.qual == -1):
+        if (self.sign == -1):
             return True
         return False
 
