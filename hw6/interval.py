@@ -372,7 +372,7 @@ class Interval:
 
 
     def complemented(self):
-        return Interval([7 - self.span, 12 - self.qual, self.xoct, self.sign])
+        return Interval([7 - self.span + (7 * self.xoct), 12 - self.qual, self.xoct, self.sign])
 
     
     def semitones(self):
