@@ -32,13 +32,7 @@
       [  input = Interval('m73').complemented()  ]  your_output = <Interval: M69 [5, 7, 9, 1]>  desired_output = $exception$  (0/2)
       [  input = Interval('m66').complemented()  ]  your_output = <Interval: M62 [5, 7, 8, 1]>  desired_output = <Interval: M69 [5, 7, 9, 1]>  (0/2)
 
-      [  input = Interval('M3').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: P5 [4, 6, 0, 1]>  (0/2)
-      [  input = Interval('m3').add(Interval('M3'))  ]  your_output = None  desired_output = <Interval: P5 [4, 6, 0, 1]>  (0/2)
-      [  input = Interval('m3').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: o5 [4, 4, 0, 1]>  (0/2)
-      [  input = Interval('M3').add(Interval('M3'))  ]  your_output = None  desired_output = <Interval: +5 [4, 8, 0, 1]>  (0/2)
-      [  input = Interval('P5').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: m7 [6, 5, 0, 1]>  (0/2)
       [  input = Interval('o5').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: o7 [6, 4, 0, 1]>  (0/2)
-      [  input = Interval('M3').add(Interval('-m3'))  ]  your_output = None  desired_output = $exception$  (0/2)
 
       [  input = Interval('++5').transpose(Pitch('C#5'))  ]  your_output = <Pitch: A#5>  desired_output = $exception$  (0/2)
       [  input = Interval('oooo5').transpose(Pitch('C#5'))  ]  your_output = <Pitch: Fb5>  desired_output = $exception$  (0/2)

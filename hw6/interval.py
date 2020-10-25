@@ -395,13 +395,13 @@ class Interval:
         if (not(isinstance(other, Interval))):
             raise TypeError(f'cannot add a {type(other)} to an interval')
         to_span = self.span + other.span
-        to_qual = (self.qual - 6) + (other.qual - 6)
+        to_qual = ((self.qual - 6) + (other.qual - 6)) + 6
         to_xoct = self.xoct + other.xoct
-        assert (to_qual > 0)
+        assert (to_qual >= 0)
         print(f'add to_span: {to_span}')
         print(f'add to_qual: {to_qual}')
         print(f'add to_xoct: {to_xoct}')
-        return Interval(to_span, to_qual, to_xoct, 1)
+        return Interval([to_span, to_qual, to_xoct, 1])
 
     def transpose(self, p):
         if (isinstance(p, Pitch.pnums)):
