@@ -364,10 +364,14 @@ class Interval:
         elif (isinstance(p, str)):
             pass
         elif (isinstance(p, Pitch)):
+            print(f'keynum: {p.keynum()}')
             target = p.keynum() + self.semitones()
-            current = p.keynum() + self._default_spans[self.span]
+            print(f'target: {target}')
+            current = (p.keynum() - (p.accidental - 2)) + self._default_spans[self.span]
+            print(f'current: {current}')
             accidental = 2 + (target - current)
-            assert (accidental > 0 and accidental < 5)
+            print(f'accidental: {accidental}')
+            assert (accidental >= 0 and accidental < 5)
             xoct = (target - p.keynum()) // 12
             print(p.letter + self.span)
             return Pitch([(p.letter + self.span) % 7, accidental, p.octave + xoct])
@@ -378,7 +382,7 @@ class Interval:
 
 def test():
     # Add your testing code here!
-    to_test = Pitch('Fbb7')
+    to_test = Pitch('C7')
     for interval in ['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8']:
         print(Interval(interval).transpose(to_test))
 
