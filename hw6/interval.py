@@ -80,7 +80,7 @@ class Interval:
                 _temp[self._SECOND] = self.dict_slice(self._imperfect_intervals_dict, 4, 12)
                 _temp[self._THIRD] = self.dict_slice(self._imperfect_intervals_dict, 2, 12)
                 _temp[self._FOURTH] = self.dict_slice(self._perfect_intervals_dict, 1, 11)
-                _temp[self._FIFTH] = self.dict_slice(self._imperfect_intervals_dict, 0, 10)
+                _temp[self._FIFTH] = self.dict_slice(self._perfect_intervals_dict, 0, 10)
                 _temp[span][qual]
             else:
                 self._semitones[span][qual]
