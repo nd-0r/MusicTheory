@@ -93,8 +93,8 @@ class Interval:
             # if compound
             if (to_span > 8):
                 # to_span = to_span % 7 - 1
-                to_xoct = (to_span - 1) // 7
-                to_span = (to_span - 1) % 7
+                to_xoct = (to_span - 1) // 7 - 1
+                to_span = ((to_span - 1) % 7 + 7) % 7
             else:
                 to_span -= 1
                 to_xoct = 0
