@@ -114,7 +114,6 @@ class Interval:
             to_span = int(end)
             # if compound
             if (to_span > 8):
-                # to_span = to_span % 7 - 1
                 to_xoct = (to_span - 1) // 8
                 to_span = ((to_span - 1) % 7 + 7) % 7
             else:

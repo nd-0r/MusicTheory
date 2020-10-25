@@ -1,5 +1,3 @@
-      [  input = Interval([0, 6, 11, 1])  ]  your_output = <Interval: P8 [7, 6, 10, 1]>  desired_output = $exception$  (0/2)
-
       [  input = Interval(Pitch('E3'), Pitch('F4'))  ]  your_output = <Interval: m2 [1, 5, 0, 1]>  desired_output = <Interval: m9 [1, 5, 1, 1]>  (0/2)
       [  input = Interval(Pitch('D##4'), Pitch('Ebb3'))  ]  your_output = $exception$  desired_output = <Interval: -+++7 [6, 10, 0, -1]>  (0/2)
       [  input = Interval(Pitch('B1'), Pitch('F8'))  ]  your_output = <Interval: o5 [4, 4, 6, 1]>  desired_output = <Interval: o47 [4, 4, 6, 1]>  (0/2)
@@ -68,6 +66,7 @@
       [  input = Interval('P5').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: m7 [6, 5, 0, 1]>  (0/2)
       [  input = Interval('o5').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: o7 [6, 4, 0, 1]>  (0/2)
       [  input = Interval('M3').add(Interval('-m3'))  ]  your_output = None  desired_output = $exception$  (0/2)
+
       [  input = Interval('++5').transpose(Pitch('C#5'))  ]  your_output = <Pitch: A#5>  desired_output = $exception$  (0/2)
       [  input = Interval('oooo5').transpose(Pitch('C#5'))  ]  your_output = <Pitch: Fb5>  desired_output = $exception$  (0/2)
       [  input = Interval('-++++5').transpose(Pitch('C##5'))  ]  your_output = $exception$  desired_output = <Pitch: Fbb4>  (0/2)
