@@ -9,6 +9,10 @@ import random
 
 class Interval:
 
+    @staticmethod
+    def dict_slice(d, start, end):
+        return dict((k, d[k]) for i,k in enumerate(d.keys()) if (i in range(start, end))) 
+
     # span 0-7, qual 0-12, xoct 0-10, sign -1 or 1
     _quals = ('ddddd', 'ooooo', 'dddd', 'oooo', 'ddd', 'ooo', 'dd', 'oo', 'd', 'o', 'm', 'm', 'p', 
     'P', 'M', 'M', 'a', '+', 'aa', '++', 'aaa', '+++', 'aaaa', '++++', 'aaaaa', '+++++')
@@ -21,11 +25,15 @@ class Interval:
     # All imperfect intervals default to major
     # format is {qual_index : offset} removed 6:0.  Let's see if it blows up...
     _imperfect_intervals_dict = {0: -6, 1: -5, 2: -4, 3: -3, 4: -2, 5: -1, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    # special dicts for unison, second, and third b/c they can't have certain qualities
+    _unison_special = dict_slice.__func__(_perfect_intervals_dict, 5, 11)
+    _second_special = dict_slice.__func__(_imperfect_intervals_dict, 4, 12)
+    _third_special = dict_slice.__func__(_imperfect_intervals_dict, 3, 12)
     # format is {span_index : default_span}
     _default_spans = {i:s for i,s in enumerate([0,2,4,5,7,9,11,12])}
     # format is {span_index : {qual_index : offset}}
-    _semitones = {_UNISON:_perfect_intervals_dict, _SECOND:_imperfect_intervals_dict, 
-    _THIRD:_imperfect_intervals_dict, _FOURTH:_perfect_intervals_dict, 
+    _semitones = {_UNISON:_unison_special, _SECOND:_second_special, 
+    _THIRD:_third_special, _FOURTH:_perfect_intervals_dict, 
     _FIFTH:_perfect_intervals_dict, _SIXTH:_imperfect_intervals_dict, 
     _SEVENTH:_imperfect_intervals_dict, _OCTAVE:_perfect_intervals_dict}
     # format is {span_index : span_name}
