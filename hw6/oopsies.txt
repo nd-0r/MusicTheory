@@ -1,6 +1,6 @@
       [  input = Interval([0, 6, 11, 1])  ]  your_output = <Interval: P78 [7, 6, 10, 1]>  desired_output = $exception$  (0/2)
 
-      [  input = Interval(Pitch('E3'), Pitch('F4'))  ]  your_output = <Interval: m2 [1, 5, 0, 1]>  desired_output = <Interval: m9 [1, 5, 1, 1]>  (0/2)
+
       [  input = Interval(Pitch('D##4'), Pitch('Ebb3'))  ]  your_output = $exception$  desired_output = <Interval: -+++7 [6, 10, 0, -1]>  (0/2)
       [  input = Interval(Pitch('E9'), Pitch('C00'))  ]  your_output = <Interval: -m6 [5, 5, 9, -1]>  desired_output = <Interval: -M73 [2, 7, 10, -1]>  (0/2)
       [  input = Interval(Pitch('C##4'), Pitch('Cbb4'))  ]  your_output = $exception$  desired_output = <Interval: -++++1 [0, 11, 0, -1]>  (0/2)

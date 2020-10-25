@@ -228,7 +228,7 @@ class Interval:
 
     def string(self):
         if (self.sign == -1):
-            return '-' + self._quals[self.qual * 2 + 1] + str(self.span + 1)
+            return '-' + self._quals[self.qual * 2 + 1] + str(self.span + (7 * self.xoct) + 1)
         else:
             return self._quals[self.qual * 2 + 1] + str(self.span + (7 * self.xoct) + 1)
 
