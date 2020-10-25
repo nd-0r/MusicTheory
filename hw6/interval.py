@@ -68,9 +68,13 @@ class Interval:
     
     def _init_from_list(self, span, qual, xoct, sign):
         # checks if it is a valid combo of span and qual
+        if (span == 0 and xoct > 0):
+            span += 7
+            xoct -= 1
+        elif (span > 7):
+            span %= 7
+            xoct += (span // 7)
         try:
-            if (span == 0 and xoct > 0):
-                raise ValueError(f'cannot have a unison with extra octaves!!!')
             # special dicts for unison, second, and third b/c they can't have certain qualities
             print(f'init from list span: {span}')
             print(f'init from list qual: {qual}')
@@ -86,9 +90,6 @@ class Interval:
                 self._semitones[span][qual]
         except KeyError:
             raise ValueError(f'Values out of range for Interval.  span: {span} qual: {qual} xoct: {xoct} sign: {sign}')
-        if (span == 0 and xoct > 0):
-            span += 7
-            xoct -= 1
         if ((0 <= span <= 7) and (0 <= qual <= 12) and (0 <= xoct <= 10) and (sign == 1 or sign == -1)):
             self.span = span
             self.qual = qual
@@ -229,7 +230,7 @@ class Interval:
         if (self.sign == -1):
             return '-' + self._quals[self.qual * 2 + 1] + str(self.span + 1)
         else:
-            return self._quals[self.qual * 2 + 1] + str(self.span + 1)
+            return self._quals[self.qual * 2 + 1] + str(self.span + (7 * self.xoct) + 1)
 
 
     def full_name(self, *, sign=True):
@@ -374,7 +375,7 @@ class Interval:
 
 
     def complemented(self):
-        return Interval([7 - self.span, 12 - self.qual, self.xoct, - self.sign])
+        return Interval([(7 - self.span + (7 * self.xoct)), 12 - self.qual, self.xoct, self.sign])
 
     
     def semitones(self):
@@ -469,20 +470,67 @@ def test():
     # print(Interval('oo3').is_dissonant())
     # print(Interval('+6').is_dissonant())
 
-    print(Interval('o3').semitones())
-    print(Interval('oo3').semitones())
-    print(Interval('ooo3').semitones())
-    print(Interval('o2').semitones())
-    print(Interval('oooo9').semitones() )
-    print(Interval('ooo9').semitones()  )
-    print(Interval('oo9').semitones() )
-    print(Interval('o9').semitones() )
-    print(Interval('m9').semitones() )
-    print(Interval('M9').semitones() )
-    print(Interval('+9').semitones() )
-    print(Interval('++9').semitones() )
-    print(Interval('+++9').semitones() )
-    print(Interval('++++9').semitones() )
+    # print(Interval('o3').semitones())
+    # print(Interval('oo3').semitones())
+    # print(Interval('ooo3').semitones())
+    # print(Interval('o2').semitones())
+    # print(Interval('oooo9').semitones() )
+    # print(Interval('ooo9').semitones()  )
+    # print(Interval('oo9').semitones() )
+    # print(Interval('o9').semitones() )
+    # print(Interval('m9').semitones() )
+    # print(Interval('M9').semitones() )
+    # print(Interval('+9').semitones() )
+    # print(Interval('++9').semitones() )
+    # print(Interval('+++9').semitones() )
+    # print(Interval('++++9').semitones() )
+
+    # print(Interval('P5').full_name()  )
+    # print(Interval('++15').full_name()  )
+    # print(Interval('P5').span_name()  )
+    # print(Interval('++15').span_name()  )
+    # print(Interval('P5').quality_name())
+    # print(Interval('++15').quality_name())
+    # print(Interval('P5').lines_and_spaces())
+
+    # print(Interval([0, 6, 1, 1]).to_list())
+    # print(Interval([0, 6, 2, 1]).to_list())
+
+    # print(Interval('P5').is_fifth()  )
+    # print(Interval('P5').is_perfect()  )
+    # print(Interval('P5').is_imperfect_type()  )
+    # print(Interval('AAAA5').is_augmented())
+    # print(Interval('P5').is_diminished()  )
+    # print(Interval('AAAA5').is_diminished()  )
+    # print(Interval('P5').is_augmented()  )
+    # print(Interval('P5').is_major()  )
+    # print(Interval('P5').is_consonant())
+    # print(Interval('P5').is_dissonant() )
+
+    print(Interval('P1').complemented())
+    print(Interval('+1').complemented())
+    print(Interval('+7').complemented())
+    print(Interval('m2').complemented())
+    print(Interval('m9').complemented() )
+    print(Interval('P8').complemented())
+    print(Interval('++6').complemented()  )
+    print(Interval('o8').complemented())
+    print(Interval('oo8').complemented()  )
+    print(Interval('++15').complemented()  )
+    print(Interval('M3').complemented()  )
+    print(Interval('m73').complemented() )
+    print(Interval('m66').complemented() )
+    print(Interval('++3').complemented()  )
+    print(Interval('oo3').complemented()  )
+    print(Interval('P5').complemented()  )
+    print(Interval('-P5').complemented()  )
+    print(Interval('-M3').complemented()  )
+    print(Interval('-oo5').complemented()   )
+    print(Interval('-ooo5').complemented())
+    print(Interval('-oooo5').complemented()  )
+    print(Interval('-ooooo5').complemented()   )
+    print(Interval('ooooo12').complemented()  )
+    print(Interval('-+++++18').complemented())
 
 
 
