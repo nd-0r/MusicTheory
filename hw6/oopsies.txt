@@ -9,7 +9,7 @@
       [  input = Interval(Pitch('B##4'), Pitch('Fbb4'))  ]  your_output = <Interval: -ooooo5 [4, 0, 0, -1]>  desired_output = <Interval: -+++++4 [3, 12, 0, -1]>  (0/2)
 
       [  input = Interval(Pitch('Cs4'), Pitch('B3'))  ]  your_output = <Interval: -m7 [6, 5, 1, -1]>  desired_output = <Interval: -M2 [1, 7, 0, -1]>  (0/2)
-      [  input = Interval(Pitch('E4'), Pitch('D4'))  ]  your_output = <Interval: -m7 [6, 5, 0, -1]>  desired_output = <Interval: -M2 [1, 7, 0, -1]>  (0/2)
+
       [  input = Interval(Pitch('E4'), Pitch('D#4'))  ]  your_output = <Interval: -M7 [6, 7, 0, -1]>  desired_output = <Interval: -m2 [1, 5, 0, -1]>  (0/2)
       [  input = Interval(Pitch('Cs4'), Pitch('B3'))  ]  your_output = <Interval: -m7 [6, 5, 1, -1]>  desired_output = <Interval: -M2 [1, 7, 0, -1]>  (0/2)
       [  input = Interval(Pitch('Cs4'), Pitch('B2'))  ]  your_output = <Interval: -m7 [6, 5, 2, -1]>  desired_output = <Interval: -M9 [1, 7, 1, -1]>  (0/2)
