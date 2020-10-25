@@ -1,7 +1,5 @@
-      [  input = Interval('ooo3')  ]  your_output = $exception$  desired_output = <Interval: ooo3 [2, 2, 0, 1]>  (0/2)
-      [  input = Interval('ooooo4')  ]  your_output = <Interval: ooooo4 [3, 0, 0, 1]>  desired_output = $exception$  (0/2)
-      [  input = Interval('+++++5')  ]  your_output = <Interval: +++++5 [4, 12, 0, 1]>  desired_output = $exception$  (0/2)
       [  input = Interval([0, 6, 11, 1])  ]  your_output = <Interval: P8 [7, 6, 10, 1]>  desired_output = $exception$  (0/2)
+
       [  input = Interval(Pitch('E3'), Pitch('F4'))  ]  your_output = <Interval: m2 [1, 5, 0, 1]>  desired_output = <Interval: m9 [1, 5, 1, 1]>  (0/2)
       [  input = Interval(Pitch('D##4'), Pitch('Ebb3'))  ]  your_output = $exception$  desired_output = <Interval: -+++7 [6, 10, 0, -1]>  (0/2)
       [  input = Interval(Pitch('B1'), Pitch('F8'))  ]  your_output = <Interval: o5 [4, 4, 6, 1]>  desired_output = <Interval: o47 [4, 4, 6, 1]>  (0/2)
@@ -37,11 +35,13 @@
       [  input = Interval(Pitch('C00'), Pitch('G9'))  ]  your_output = <Interval: P5 [4, 6, 9, 1]>  desired_output = <Interval: P75 [4, 6, 10, 1]>  (0/2)
       [  input = Interval(Pitch('C00'), Pitch('F##9'))  ]  your_output = <Interval: ++4 [3, 9, 9, 1]>  desired_output = <Interval: ++74 [3, 9, 10, 1]>  (0/2)
       [  input = Interval(Pitch('C00'), Pitch('Abb9'))  ]  your_output = $exception$  desired_output = <Interval: o76 [5, 4, 10, 1]>  (0/2)
+
       [  input = Interval('ddd9').is_second()  ]  your_output = $exception$  desired_output = True  (0/2)
       [  input = Interval('ooo3').is_diminished()  ]  your_output = $exception$  desired_output = 3  (0/2)
       [  input = Interval('oo9').is_compound()  ]  your_output = $exception$  desired_output = True  (0/2)
       [  input = Interval('ooo9').is_compound()  ]  your_output = $exception$  desired_output = True  (0/2)
       [  input = Interval('oooo9').is_compound()  ]  your_output = $exception$  desired_output = True  (0/2)
+
       [  input = Interval('P1').complemented()  ]  your_output = <Interval: -P8 [7, 6, 0, -1]>  desired_output = <Interval: P8 [7, 6, 0, 1]>  (0/2)
       [  input = Interval('+1').complemented()  ]  your_output = <Interval: -o8 [7, 4, 0, -1]>  desired_output = <Interval: o8 [7, 4, 0, 1]>  (0/2)
       [  input = Interval('+7').complemented()  ]  your_output = <Interval: -o2 [1, 4, 0, -1]>  desired_output = <Interval: o2 [1, 4, 0, 1]>  (0/2)
@@ -66,10 +66,7 @@
       [  input = Interval('-ooooo5').complemented()  ]  your_output = <Interval: +++++4 [3, 12, 0, 1]>  desired_output = <Interval: -+++++4 [3, 12, 0, -1]>  (0/2)
       [  input = Interval('ooooo12').complemented()  ]  your_output = <Interval: -+++++4 [3, 12, 1, -1]>  desired_output = <Interval: +++++11 [3, 12, 1, 1]>  (0/2)
       [  input = Interval('-+++++18').complemented()  ]  your_output = <Interval: ooooo5 [4, 0, 2, 1]>  desired_output = <Interval: -ooooo19 [4, 0, 2, -1]>  (0/2)
-      [  input = Interval('ooo3').semitones()  ]  your_output = $exception$  desired_output = 0  (0/2)
-      [  input = Interval('oooo9').semitones()  ]  your_output = $exception$  desired_output = 9  (0/2)
-      [  input = Interval('ooo9').semitones()  ]  your_output = $exception$  desired_output = 10  (0/2)
-      [  input = Interval('oo9').semitones()  ]  your_output = $exception$  desired_output = 11  (0/2)
+
       [  input = Interval('M3').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: P5 [4, 6, 0, 1]>  (0/2)
       [  input = Interval('m3').add(Interval('M3'))  ]  your_output = None  desired_output = <Interval: P5 [4, 6, 0, 1]>  (0/2)
       [  input = Interval('m3').add(Interval('m3'))  ]  your_output = None  desired_output = <Interval: o5 [4, 4, 0, 1]>  (0/2)

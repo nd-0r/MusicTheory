@@ -25,19 +25,13 @@ class Interval:
     # All imperfect intervals default to major
     # format is {qual_index : offset} removed 6:0.  Let's see if it blows up...
     _imperfect_intervals_dict = {0: -6, 1: -5, 2: -4, 3: -3, 4: -2, 5: -1, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
-    # special dicts for unison, second, and third b/c they can't have certain qualities
-    _unison_special = dict_slice.__func__(_perfect_intervals_dict, 5, 11)
-    _second_special = dict_slice.__func__(_imperfect_intervals_dict, 4, 12)
-    _third_special = dict_slice.__func__(_imperfect_intervals_dict, 2, 12)
-    _fourth_special = dict_slice.__func__(_perfect_intervals_dict, 1, 11)
-    _fifth_special = dict_slice.__func__(_imperfect_intervals_dict, 0, 10)
     # format is {span_index : default_span}
     _default_spans = {i:s for i,s in enumerate([0,2,4,5,7,9,11,12])}
     # format is {span_index : {qual_index : offset}}
-    _semitones = {_UNISON:_unison_special, _SECOND:_second_special, 
-    _THIRD:_third_special, _FOURTH:_fourth_special, _FIFTH:_fifth_special, 
-    _SIXTH:_imperfect_intervals_dict, _SEVENTH:_imperfect_intervals_dict, 
-    _OCTAVE:_perfect_intervals_dict}
+    _semitones = {_UNISON:_perfect_intervals_dict, _SECOND:_imperfect_intervals_dict, 
+    _THIRD:_imperfect_intervals_dict, _FOURTH:_perfect_intervals_dict, 
+    _FIFTH:_perfect_intervals_dict, _SIXTH:_imperfect_intervals_dict, 
+    _SEVENTH:_imperfect_intervals_dict, _OCTAVE:_perfect_intervals_dict}
     # format is {span_index : span_name}
     _span_names = {i:n for i,n in enumerate(['unison', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'octave'])}
     # format is {qual_index : qual_name}
@@ -75,7 +69,19 @@ class Interval:
     def _init_from_list(self, span, qual, xoct, sign):
         # checks if it is a valid combo of span and qual
         try:
-            self._semitones[span][qual]
+            # special dicts for unison, second, and third b/c they can't have certain qualities
+            print(f'init from list span: {span}')
+            print(f'init from list qual: {qual}')
+            if (xoct == 0):
+                _temp = self._semitones
+                _temp[self._UNISON] = self.dict_slice(self._perfect_intervals_dict, 5, 11)
+                _temp[self._SECOND] = self.dict_slice(self._imperfect_intervals_dict, 4, 12)
+                _temp[self._THIRD] = self.dict_slice(self._imperfect_intervals_dict, 2, 12)
+                _temp[self._FOURTH] = self.dict_slice(self._perfect_intervals_dict, 1, 11)
+                _temp[self._FIFTH] = self.dict_slice(self._imperfect_intervals_dict, 0, 10)
+                _temp[span][qual]
+            else:
+                self._semitones[span][qual]
         except KeyError:
             raise ValueError(f'Values out of range for Interval.  span: {span} qual: {qual} xoct: {xoct} sign: {sign}')
         if (span == 0 and xoct > 0):
