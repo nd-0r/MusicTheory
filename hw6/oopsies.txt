@@ -33,9 +33,6 @@
       [  input = Interval(Pitch('C00'), Pitch('F##9'))  ]  your_output = <Interval: ++4 [3, 9, 9, 1]>  desired_output = <Interval: ++74 [3, 9, 10, 1]>  (0/2)
       [  input = Interval(Pitch('C00'), Pitch('Abb9'))  ]  your_output = $exception$  desired_output = <Interval: o76 [5, 4, 10, 1]>  (0/2)
 
-      [  input = Interval([0, 6, 1, 1]).to_list()  ]  your_output = $exception$  desired_output = [7, 6, 0, 1]  (0/2)
-      [  input = Interval([0, 6, 2, 1]).to_list()  ]  your_output = $exception$  desired_output = [7, 6, 1, 1]  (0/2)
-
       [  input = Interval('P1').complemented()  ]  your_output = <Interval: -P8 [7, 6, 0, -1]>  desired_output = <Interval: P8 [7, 6, 0, 1]>  (0/2)
       [  input = Interval('+1').complemented()  ]  your_output = <Interval: -o8 [7, 4, 0, -1]>  desired_output = <Interval: o8 [7, 4, 0, 1]>  (0/2)
       [  input = Interval('+7').complemented()  ]  your_output = <Interval: -o2 [1, 4, 0, -1]>  desired_output = <Interval: o2 [1, 4, 0, 1]>  (0/2)
