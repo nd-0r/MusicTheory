@@ -68,6 +68,12 @@ class Interval:
     
     def _init_from_list(self, span, qual, xoct, sign):
         # checks if it is a valid combo of span and qual
+        if (span == 0 and xoct > 0):
+            span += 7
+            xoct -= 1
+        elif (span > 7):
+            span %= 7
+            xoct += (span // 7)
         try:
             # special dicts for unison, second, and third b/c they can't have certain qualities
             print(f'init from list span: {span}')
@@ -84,9 +90,6 @@ class Interval:
                 self._semitones[span][qual]
         except KeyError:
             raise ValueError(f'Values out of range for Interval.  span: {span} qual: {qual} xoct: {xoct} sign: {sign}')
-        if (span == 0 and xoct > 0):
-            span += 7
-            xoct -= 1
         if ((0 <= span <= 7) and (0 <= qual <= 12) and (0 <= xoct <= 10) and (sign == 1 or sign == -1)):
             self.span = span
             self.qual = qual
@@ -372,7 +375,7 @@ class Interval:
 
 
     def complemented(self):
-        return Interval([(7 - self.span + (7 * self.xoct)) % 7, 12 - self.qual, self.xoct, self.sign])
+        return Interval([(7 - self.span + (7 * self.xoct)), 12 - self.qual, self.xoct, self.sign])
 
     
     def semitones(self):
