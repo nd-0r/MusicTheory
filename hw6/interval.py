@@ -238,6 +238,8 @@ class Interval:
         return [self.span, self.qual, self.xoct, self.sign]
 
     def is_interval(self, span, qual=None):
+        if (qual is not None and qual not in ('M','m')):
+            qual = str.lower(qual)
         try:
             if (self.span == span and (qual==None or self._qual == (self._quals.index(qual) // 2))):
                 return True
@@ -273,7 +275,7 @@ class Interval:
 
     
     def is_octave(self, qual=None):
-        sreturn elf.is_interval(7, qual)
+        return self.is_interval(7, qual)
 
 
     def is_diminished(self):
