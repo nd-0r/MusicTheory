@@ -28,14 +28,16 @@ class Interval:
     # special dicts for unison, second, and third b/c they can't have certain qualities
     _unison_special = dict_slice.__func__(_perfect_intervals_dict, 5, 11)
     _second_special = dict_slice.__func__(_imperfect_intervals_dict, 4, 12)
-    _third_special = dict_slice.__func__(_imperfect_intervals_dict, 3, 12)
+    _third_special = dict_slice.__func__(_imperfect_intervals_dict, 2, 12)
+    _fourth_special = dict_slice.__func__(_perfect_intervals_dict, 1, 11)
+    _fifth_special = dict_slice.__func__(_imperfect_intervals_dict, 0, 10)
     # format is {span_index : default_span}
     _default_spans = {i:s for i,s in enumerate([0,2,4,5,7,9,11,12])}
     # format is {span_index : {qual_index : offset}}
     _semitones = {_UNISON:_unison_special, _SECOND:_second_special, 
-    _THIRD:_third_special, _FOURTH:_perfect_intervals_dict, 
-    _FIFTH:_perfect_intervals_dict, _SIXTH:_imperfect_intervals_dict, 
-    _SEVENTH:_imperfect_intervals_dict, _OCTAVE:_perfect_intervals_dict}
+    _THIRD:_third_special, _FOURTH:_fourth_special, _FIFTH:_fifth_special, 
+    _SIXTH:_imperfect_intervals_dict, _SEVENTH:_imperfect_intervals_dict, 
+    _OCTAVE:_perfect_intervals_dict}
     # format is {span_index : span_name}
     _span_names = {i:n for i,n in enumerate(['unison', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'octave'])}
     # format is {qual_index : qual_name}
