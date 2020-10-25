@@ -94,7 +94,7 @@ class Interval:
             # if compound
             if (to_span > 8):
                 # to_span = to_span % 7 - 1
-                to_xoct = (to_span - 1) // 7 - 1
+                to_xoct = (to_span - 1) // 8
                 to_span = ((to_span - 1) % 7 + 7) % 7
             else:
                 to_span -= 1
@@ -358,7 +358,7 @@ class Interval:
 
     
     def semitones(self):
-        return self._default_spans[self.span] + self._semitones[self.span][self.qual]
+        return self._default_spans[self.span] + self._semitones[self.span][self.qual] + (12 * self.xoct)
 
 
     def add(self, other):
@@ -403,8 +403,8 @@ class Interval:
 def test():
     # Add your testing code here!
     to_test = Pitch('C##5')
-    for interval in ['-P1', '-m2', '-M2', '-m3', '-M3', '-P4', '-d5', '-P5', '-m6', '-M6', '-m7', '-M7', '-P8']:
-        print(Interval(interval).transpose(to_test))
+    # for interval in ['-P1', '-m2', '-M2', '-m3', '-M3', '-P4', '-d5', '-P5', '-m6', '-M6', '-m7', '-M7', '-P8']:
+        #print(Interval(interval).transpose(to_test))
     
     print(Interval('+1').is_unison('A'))
     print(Interval('+1').is_unison('+'))
@@ -448,6 +448,22 @@ def test():
     print(Interval('ooooo5').is_dissonant())
     print(Interval('oo3').is_dissonant())
     print(Interval('+6').is_dissonant())
+
+    print(Interval('o3').semitones())
+    print(Interval('oo3').semitones())
+    print(Interval('ooo3').semitones())
+    print(Interval('o2').semitones())
+    print(Interval('oooo9').semitones() )
+    print(Interval('ooo9').semitones()  )
+    print(Interval('oo9').semitones() )
+    print(Interval('o9').semitones() )
+    print(Interval('m9').semitones() )
+    print(Interval('M9').semitones() )
+    print(Interval('+9').semitones() )
+    print(Interval('++9').semitones() )
+    print(Interval('+++9').semitones() )
+    print(Interval('++++9').semitones() )
+
 
 
 if __name__ == '__main__':
