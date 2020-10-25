@@ -359,7 +359,7 @@ class Interval:
 
 
     def transpose(self, p):
-        if (isinstance(p, Pnum)):
+        if (isinstance(p, Pitch.pnums)):
             pass
         elif (isinstance(p, str)):
             pass
@@ -368,8 +368,9 @@ class Interval:
             current = p.keynum() + self._default_spans[self.span]
             accidental = 2 + (target - current)
             assert (accidental > 0 and accidental < 5)
-            xoct = (target - p.keynum) % 12
-            return Pitch([p.letter + self.span, accidental, p.octave + xoct])
+            xoct = (target - p.keynum()) // 12
+            print(p.letter + self.span)
+            return Pitch([(p.letter + self.span) % 7, accidental, p.octave + xoct])
         else:
             raise TypeError(f'invalid input {p} with type {type(p)}')
 
@@ -377,8 +378,9 @@ class Interval:
 
 def test():
     # Add your testing code here!
-    print(Interval([7, 1, 0, 1]))
-    print(Interval([random.randint(0, 7), random.randint(0, 12), random.randint(0, 10), random.randint(-1, 1)]))
+    to_test = Pitch('Fbb7')
+    for interval in ['P1', 'm2', 'M2', 'm3', 'M3', 'P4', 'd5', 'P5', 'm6', 'M6', 'm7', 'M7', 'P8']:
+        print(Interval(interval).transpose(to_test))
 
 
 if __name__ == '__main__':
