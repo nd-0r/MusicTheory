@@ -5,6 +5,7 @@ import random
 
 # !!! fix f to b sharp case
 # !!! fix midi oob error for pitch to interval
+# !!! fix descending case for transpose/pitch_to_interval
 
 class Interval:
 
@@ -347,7 +348,7 @@ class Interval:
 
                    
     def is_dissonant(self):
-        if (self.semitones() in (6,1,11)):
+        if (self.semitones() in (6,1,11,2,10)):
             return True
         return False
 
