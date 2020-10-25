@@ -227,7 +227,7 @@ class Interval:
         if (self.sign == -1):
             return '-' + self._quals[self.qual * 2 + 1] + str(self.span + 1)
         else:
-            return self._quals[self.qual * 2 + 1] + str(self.span + 1)
+            return self._quals[self.qual * 2 + 1] + str(self.span + (7 * self.xoct) + 1)
 
 
     def full_name(self, *, sign=True):
@@ -372,7 +372,7 @@ class Interval:
 
 
     def complemented(self):
-        return Interval([7 - self.span + (7 * self.xoct), 12 - self.qual, self.xoct, self.sign])
+        return Interval([(7 - self.span + (7 * self.xoct)) % 7, 12 - self.qual, self.xoct, self.sign])
 
     
     def semitones(self):
