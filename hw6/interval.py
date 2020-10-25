@@ -68,6 +68,9 @@ class Interval:
             self._semitones[span][qual]
         except KeyError:
             raise ValueError(f'Values out of range for Interval.  span: {span} qual: {qual} xoct: {xoct} sign: {sign}')
+        if (span == 0 and xoct > 0):
+            span += 7
+            xoct -= 1
         if ((0 <= span <= 7) and (0 <= qual <= 12) and (0 <= xoct <= 10) and (sign == 1 or sign == -1)):
             self.span = span
             self.qual = qual
@@ -226,7 +229,7 @@ class Interval:
 
 
     def matches(self, other):
-        if (self.semitones() == other.semitones()):
+        if (self.span == other.span and self.qual == other.qual and self.sign == other.sign):
             return True
         return False
 
