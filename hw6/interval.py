@@ -69,11 +69,13 @@ class Interval:
     def _init_from_list(self, span, qual, xoct, sign):
         # checks if it is a valid combo of span and qual
         try:
+            if (span == 0 and xoct > 0):
+                raise ValueError(f'cannot have a unison with extra octaves!!!')
             # special dicts for unison, second, and third b/c they can't have certain qualities
             print(f'init from list span: {span}')
             print(f'init from list qual: {qual}')
             if (xoct == 0):
-                _temp = self._semitones
+                _temp = dict(self._semitones)
                 _temp[self._UNISON] = self.dict_slice(self._perfect_intervals_dict, 5, 11)
                 _temp[self._SECOND] = self.dict_slice(self._imperfect_intervals_dict, 4, 12)
                 _temp[self._THIRD] = self.dict_slice(self._imperfect_intervals_dict, 2, 12)
