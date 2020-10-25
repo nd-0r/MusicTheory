@@ -152,7 +152,7 @@ class Interval:
             keynum_span = (pitch2_base_keynum - pitch1_base_keynum) % 12
         print("pc span: " + str(keynum_span))
         if (pitch2.keynum() - pitch1.keynum() < 0):
-            base_interval = Interval("-" + self._diatonic_intervals[abs(keynum_span)])
+            base_interval = Interval("-" + self._diatonic_intervals[abs(keynum_span)]).complemented()
         else:
             base_interval = Interval(self._diatonic_intervals[abs(keynum_span)])
         print("base interval: " + str(base_interval.string())) 
