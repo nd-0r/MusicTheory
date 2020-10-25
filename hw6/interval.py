@@ -241,7 +241,7 @@ class Interval:
         if (qual is not None and qual not in ('M','m')):
             qual = str.lower(qual)
         try:
-            if (self.span == span and (qual==None or self._qual == (self._quals.index(qual) // 2))):
+            if (self.span == span and (qual==None or self.qual == (self._quals.index(qual) // 2))):
                 return True
         except ValueError:
             raise ValueError(f'invalid quality: {qual}')
@@ -400,6 +400,49 @@ def test():
     to_test = Pitch('C##5')
     for interval in ['-P1', '-m2', '-M2', '-m3', '-M3', '-P4', '-d5', '-P5', '-m6', '-M6', '-m7', '-M7', '-P8']:
         print(Interval(interval).transpose(to_test))
+    
+    print(Interval('+1').is_unison('A'))
+    print(Interval('+1').is_unison('+'))
+    print(Interval('+1').is_unison('o'))
+    print(Interval('+2').is_second('A'))
+    print(Interval('+2').is_second('+'))
+    print(Interval('+2').is_second('m') )
+    print(Interval('+3').is_third('A'))
+    print(Interval('+3').is_third('+'))
+    print(Interval('+3').is_third('++') )
+    print(Interval('+4').is_fourth('A'))
+    print(Interval('+4').is_fourth('+'))
+    print(Interval('+4').is_fourth('oo') )
+    print(Interval('+5').is_fifth('A'))
+    print(Interval('+5').is_fifth('+'))
+    print(Interval('+5').is_fifth('oo') )
+    print(Interval('M6').is_sixth('M'))
+    print(Interval('+6').is_sixth('+'))
+    print(Interval('+6').is_sixth('oo') )
+    print(Interval('m7').is_seventh('m'))
+    print(Interval('+7').is_seventh('+'))
+    print(Interval('+7').is_seventh('oo') )
+    print(Interval('+++14').is_seventh())
+    print(Interval('+8').is_octave('A'))
+    print(Interval('+8').is_octave('+'))
+    print(Interval('+8').is_octave('P') )
+    print(Interval('-m14').is_major() )
+    print(Interval('-m14').is_minor())
+    print(Interval('m9').is_compound())
+    print(Interval('o9').is_compound())
+    print(Interval('oo9').is_compound())
+    print(Interval('ooo9').is_compound())
+    print(Interval('oooo9').is_compound())
+    print(Interval('-m3').is_ascending())
+    print(Interval('-+3').is_descending())
+    print(Interval('+++++4').is_consonant())
+    print(Interval('ooooo5').is_consonant())
+    print(Interval('oo3').is_consonant())
+    print(Interval('+6').is_consonant())
+    print(Interval('+++++4').is_dissonant())
+    print(Interval('ooooo5').is_dissonant())
+    print(Interval('oo3').is_dissonant())
+    print(Interval('+6').is_dissonant())
 
 
 if __name__ == '__main__':
