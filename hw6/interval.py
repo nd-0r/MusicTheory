@@ -18,8 +18,8 @@ class Interval:
     # format is {qual_index : offset}
     _perfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 6: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
     # All imperfect intervals default to major
-    # format is {qual_index : offset}
-    _imperfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 5: -1, 6: 0, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    # format is {qual_index : offset} removed 6:0.  Let's see if it blows up...
+    _imperfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 5: -1, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
     # format is {span_index : default_span}
     _default_spans = {i:s for i,s in enumerate([0,2,4,5,7,9,11,12])}
     # format is {span_index : {qual_index : offset}}
@@ -92,20 +92,24 @@ class Interval:
             to_span = int(end)
             # if compound
             if (to_span > 8):
-                to_span = to_span % 7 - 1
+                # to_span = to_span % 7 - 1
+                to_xoct = (to_span - 1) // 7
+                to_span = (to_span - 1) % 7
             else:
                 to_span -= 1
+                to_xoct = 0
             to_qual = name[:name.index(end)]
             if (to_qual not in ('m', 'M') and to_qual[1:] not in ('m', 'M')):
                 to_qual = str.lower(to_qual)
             
             print("to_span: ", to_span)
             print("to_qual: ", to_qual)
+            print("to_xoct: ", to_xoct)
 
             if (to_span in range(8) and name[0] == '-' and to_qual[1:] in self._quals):
-                self._init_from_list(to_span, self._safe_quals_dict[to_qual[1:]], max(to_span // 9 - 1, 0), -1)
+                self._init_from_list(to_span, self._safe_quals_dict[to_qual[1:]], to_xoct, -1)
             elif (to_span in range(8) and to_qual in self._quals):
-                self._init_from_list(to_span, self._safe_quals_dict[to_qual], max(to_span // 9 - 1, 0), 1)
+                self._init_from_list(to_span, self._safe_quals_dict[to_qual], to_xoct, 1)
             else:
                 raise ValueError(f'Invalid interval name {name}')
         except Exception:
