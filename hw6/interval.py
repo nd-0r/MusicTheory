@@ -20,7 +20,7 @@ class Interval:
     _perfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 6: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
     # All imperfect intervals default to major
     # format is {qual_index : offset} removed 6:0.  Let's see if it blows up...
-    _imperfect_intervals_dict = {0: -5, 1: -4, 2: -3, 3: -2, 4: -1, 5: -1, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
+    _imperfect_intervals_dict = {0: -6, 1: -5, 2: -4, 3: -3, 4: -2, 5: -1, 7: 0, 8: 1, 9: 2, 10: 3, 11: 4, 12: 5}
     # format is {span_index : default_span}
     _default_spans = {i:s for i,s in enumerate([0,2,4,5,7,9,11,12])}
     # format is {span_index : {qual_index : offset}}
