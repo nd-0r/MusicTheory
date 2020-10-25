@@ -48,6 +48,8 @@ class Interval:
     # Standard takes an interval quality index and maps it to a sliding
     # scale standard for imperfect/perfect intervals. Reverse does the 
     # opposite
+    _qual_scale_devil = {q:i for i,q in enumerate([0,1,2,3,4,8,9,10,11,12])}
+    _qual_scale_devil_reverse = dict(reversed(pair) for pair in _qual_scale_devil.items())
     _qual_scale_imperfect = {q:i for i,q in enumerate([0,1,2,3,4,5,7,8,9,10,11,12])}
     _qual_scale_imperfect_reverse = dict(reversed(pair) for pair in _qual_scale_imperfect.items())
     _qual_scale_perfect = {q:i for i,q in enumerate([0,1,2,3,4,6,8,9,10,11,12])}
@@ -157,9 +159,14 @@ class Interval:
             base_interval = Interval(self._diatonic_intervals[abs(keynum_span)])
         print("base interval: " + str(base_interval.string())) 
         # offset from the diatonic intervals given by the pitches' accidentals
-        qual_offset = (pitch2.accidental - 2) - (pitch1.accidental - 2)
+        if (pitch2.keynum() - pitch1.keynum() < 0):
+            qual_offset = -((pitch2.accidental - 2) - (pitch1.accidental - 2))
+        else:
+            qual_offset = (pitch2.accidental - 2) - (pitch1.accidental - 2)
         print("qual offset: " + str(qual_offset))
-        if (base_interval.is_perfect()):
+        if ((pitch1.letter == 3 and pitch2.letter == 6) or(pitch1.letter == 6 and pitch2.letter == 3)):
+            qual = self._qual_scale_perfect_reverse[self._qual_scale_perfect[base_interval.qual] + qual_offset]
+        elif (base_interval.is_perfect()):
             qual = self._qual_scale_perfect_reverse[self._qual_scale_perfect[base_interval.qual] + qual_offset]
         else:
             qual = self._qual_scale_imperfect_reverse[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
