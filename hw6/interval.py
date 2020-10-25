@@ -163,7 +163,7 @@ class Interval:
             qual = self._qual_scale_perfect_reverse[self._qual_scale_perfect[base_interval.qual] + qual_offset]
         else:
             qual = self._qual_scale_imperfect_reverse[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
-        self._init_from_list(base_interval.span, qual, max(abs(pitch2.octave - pitch1.octave) - 1, 0), base_interval.sign)
+        self._init_from_list(base_interval.span, qual, max(abs(pitch2.octave - pitch1.octave), 0), base_interval.sign)
             
 
     def __str__(self):
