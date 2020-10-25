@@ -113,7 +113,7 @@ class Interval:
             # if compound
             if (to_span > 8):
                 to_xoct = (to_span - 1) // 8
-                to_span = ((to_span - 1) % 7 + 7) % 8
+                to_span = ((to_span - 1) % 7 + 7) % 7
             else:
                 to_span -= 1
                 to_xoct = 0
@@ -493,16 +493,41 @@ def test():
     # print(Interval([0, 6, 1, 1]).to_list())
     # print(Interval([0, 6, 2, 1]).to_list())
 
-    print(Interval('P5').is_fifth()  )
-    print(Interval('P5').is_perfect()  )
-    print(Interval('P5').is_imperfect_type()  )
-    print(Interval('AAAA5').is_augmented())
-    print(Interval('P5').is_diminished()  )
-    print(Interval('AAAA5').is_diminished()  )
-    print(Interval('P5').is_augmented()  )
-    print(Interval('P5').is_major()  )
-    print(Interval('P5').is_consonant())
-    print(Interval('P5').is_dissonant() )
+    # print(Interval('P5').is_fifth()  )
+    # print(Interval('P5').is_perfect()  )
+    # print(Interval('P5').is_imperfect_type()  )
+    # print(Interval('AAAA5').is_augmented())
+    # print(Interval('P5').is_diminished()  )
+    # print(Interval('AAAA5').is_diminished()  )
+    # print(Interval('P5').is_augmented()  )
+    # print(Interval('P5').is_major()  )
+    # print(Interval('P5').is_consonant())
+    # print(Interval('P5').is_dissonant() )
+
+    print(Interval('P1').complemented())
+    print(Interval('+1').complemented())
+    print(Interval('+7').complemented())
+    print(Interval('m2').complemented())
+    print(Interval('m9').complemented() )
+    print(Interval('P8').complemented())
+    print(Interval('++6').complemented()  )
+    print(Interval('o8').complemented())
+    print(Interval('oo8').complemented()  )
+    print(Interval('++15').complemented()  )
+    print(Interval('M3').complemented()  )
+    print(Interval('m73').complemented() )
+    print(Interval('m66').complemented() )
+    print(Interval('++3').complemented()  )
+    print(Interval('oo3').complemented()  )
+    print(Interval('P5').complemented()  )
+    print(Interval('-P5').complemented()  )
+    print(Interval('-M3').complemented()  )
+    print(Interval('-oo5').complemented()   )
+    print(Interval('-ooo5').complemented())
+    print(Interval('-oooo5').complemented()  )
+    print(Interval('-ooooo5').complemented()   )
+    print(Interval('ooooo12').complemented()  )
+    print(Interval('-+++++18').complemented())
 
 
 
