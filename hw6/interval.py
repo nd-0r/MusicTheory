@@ -69,8 +69,6 @@ class Interval:
     def _init_from_list(self, span, qual, xoct, sign):
         # checks if it is a valid combo of span and qual
         try:
-            if (span == 0 and xoct > 0):
-                raise ValueError(f'cannot have a unison with extra octaves!!!')
             # special dicts for unison, second, and third b/c they can't have certain qualities
             print(f'init from list span: {span}')
             print(f'init from list qual: {qual}')
@@ -484,15 +482,17 @@ def test():
     # print(Interval('+++9').semitones() )
     # print(Interval('++++9').semitones() )
 
-    print(Interval('P5').full_name()  )
-    print(Interval('++15').full_name()  )
-    print(Interval('P5').span_name()  )
-    print(Interval('++15').span_name()  )
-    print(Interval('P5').quality_name())
-    print(Interval('++15').quality_name())
-    print(Interval('P5').lines_and_spaces())
-    print(Interval([0, 6, 1, 1]).to_list())
-    print(Interval([0, 6, 2, 1]).to_list())
+    # print(Interval('P5').full_name()  )
+    # print(Interval('++15').full_name()  )
+    # print(Interval('P5').span_name()  )
+    # print(Interval('++15').span_name()  )
+    # print(Interval('P5').quality_name())
+    # print(Interval('++15').quality_name())
+    # print(Interval('P5').lines_and_spaces())
+
+    # print(Interval([0, 6, 1, 1]).to_list())
+    # print(Interval([0, 6, 2, 1]).to_list())
+
     print(Interval('P5').is_fifth()  )
     print(Interval('P5').is_perfect()  )
     print(Interval('P5').is_imperfect_type()  )
