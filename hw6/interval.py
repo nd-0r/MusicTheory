@@ -147,6 +147,10 @@ class Interval:
         pitch2_base_keynum = Pitch([pitch2.letter, 2, pitch2.octave]).keynum()
         print("p1 pc: " + str(pitch1_base_keynum))
         print("p2 pc: " + str(pitch2_base_keynum))
+        # checks if the pitches crossy crossy
+        if (pitch2_base_keynum > pitch1_base_keynum and pitch1.keynum() > pitch2.keynum() 
+            or pitch2_base_keynum < pitch1_base_keynum and pitch1.keynum() < pitch2.keynum()):
+                raise ValueError(f'Cannnot make an interval from pitches that crossy crossy')
         # substracts those pitch classes to get a basic interval to build off
         if (abs(pitch2_base_keynum - pitch1_base_keynum) == 12):
             keynum_span = (pitch2_base_keynum - pitch1_base_keynum)
@@ -177,9 +181,12 @@ class Interval:
             qual = self._qual_scale_perfect_reverse[self._qual_scale_perfect[base_interval.qual] + qual_offset]
         else:
             qual = self._qual_scale_imperfect_reverse[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
-        # self._init_from_list(base_interval.span, qual, max(abs(pitch2.octave - pitch1.octave) - 1, 0), base_interval.sign)
-        self._init_from_list(base_interval.span, qual, max((abs(pitch2_base_keynum - pitch1_base_keynum) // 12), 0), base_interval.sign)
-            
+        # handles the octave special case for extra octaves (the crossover)
+        if (base_interval.span == 7 and abs(pitch2_base_keynum - pitch1_base_keynum) // 12 == 1):
+            self._init_from_list(base_interval.span, qual, max((abs(pitch2_base_keynum - pitch1_base_keynum) // 12) - 1, 0), base_interval.sign)
+        else:
+            self._init_from_list(base_interval.span, qual, max((abs(pitch2_base_keynum - pitch1_base_keynum) // 12), 0), base_interval.sign)
+        
 
     def __str__(self):
         return f'<Interval: {self.string()} {self.to_list()} {hex(id(self))}>'
