@@ -408,39 +408,57 @@ class Interval:
             if (self.is_descending()):
                 interval_to_use = self.complemented()
                 interval_to_use.sign = 1
+                print(interval_to_use)
             else:
                 interval_to_use = self
-            interval_to_use.transpose(Pitch(p.name + '4')).pnum()
+            print(f'Interval to use: {interval_to_use}')
+            print(f'Pitch to use: {Pitch(p.name + "4")}')
+            return interval_to_use.transpose(Pitch(p.name + '4')).pnum()
         elif (isinstance(p, str)):
             pass
         elif (isinstance(p, Pitch)):
-            new_letter = p.letter + self.span
+            if (self.is_descending()):
+                interval_to_use = self.complemented()
+                interval_to_use.sign = 1
+                octave_offset = 1
+                print(interval_to_use)
+            else:
+                interval_to_use = self
+                octave_offset = 0
+            new_letter = p.letter + interval_to_use.span
             print(f'keynum: {p.keynum()}')
-            target = p.keynum() + self.semitones()
+            target = p.keynum() + interval_to_use.semitones()
             # accomodates letters F and C
-            if (new_letter % 7 in (0, 3)):
+            if (new_letter % 7 in (0, 3) and not self.is_descending() and self.is_imperfect_type()):
                 target += 1
+            elif (new_letter % 7 in (6, 2) and self.is_descending() and self.is_imperfect_type()):
+                target -= 1
             print(f'target: {target}')
-            current = (p.keynum() - (p.accidental - 2)) + self._default_spans[self.span]
+            current = (p.keynum() - (p.accidental - 2)) + self._default_spans[interval_to_use.span]
             print(f'current: {current}')
             accidental = 2 + (target - current)
             print(f'accidental: {accidental}')
             if (accidental < 0 and new_letter in (0, 1, 3, 4, 5)):
+                raise Exception
                 new_letter -= 1
                 accidental += 2
             elif (accidental < 0):
+                raise Exception
                 new_letter -= 1
                 accidental += 1
             elif (accidental > 4 and new_letter in (1, 2, 4, 5, 6)):
+                raise Exception
                 new_letter += 1
                 accidental -= 2
             elif (accidental > 4):
+                raise Exception
                 new_letter += 1
                 accidental -= 1
             assert (accidental >= 0 and accidental < 5)
-            xoct = (target - p.keynum()) // 12
+            # xoct = (target - p.keynum()) // 12
+            xoct = (new_letter) // 7
             print(new_letter)
-            return Pitch([(new_letter) % 7, accidental, p.octave + xoct])
+            return Pitch([(new_letter) % 7, accidental, p.octave + xoct - octave_offset])
         else:
             raise TypeError(f'invalid input {p} with type {type(p)}')
 
