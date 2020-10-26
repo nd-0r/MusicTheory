@@ -454,23 +454,14 @@ class Interval:
             accidental = 2 + (target - current)
             print(f'accidental: {accidental}')
             if (accidental < 0 and new_letter in (0, 1, 3, 4, 5)):
-                raise Exception
-                new_letter -= 1
-                accidental += 2
+                raise ValueError(f'Invalid transposition - 1')
             elif (accidental < 0):
-                raise Exception
-                new_letter -= 1
-                accidental += 1
+                raise ValueError(f'Invalid transposition - 2')
             elif (accidental > 4 and new_letter in (1, 2, 4, 5, 6)):
-                raise Exception
-                new_letter += 1
-                accidental -= 2
+                raise ValueError(f'Invalid transposition - 3')
             elif (accidental > 4):
-                raise Exception
-                new_letter += 1
-                accidental -= 1
+                raise ValueError(f'Invalid transposition - 4')
             assert (accidental >= 0 and accidental < 5)
-            # xoct = (target - p.keynum()) // 12
             xoct = (new_letter) // 7
             print(new_letter)
             return Pitch([(new_letter) % 7, accidental, p.octave + xoct - octave_offset])
