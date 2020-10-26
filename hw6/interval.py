@@ -146,19 +146,23 @@ class Interval:
         try:
             pitch1_base_keynum = Pitch([pitch1.letter, 2, pitch1.octave]).keynum()
         except ValueError:
-            if (pitch1.letter == 5 and pitch1.octave == 9 and pitch1.accidental < 2):
+            if (pitch1.letter == 5 and pitch1.octave == 10 and pitch1.accidental < 2):
                 pitch1_base_keynum = 127 - (pitch1.accidental - 2)
-            elif (pitch1.letter == 0 and pitch1.octave == 0 and pitch1.accidental > 2):
+            elif (pitch1.letter == 0 and pitch1.octave == 0 and pitch1.accidental >= 2):
                 pitch1_base_keynum = 0 + (pitch1.accidental - 2)
+            else:
+                raise ValueError(f'invalid pitches')
         try:
             pitch2_base_keynum = Pitch([pitch2.letter, 2, pitch2.octave]).keynum()
         except ValueError:
-            if (pitch2.letter == 5 and pitch2.octave == 9 and pitch2.accidental < 2):
+            if (pitch2.letter == 5 and pitch2.octave == 10 and pitch2.accidental < 2):
                 pitch2_base_keynum = 127 - (pitch2.accidental - 2)
-            elif (pitch2.letter == 0 and pitch2.octave == 0 and pitch2.accidental > 2):
+            elif (pitch2.letter == 0 and pitch2.octave == 0 and pitch2.accidental >= 2):
                 pitch2_base_keynum = 0 + (pitch2.accidental - 2)
-        print("p1 pc: " + str(pitch1_base_keynum))
-        print("p2 pc: " + str(pitch2_base_keynum))
+            else:
+                raise ValueError(f'invalid pitches')
+        # print("p1 pc: " + str(pitch1_base_keynum))
+        # print("p2 pc: " + str(pitch2_base_keynum))
         # checks if the pitches crossy crossy
         if (pitch2_base_keynum > pitch1_base_keynum and pitch1.keynum() > pitch2.keynum() 
             or pitch2_base_keynum < pitch1_base_keynum and pitch1.keynum() < pitch2.keynum()):
@@ -178,14 +182,19 @@ class Interval:
         # 5) sets base interval to the default span
         if (pitch2.keynum() - pitch1.keynum() < 0 and pitch2_base_keynum - pitch1_base_keynum == 0):
             base_interval = Interval("-" + self._diatonic_intervals[0])
+            print("in 1")
         elif (pitch2.keynum() - pitch1.keynum() < 0 and pitch1.letter < pitch2.letter):
             base_interval = Interval("-" + self._diatonic_intervals[abs(keynum_span)]).complemented()
+            print("in 2")
         elif (pitch2.keynum() - pitch1.keynum() < 0):
             base_interval = Interval("-" + self._diatonic_intervals[12 - abs(keynum_span)])
-        elif (pitch2.keynum() - pitch1.keynum() > 0 and pitch1.letter > pitch2.letter):
-            base_interval = Interval(self._diatonic_intervals[abs(keynum_span)]).complemented()
+            print("in 3")
+        # elif (pitch2.keynum() - pitch1.keynum() > 0 and pitch1.letter > pitch2.letter):
+        #     base_interval = Interval(self._diatonic_intervals[abs(keynum_span)]).complemented()
+        #     print("in 4")
         else:
             base_interval = Interval(self._diatonic_intervals[abs(keynum_span)])
+            print("in 5")
         print("base interval: " + str(base_interval.string())) 
         # offset from the diatonic intervals given by the pitches' accidentals
         if (pitch2.keynum() - pitch1.keynum() < 0):
@@ -471,12 +480,22 @@ class Interval:
             # accomodates special cases going to/from letters surrounding half steps
             if (new_letter % 7 in (0, 3) and self.is_ascending() and self.is_imperfect_type()):
                 target += 1
+                print("in 1")
             elif (new_letter % 7 in (6, 2) and self.is_descending() and self.is_imperfect_type()):
                 target -= 1
-            elif (p.letter % 7 in (6, 2) and self.is_ascending() and self.is_imperfect_type()):
+                print("in 2")
+            elif (p.letter % 7 == 6 and self.is_ascending() and not (self.is_fourth())):
                 target += 1
-            elif (p.letter % 7 in (6, 2) and self.is_descending() and self.is_imperfect_type()):
+                print("in 3")
+            elif (p.letter % 7 == 3 and self.is_ascending() and self.is_fourth()):
+                target -= 1
+                print("in 4")
+            elif (p.letter % 7 == 3 and self.is_descending() and self.is_perfect_type()):
+                target -= 1
+                print("in 5")
+            elif (p.letter % 7 == 6 and self.is_descending) and (self.is_imperfect_type()):
                 target += 1
+                print("in 6")
             print(f'target: {target}')
             current = (p.keynum() - (p.accidental - 2)) + self._default_spans[interval_to_use.span]
             print(f'current: {current}')
