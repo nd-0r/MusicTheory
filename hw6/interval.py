@@ -155,6 +155,9 @@ class Interval:
         print("pc span: " + str(keynum_span))
         # if (pitch2.keynum() - pitch1.keynum() < 0):
         #     base_interval = Interval("-" + self._diatonic_intervals[12 - abs(keynum_span)])
+        # 1) accomodates the unison case
+        # 2) accomodates the octave case
+        # 3) sets base interval to the default span
         if (pitch2.keynum() - pitch1.keynum() < 0 and pitch2_base_keynum - pitch1_base_keynum == 0):
             base_interval = Interval("-" + self._diatonic_intervals[0])
         elif (pitch2.keynum() - pitch1.keynum() < 0):
