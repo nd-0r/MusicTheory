@@ -405,7 +405,12 @@ class Interval:
 
     def transpose(self, p):
         if (isinstance(p, Pitch.pnums)):
-            pass
+            letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
+            if (self.is_descending()):
+                interval_to_use = self.conplemented()
+            else:
+                interval_to_use = self
+            
         elif (isinstance(p, str)):
             pass
         elif (isinstance(p, Pitch)):
