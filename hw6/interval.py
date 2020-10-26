@@ -143,8 +143,20 @@ class Interval:
     def _init_from_pitches(self, pitch1, pitch2):
         # gets the pitch class of the not without accidentals
         # fix for midi out of range errors!
-        pitch1_base_keynum = Pitch([pitch1.letter, 2, pitch1.octave]).keynum()
-        pitch2_base_keynum = Pitch([pitch2.letter, 2, pitch2.octave]).keynum()
+        try:
+            pitch1_base_keynum = Pitch([pitch1.letter, 2, pitch1.octave]).keynum()
+        except ValueError:
+            if (pitch1.letter == 5 and pitch1.octave == 9 and pitch1.accidental < 2):
+                pitch1_base_keynum = 127 - (pitch1.accidental - 2)
+            elif (pitch1.letter == 0 and pitch1.octave == 0 and pitch1.accidental > 2):
+                pitch1_base_keynum = 0 + (pitch1.accidental - 2)
+        try:
+            pitch2_base_keynum = Pitch([pitch2.letter, 2, pitch2.octave]).keynum()
+        except ValueError:
+            if (pitch2.letter == 5 and pitch2.octave == 9 and pitch2.accidental < 2):
+                pitch2_base_keynum = 127 - (pitch2.accidental - 2)
+            elif (pitch2.letter == 0 and pitch2.octave == 0 and pitch2.accidental > 2):
+                pitch2_base_keynum = 0 + (pitch2.accidental - 2)
         print("p1 pc: " + str(pitch1_base_keynum))
         print("p2 pc: " + str(pitch2_base_keynum))
         # checks if the pitches crossy crossy
