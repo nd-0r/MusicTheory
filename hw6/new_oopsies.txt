@@ -1,6 +1,5 @@
       [  input = Interval([0, 6, 11, 1])  ]  your_output = <Interval: P78 [7, 6, 10, 1]>  desired_output = $exception$  (0/2)
 
-
       [  input = Interval(Pitch('B1'), Pitch('F8'))  ]  your_output = <Interval: +39 [3, 8, 5, 1]>  desired_output = <Interval: o47 [4, 4, 6, 1]>  (0/2)
 
       [  input = Interval(Pitch('B#3'), Pitch('Cb4'))  ]  your_output = <Interval: -++7 [6, 9, 0, -1]>  desired_output = $exception$  (0/2)
