@@ -160,12 +160,18 @@ class Interval:
         # if (pitch2.keynum() - pitch1.keynum() < 0):
         #     base_interval = Interval("-" + self._diatonic_intervals[12 - abs(keynum_span)])
         # 1) accomodates the unison case
-        # 2) accomodates the octave case
-        # 3) sets base interval to the default span
+        # 4) accomodates the octave case
+        # 3) accomodates the devil (and others) case
+        # 2) accomodates the converse of the devil case
+        # 5) sets base interval to the default span
         if (pitch2.keynum() - pitch1.keynum() < 0 and pitch2_base_keynum - pitch1_base_keynum == 0):
             base_interval = Interval("-" + self._diatonic_intervals[0])
+        elif (pitch2.keynum() - pitch1.keynum() < 0 and pitch1.letter < pitch2.letter):
+            base_interval = Interval("-" + self._diatonic_intervals[abs(keynum_span)]).complemented()
         elif (pitch2.keynum() - pitch1.keynum() < 0):
             base_interval = Interval("-" + self._diatonic_intervals[12 - abs(keynum_span)])
+        elif (pitch2.keynum() - pitch1.keynum() > 0 and pitch1.letter > pitch2.letter):
+            base_interval = Interval(self._diatonic_intervals[abs(keynum_span)]).complemented()
         else:
             base_interval = Interval(self._diatonic_intervals[abs(keynum_span)])
         print("base interval: " + str(base_interval.string())) 
