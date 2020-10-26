@@ -405,18 +405,21 @@ class Interval:
 
     def transpose(self, p):
         if (isinstance(p, Pitch.pnums)):
-            letters = ('C', 'D', 'E', 'F', 'G', 'A', 'B')
             if (self.is_descending()):
-                interval_to_use = self.conplemented()
+                interval_to_use = self.complemented()
+                interval_to_use.sign = 1
             else:
                 interval_to_use = self
-            
+            interval_to_use.transpose(Pitch(p.name + '4')).pnum()
         elif (isinstance(p, str)):
             pass
         elif (isinstance(p, Pitch)):
             new_letter = p.letter + self.span
             print(f'keynum: {p.keynum()}')
             target = p.keynum() + self.semitones()
+            # accomodates letters F and C
+            if (new_letter % 7 in (0, 3)):
+                target += 1
             print(f'target: {target}')
             current = (p.keynum() - (p.accidental - 2)) + self._default_spans[self.span]
             print(f'current: {current}')
