@@ -416,13 +416,20 @@ class Interval:
         if (not(isinstance(other, Interval))):
             raise TypeError(f'cannot add a {type(other)} to an interval')
         to_span = self.span + other.span
+        target = self.semitones() + other.semitones()
         to_qual = ((self.qual - 6) + (other.qual - 6)) + 6
         to_xoct = self.xoct + other.xoct
         assert (to_qual >= 0)
         print(f'add to_span: {to_span}')
         print(f'add to_qual: {to_qual}')
         print(f'add to_xoct: {to_xoct}')
-        return Interval([to_span, to_qual, to_xoct, 1])
+        out = Interval([to_span, to_qual, to_xoct, 1])
+        # fine tune the quality
+        if (out.semitones() < target):
+            to_qual += target - out.semitones()
+        out = Interval([to_span, to_qual, to_xoct, 1])
+        assert (out.semitones() == target)
+        return out
 
     def transpose(self, p):
         if (isinstance(p, Pitch.pnums)):
@@ -449,11 +456,15 @@ class Interval:
             new_letter = p.letter + interval_to_use.span
             print(f'keynum: {p.keynum()}')
             target = p.keynum() + interval_to_use.semitones()
-            # accomodates letters F and C
-            if (new_letter % 7 in (0, 3) and not self.is_descending() and self.is_imperfect_type()):
+            # accomodates special cases going to/from letters surrounding half steps
+            if (new_letter % 7 in (0, 3) and self.is_ascending() and self.is_imperfect_type()):
                 target += 1
             elif (new_letter % 7 in (6, 2) and self.is_descending() and self.is_imperfect_type()):
                 target -= 1
+            elif (p.letter % 7 in (6, 2) and self.is_ascending() and self.is_imperfect_type()):
+                target += 1
+            elif (p.letter % 7 in (6, 2) and self.is_descending() and self.is_imperfect_type()):
+                target += 1
             print(f'target: {target}')
             current = (p.keynum() - (p.accidental - 2)) + self._default_spans[interval_to_use.span]
             print(f'current: {current}')
