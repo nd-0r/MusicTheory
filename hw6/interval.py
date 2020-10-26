@@ -178,7 +178,7 @@ class Interval:
         else:
             qual = self._qual_scale_imperfect_reverse[self._qual_scale_imperfect[base_interval.qual] + qual_offset]
         # self._init_from_list(base_interval.span, qual, max(abs(pitch2.octave - pitch1.octave) - 1, 0), base_interval.sign)
-        self._init_from_list(base_interval.span, qual, max((abs(pitch2_base_keynum - pitch1_base_keynum) // 12) - 1, 0), base_interval.sign)
+        self._init_from_list(base_interval.span, qual, max((abs(pitch2_base_keynum - pitch1_base_keynum) // 12), 0), base_interval.sign)
             
 
     def __str__(self):
