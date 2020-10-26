@@ -10,5 +10,3 @@
       [  input = Interval('++15').complemented()  ]  your_output = $exception$  desired_output = <Interval: oo8 [7, 3, 0, 1]>  (0/2)
       [  input = Interval('m73').complemented()  ]  your_output = <Interval: M69 [5, 7, 9, 1]>  desired_output = $exception$  (0/2)
       [  input = Interval('m66').complemented()  ]  your_output = <Interval: M62 [5, 7, 8, 1]>  desired_output = <Interval: M69 [5, 7, 9, 1]>  (0/2)
-
-      [  input = Interval('o5').add(Interval('m3'))  ]  your_output = <Interval: oo7 [6, 3, 0, 1]>  desired_output = <Interval: o7 [6, 4, 0, 1]>  (0/2)
