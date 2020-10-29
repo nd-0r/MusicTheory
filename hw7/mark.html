@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.9.1" />
+<title>score.mark API documentation</title>
+<meta name="description" content="The Mark class inherits from IntEnum to enumerate various types of notation
+marks that appear in musical scores. The mark module provides four …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>score.mark</code></h1>
+</header>
+<section id="section-intro">
+<p>The Mark class inherits from IntEnum to enumerate various types of notation
+marks that appear in musical scores. The mark module provides four top-level
+'group' constants: DYNAMIC, ARTICULATION, ORNAMENT, and TEMPORAL that are
+assigned the values 0 to 3 left-shifted by 8 bits.</p>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="score.mark.Mark"><code class="flex name class">
+<span>class <span class="ident">Mark</span></span>
+<span>(</span><span>value, names=None, *, module=None, qualname=None, type=None, start=1)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>The Mark class inherits from IntEnum to enumerate various types
+of notation marks that appear in musical scores. Each Mark enum is
+a 16 bit value with the format 'ggggggggrrrrrrrr', where:</p>
+<pre><code class="py">7654321076543210
+gggggggg--------   the 'group' of the mark (dynamic, articulation, etc.)
+--------rrrrrrrr   the 'rank' of the identifier within its group.
+</code></pre>
+<p>The DYNAMIC group enums are: NIENTE, PPPP, PPP, PP, P, MP, MF, F, FF, FFF,
+FFFF, SFZ, CRESCENDO, CRESCENDO_END, DECRESCENDO, DECRESCENDO_END.
+These enums all have DYNAMIC as their upper byte and their lower byte
+holds their rank value 0-15.</p>
+<p>The ARTICULATION group enums are: TENUTO, DETATCHED, STACCATO, STACCATISSIMO,
+ACCENT, MARCATO. These enums all have ARTICULATION as their upper byte and
+their lower byte holds their rank value 0-5.</p>
+<p>The ORNAMENT group enums are: TRILL, MORDENT, TURN. These enums all have
+ORNAMENT as their upper byte and their lower byte holds their rank value 0-2.</p>
+<p>The TEMPORAL group enums are: FERMATA, ACCEL, DEACCEL. These enums all have
+TEMPORAL as their upper byte and their lower byte holds their rank value 0-2.</p>
+<p>See the following links for information about various musical marks.
+<a href="https://en.wikipedia.org/wiki/Dynamics_(music),">https://en.wikipedia.org/wiki/Dynamics_(music),</a>
+<a href="https://en.wikipedia.org/wiki/Articulation_(music),">https://en.wikipedia.org/wiki/Articulation_(music),</a>
+<a href="https://en.wikipedia.org/wiki/Ornament_(music)">https://en.wikipedia.org/wiki/Ornament_(music)</a></p></div>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>enum.IntEnum</li>
+<li>builtins.int</li>
+<li>enum.Enum</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="score.mark.Mark.ACCEL"><code class="name">var <span class="ident">ACCEL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.ACCENT"><code class="name">var <span class="ident">ACCENT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.CRESCENDO"><code class="name">var <span class="ident">CRESCENDO</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.CRESCENDO_END"><code class="name">var <span class="ident">CRESCENDO_END</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.DEACCEL"><code class="name">var <span class="ident">DEACCEL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.DECRESCENDO"><code class="name">var <span class="ident">DECRESCENDO</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.DECRESCENDO_END"><code class="name">var <span class="ident">DECRESCENDO_END</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.DETATCHED"><code class="name">var <span class="ident">DETATCHED</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.F"><code class="name">var <span class="ident">F</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.FERMATA"><code class="name">var <span class="ident">FERMATA</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.FF"><code class="name">var <span class="ident">FF</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.FFF"><code class="name">var <span class="ident">FFF</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.FFFF"><code class="name">var <span class="ident">FFFF</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.MARCATO"><code class="name">var <span class="ident">MARCATO</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.MF"><code class="name">var <span class="ident">MF</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.MORDENT"><code class="name">var <span class="ident">MORDENT</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.MP"><code class="name">var <span class="ident">MP</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.NIENTE"><code class="name">var <span class="ident">NIENTE</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.P"><code class="name">var <span class="ident">P</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.PP"><code class="name">var <span class="ident">PP</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.PPP"><code class="name">var <span class="ident">PPP</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.PPPP"><code class="name">var <span class="ident">PPPP</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.SFZ"><code class="name">var <span class="ident">SFZ</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.STACCATISSIMO"><code class="name">var <span class="ident">STACCATISSIMO</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.STACCATO"><code class="name">var <span class="ident">STACCATO</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.TENUTO"><code class="name">var <span class="ident">TENUTO</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.TRILL"><code class="name">var <span class="ident">TRILL</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="score.mark.Mark.TURN"><code class="name">var <span class="ident">TURN</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="score.mark.Mark.group"><code class="name flex">
+<span>def <span class="ident">group</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the mark's group number from the upper eight bits of the enum.</p></div>
+</dd>
+<dt id="score.mark.Mark.rank"><code class="name flex">
+<span>def <span class="ident">rank</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the mark's rank number from the lower eight bits of the enum.</p></div>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="score" href="index.html">score</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="score.mark.Mark" href="#score.mark.Mark">Mark</a></code></h4>
+<ul class="two-column">
+<li><code><a title="score.mark.Mark.ACCEL" href="#score.mark.Mark.ACCEL">ACCEL</a></code></li>
+<li><code><a title="score.mark.Mark.ACCENT" href="#score.mark.Mark.ACCENT">ACCENT</a></code></li>
+<li><code><a title="score.mark.Mark.CRESCENDO" href="#score.mark.Mark.CRESCENDO">CRESCENDO</a></code></li>
+<li><code><a title="score.mark.Mark.CRESCENDO_END" href="#score.mark.Mark.CRESCENDO_END">CRESCENDO_END</a></code></li>
+<li><code><a title="score.mark.Mark.DEACCEL" href="#score.mark.Mark.DEACCEL">DEACCEL</a></code></li>
+<li><code><a title="score.mark.Mark.DECRESCENDO" href="#score.mark.Mark.DECRESCENDO">DECRESCENDO</a></code></li>
+<li><code><a title="score.mark.Mark.DECRESCENDO_END" href="#score.mark.Mark.DECRESCENDO_END">DECRESCENDO_END</a></code></li>
+<li><code><a title="score.mark.Mark.DETATCHED" href="#score.mark.Mark.DETATCHED">DETATCHED</a></code></li>
+<li><code><a title="score.mark.Mark.F" href="#score.mark.Mark.F">F</a></code></li>
+<li><code><a title="score.mark.Mark.FERMATA" href="#score.mark.Mark.FERMATA">FERMATA</a></code></li>
+<li><code><a title="score.mark.Mark.FF" href="#score.mark.Mark.FF">FF</a></code></li>
+<li><code><a title="score.mark.Mark.FFF" href="#score.mark.Mark.FFF">FFF</a></code></li>
+<li><code><a title="score.mark.Mark.FFFF" href="#score.mark.Mark.FFFF">FFFF</a></code></li>
+<li><code><a title="score.mark.Mark.MARCATO" href="#score.mark.Mark.MARCATO">MARCATO</a></code></li>
+<li><code><a title="score.mark.Mark.MF" href="#score.mark.Mark.MF">MF</a></code></li>
+<li><code><a title="score.mark.Mark.MORDENT" href="#score.mark.Mark.MORDENT">MORDENT</a></code></li>
+<li><code><a title="score.mark.Mark.MP" href="#score.mark.Mark.MP">MP</a></code></li>
+<li><code><a title="score.mark.Mark.NIENTE" href="#score.mark.Mark.NIENTE">NIENTE</a></code></li>
+<li><code><a title="score.mark.Mark.P" href="#score.mark.Mark.P">P</a></code></li>
+<li><code><a title="score.mark.Mark.PP" href="#score.mark.Mark.PP">PP</a></code></li>
+<li><code><a title="score.mark.Mark.PPP" href="#score.mark.Mark.PPP">PPP</a></code></li>
+<li><code><a title="score.mark.Mark.PPPP" href="#score.mark.Mark.PPPP">PPPP</a></code></li>
+<li><code><a title="score.mark.Mark.SFZ" href="#score.mark.Mark.SFZ">SFZ</a></code></li>
+<li><code><a title="score.mark.Mark.STACCATISSIMO" href="#score.mark.Mark.STACCATISSIMO">STACCATISSIMO</a></code></li>
+<li><code><a title="score.mark.Mark.STACCATO" href="#score.mark.Mark.STACCATO">STACCATO</a></code></li>
+<li><code><a title="score.mark.Mark.TENUTO" href="#score.mark.Mark.TENUTO">TENUTO</a></code></li>
+<li><code><a title="score.mark.Mark.TRILL" href="#score.mark.Mark.TRILL">TRILL</a></code></li>
+<li><code><a title="score.mark.Mark.TURN" href="#score.mark.Mark.TURN">TURN</a></code></li>
+<li><code><a title="score.mark.Mark.group" href="#score.mark.Mark.group">group</a></code></li>
+<li><code><a title="score.mark.Mark.rank" href="#score.mark.Mark.rank">rank</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.9.1</a>.</p>
+</footer>
+</body>
+</html>
