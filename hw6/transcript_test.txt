@@ -1,4 +1,4 @@
-============= aorals2.hw6 transcript [test] (2020-10-31 05:00:24.064117) =============
+============= aorals2.hw6 transcript [test] (2020-10-31 06:00:08.602873) =============
   module: interval
     [import]: success  (1/1)
       [  input = Interval('')  ]  your_output = $exception$  desired_output = $exception$  (2/2)
