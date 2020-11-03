@@ -7,7 +7,6 @@ in hertz, keynum, pitch class, Pnum  and pitch name formats.  Pitches
 can be compared using standard math relations and maintain proper spelling
 when complemented or transposed by an Interval.
 """
-
 from enum import IntEnum
 from math import pow
 from collections import namedtuple
