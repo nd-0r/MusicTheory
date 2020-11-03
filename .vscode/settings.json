@@ -1,3 +1,8 @@
 {
-    "python.pythonPath": "/usr/local/bin/python3.7"
+    "python.pythonPath": "env/bin/python3.8",
+    "python.autoComplete.extraPaths": [
+    
+    ]
+    "python.linting.pep8Enabled": true,
+    "python.linting.pylintEnabled": true
 }
