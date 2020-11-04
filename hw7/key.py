@@ -2,7 +2,7 @@
 # See key.html for module documentation.
 
 # Do not add or modify import statements.
-from .pitch import Pitch as P
+from .pitch import Pitch
 from .mode import Mode
 from .interval import Interval
 
@@ -12,14 +12,19 @@ class Key:
     _diatonic_intervals = ['P1', 'M2', 'm3', 'P4', 'P5', 'M6', 'M7']
 
     def __init__(self, signum, mode):
-        assert (isinstance(signum, int))
-        assert (isinstance(mode, int))
-        if (-7 > signum > 7):
-            raise ValueError(f'Cannot use signum {signum}')
-        if (0 > mode > 6):
-            raise ValueError(f'Cannot use mode {mode}')
-        self.signum = signum
-        self.mode = mode
+        if (isinstance(signum, int)):
+            if (-7 > signum > 7):
+                raise ValueError(f'Cannot use signum {signum}')
+            self.signum = signum
+            if (isinstance(mode, Mode)):
+                self.mode = mode
+            else:
+                try:
+                    self.mode = Mode[mode.upper()].value
+                except Exception:
+                    raise TypeError("mode must be an enum or a valid str")
+        else:
+            raise TypeError("signum must be an int")
 
     def __str__(self):
         return ''
@@ -28,25 +33,26 @@ class Key:
         return ''
 
     def string(self):
+        k = self.tonic().name
+        m = self.mode.name.lower()
+        if ('n' in k):
+            k = k[:-1]
+        return (k + '-' + m)
+
+    def get_base_pitch(self):
         if (self.signum < -1):
-            k = P.fromKeynum(69 + ((self.signum * 7) % 12), 'b').string()[:-1]
+            return Pitch.fromKeynum(69 + ((self.signum * 7) % 12), 'b')
         elif (self.signum > 5):
-            k = P.fromKeynum(69 + ((self.signum * 7) % 12), 's').string()[:-1]
-        else:
-            k = P.fromKeynum(69 + ((self.signum * 7) % 12)).string()[:-1]
-        m = Mode(self.mode).name.lower()
-        return (k + ' ' + m)
+            return Pitch.fromKeynum(69 + ((self.signum * 7) % 12), 's')
+        return Pitch.fromKeynum(69 + ((self.signum * 7) % 12))
 
     def tonic(self):
-        if (self.signum < -1):
-            p = P.fromKeynum(69 + ((self.signum * 7) % 12), 'b').string()[:-1]
-        elif (self.signum > 5):
-            p = P.fromKeynum(69 + ((self.signum * 7) % 12), 's').string()[:-1]
-        else:
-            p = P.fromKeynum(69 + ((self.signum * 7) % 12)).string()[:-1]
-        return Interval(self._diatonic_intervals[self.mode], p)
+        p = self.get_base_pitch()
+        i = self._diatonic_intervals[self.mode.value]
+        return Interval(i).transpose(p).pnum()
 
     def scale(self):
-        pass
-
-
+        out = []
+        for interval in self._diatonic_intervals:
+            out.append(Interval(interval).transpose(self.get_base_pitch).pnum)
+        return out[self.mode.value:] + out[:self.mode.value]
