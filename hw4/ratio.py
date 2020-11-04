@@ -12,7 +12,6 @@ RatioBase = namedtuple('RatioBase', ['num', 'den'])
 
 class Ratio (RatioBase):
 
-
     def __new__(cls, num, den=None):
         hnum = None
         hden = None

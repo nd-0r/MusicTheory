@@ -13,7 +13,6 @@ TEMPORAL = 3 << 8
 
 class Mark (IntEnum):
     # Create enums here...
-    
     NIENTE = DYNAMIC + 0
     PPPP = DYNAMIC + 1
     PPP = DYNAMIC + 2
@@ -30,7 +29,7 @@ class Mark (IntEnum):
     CRESCENDO_END = DYNAMIC + 13
     DECRESCENDO = DYNAMIC + 14
     DECRESCENDO_END = DYNAMIC + 15
-    
+
     TENUTO = ARTICULATION + 0
     DETATCHED = ARTICULATION + 1
     STACCATO = ARTICULATION + 2
@@ -41,7 +40,7 @@ class Mark (IntEnum):
     TRILL = ORNAMENT + 0
     MORDENT = ORNAMENT + 1
     TURN = ORNAMENT + 2
-    
+
     FERMATA = TEMPORAL + 0
     ACCEL = TEMPORAL + 1
     DEACCEL = TEMPORAL + 2
