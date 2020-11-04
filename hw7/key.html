@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.9.1" />
 <title>score.key API documentation</title>
-<meta name="description" content="" />
+<meta name="description" content="The Key class represents the complete chromatic set of keys in western music." />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
 <link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
@@ -22,6 +22,7 @@
 <h1 class="title">Module <code>score.key</code></h1>
 </header>
 <section id="section-intro">
+<p>The Key class represents the complete chromatic set of keys in western music.</p>
 </section>
 <section>
 </section>
@@ -34,29 +35,97 @@
 <dl>
 <dt id="score.key.Key"><code class="flex name class">
 <span>class <span class="ident">Key</span></span>
-<span>(</span><span>signum, mode)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>A key consists of an integer 'signum' representing the number of sharps or
+flats in the key's signature, and a Mode (Enum). Keys can return Pnums
+representing their tonic note and diatonic scale degrees.
+See: <a href="https://en.wikipedia.org/wiki/Key_(music)">https://en.wikipedia.org/wiki/Key_(music)</a></p>
+<p>Creates a Key from an integer key signature identifier and mode.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>signum</code></strong> :&ensp;<code>int</code></dt>
+<dd>A value -7 to 7 representing the number of flats (negative) or sharps (positive).</dd>
+<dt><strong><code>mode</code></strong> :&ensp;<code>Mode</code></dt>
+<dd>A Mode enum, or its case-insensitive string name.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>A TypeError if signum is not an integer or if mode is not a Mode or string.<br>
+A ValueError if the signum integer or the mode string is invalid.</p></div>
 <h3>Methods</h3>
 <dl>
+<dt id="score.key.Key.__init__"><code class="name flex">
+<span>def <span class="ident">__init__</span></span>(<span>self, signum, mode)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Creates a Key from an integer key signature identifier and mode.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>signum</code></strong> :&ensp;<code>int</code></dt>
+<dd>A value -7 to 7 representing the number of flats (negative) or sharps (positive).</dd>
+<dt><strong><code>mode</code></strong> :&ensp;<code>Mode</code></dt>
+<dd>A Mode enum, or its case-insensitive string name.</dd>
+</dl>
+<h2 id="raises">Raises</h2>
+<p>A TypeError if signum is not an integer or if mode is not a Mode or string.<br>
+A ValueError if the signum integer or the mode string is invalid.</p></div>
+</dd>
+<dt id="score.key.Key.__repr__"><code class="name flex">
+<span>def <span class="ident">__repr__</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the external representation of the Key including the
+constructor name, signum, and the capitalized version of the
+mode's name.</p>
+<h2 id="examples">Examples</h2>
+<p>'Key(4, "Dorian")'<br>
+'Key(-1, "Major")'</p></div>
+</dd>
+<dt id="score.key.Key.__str__"><code class="name flex">
+<span>def <span class="ident">__str__</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Returns the print representation of the key. The string should
+include the class name, tonic, mode, number of sharps or flats,
+and the instance id.</p>
+<h2 id="examples">Examples</h2>
+<p>'&lt;Key: C-Major (0 sharps or flats) 0x10c03c050&gt;'<br>
+'&lt;Key: G-Major (1 sharp) 0x10eec5250&gt;'<br>
+'&lt;Key: A-Mixolydian (2 sharps) 0x10c03c490&gt;'<br>
+'&lt;Key: Af-Minor (7 flats) 0x10c03c390&gt;'<br></p></div>
+</dd>
 <dt id="score.key.Key.scale"><code class="name flex">
 <span>def <span class="ident">scale</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns a list of Pnums representing the unique pitches of the key's
+diatonic scale. The octave completion should NOT be included in the list.</p></div>
 </dd>
 <dt id="score.key.Key.string"><code class="name flex">
 <span>def <span class="ident">string</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns a string containing the name of the tonic Pnum, a
+hyphen, and the capitalized version of the mode's name.</p>
+<h2 id="examples">Examples</h2>
+<p>'Fs-Dorian',<br>
+'Bf-Phrygian',<br>
+'B-Major'</p></div>
 </dd>
 <dt id="score.key.Key.tonic"><code class="name flex">
 <span>def <span class="ident">tonic</span></span>(<span>self)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Returns a Pnum representing the key's tonic. The tonic can
+be calculated by transposing the Major tonic (Pnum) by the
+interval distance of the mode above the major. The
+transposition can be performed using that interval's transpose()
+method. The interval distances of Major up to Locrian are:
+P1, M2, M3, P4, P5, M6, M7.</p>
+<h2 id="examples">Examples</h2>
+<p>Key(0, "lydian").tonic() is Pnum F.<br>
+Key(2, "dorian").tonic() is Pnum E.<br>
+Key(-6, "phrygian").tonic() is Pnum Bf.<br></p></div>
 </dd>
 </dl>
 </dd>
@@ -78,7 +147,10 @@
 <ul>
 <li>
 <h4><code><a title="score.key.Key" href="#score.key.Key">Key</a></code></h4>
-<ul class="">
+<ul class="two-column">
+<li><code><a title="score.key.Key.__init__" href="#score.key.Key.__init__">__init__</a></code></li>
+<li><code><a title="score.key.Key.__repr__" href="#score.key.Key.__repr__">__repr__</a></code></li>
+<li><code><a title="score.key.Key.__str__" href="#score.key.Key.__str__">__str__</a></code></li>
 <li><code><a title="score.key.Key.scale" href="#score.key.Key.scale">scale</a></code></li>
 <li><code><a title="score.key.Key.string" href="#score.key.Key.string">string</a></code></li>
 <li><code><a title="score.key.Key.tonic" href="#score.key.Key.tonic">tonic</a></code></li>
