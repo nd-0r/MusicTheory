@@ -20,7 +20,7 @@ class Key:
                 self.mode = mode
             else:
                 try:
-                    self.mode = Mode[mode.upper()].value
+                    self.mode = Mode[mode.upper()]
                 except Exception:
                     raise TypeError("mode must be an enum or a valid str")
         else:
@@ -28,22 +28,22 @@ class Key:
 
     # '<Key: C-Major (0 sharps or flats) 0x10c03c050>'
     def __str__(self):
-        if (signum == 0):
-            s_or_f = f'(0 sharps or flats)'
-        elif (signum < -1):
-            s_or_f = f'({signum} flats)'
-        elif (signum < 0):
-            s_or_f = f'(1 flat)'
-        elif (signum > 1):
-            s_or_f = f'({signum} sharps)'
+        if (self.signum == 0):
+            s_or_f = '(0 sharps or flats)'
+        elif (self.signum < -1):
+            s_or_f = f'({abs(self.signum)} flats)'
+        elif (self.signum < 0):
+            s_or_f = '(1 flat)'
+        elif (self.signum > 1):
+            s_or_f = f'({abs(self.signum)} sharps)'
         else:
-            s_or_f = f'(1 sharp)'
+            s_or_f = '(1 sharp)'
         # return str(f'<Key: {self.string()} {s_or_f} {hex(id(self))}>')
         return str(f'<Key: {self.string()} {s_or_f}>')
 
     # 'Key(4, "Dorian")'
     def __repr__(self):
-        f'Key({self.signum}, "{self.mode.name.title()}")'
+        return f'Key({self.signum}, "{Mode(self.mode).name.title()}")'
 
     def string(self):
         k = self.tonic().name
@@ -54,10 +54,12 @@ class Key:
 
     def get_base_pitch(self):
         if (self.signum < -1):
-            return Pitch.fromKeynum(69 + ((self.signum * 7) % 12), 'b')
+            return Pitch.from_keynum(60 + ((self.signum * 7) % -12), 'b')
         elif (self.signum > 5):
-            return Pitch.fromKeynum(69 + ((self.signum * 7) % 12), 's')
-        return Pitch.fromKeynum(69 + ((self.signum * 7) % 12))
+            return Pitch.from_keynum(60 + ((self.signum * 7) % 12), 's')
+        elif (self.signum == -1):
+            return Pitch.from_keynum(60 + ((self.signum * 7) % -12))
+        return Pitch.from_keynum(60 + ((self.signum * 7) % 12))
 
     def tonic(self):
         p = self.get_base_pitch()
