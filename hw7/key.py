@@ -67,7 +67,7 @@ class Key:
         return Interval(i).transpose(p).pnum()
 
     def scale(self):
-        out = [self.get_base_pitch().pnum()]
+        out = []
         for interval in self._diatonic_intervals:
             out.append(
                 Interval(interval).transpose(self.get_base_pitch()).pnum()
