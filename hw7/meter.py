@@ -56,7 +56,9 @@ class Meter:
         if (not(self.is_simple() or self.is_compound())):
             raise NotImplementedError('Cannot get beat for non-simple',
                                       'or non-compound rhythms yet')
-        if (self.is_duple()):
+        if (self.num == 1):
+            return Ratio(self.num, self.den)
+        elif (self.is_duple()):
             return Ratio(self.num // 2, self.den)
         elif (self.is_triple()):
             return Ratio(self.num // 3, self.den)
