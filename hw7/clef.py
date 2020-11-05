@@ -20,8 +20,8 @@ class Clef (Enum):
     # Create enums here...
 
     ALTO = (3, MIDDLE_LINE, 0)
-    BARITONE = (12, TOP_LINE, 0)
-    BARITONE_F = (5, MIDDLE_LINE, 0)
+    BARITONE = (5, TOP_LINE, 0)
+    BARITONE_F = (12, MIDDLE_LINE, 0)
     BASS = (6, UPPER_MIDDLE_LINE, 0)
     BASS_15MA = (10, UPPER_MIDDLE_LINE, -15)
     BASS_8VA = (8, UPPER_MIDDLE_LINE, -8)
