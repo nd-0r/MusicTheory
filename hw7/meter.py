@@ -8,17 +8,16 @@ from .ratio import Ratio
 class Meter:
 
     def __init__(self, num, den):
-        if num not in range(1, 17):
+        if (not (isinstance(num, int) and isinstance(den, int))):
+            raise TypeError(f'Invalid numerator of type: {type(num)}'
+                            f'or denominator of type: {type(den)}')
+        elif num not in range(1, 17):
             raise ValueError(f'Invalid numerator: {num}')
         elif den not in {2 ** i for i in range(0, 6)}:
             raise ValueError(f'Invalid denominator: {den}')
-        try:
-            self.num = num
-            self.den = den
-        except TypeError:
-            raise TypeError(f'Invalid numerator of type: {type(num)}'
-                            f'or denominator of type: {type(den)}')
-
+        self.num = num
+        self.den = den
+            
     def __str__(self):
         return str(f'<Meter: {self.num}/{self.den} {hex(id(self))}>')
 
