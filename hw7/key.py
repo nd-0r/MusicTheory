@@ -54,9 +54,9 @@ class Key:
 
     def get_base_pitch(self):
         if (self.signum < -1):
-            return Pitch.from_keynum(60 + ((self.signum * 7) % -12), 'b')
+            return Pitch.from_keynum(60 + ((self.signum * 7) % -12))
         elif (self.signum > 5):
-            return Pitch.from_keynum(60 + ((self.signum * 7) % 12), 's')
+            return Pitch.from_keynum(60 + ((self.signum * 7) % 12))
         elif (self.signum == -1):
             return Pitch.from_keynum(60 + ((self.signum * 7) % -12))
         return Pitch.from_keynum(60 + ((self.signum * 7) % 12))
