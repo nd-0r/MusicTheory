@@ -1,7 +1,1 @@
       [  input = len(Barline)  ]  your_output = 1  desired_output = 11  (0/2)
-      [  input = Clef['BARITONE'].value  ]  your_output = (12, 8, 0)  desired_output = (5, 8, 0)  (0/2)
-      [  input = Clef['BARITONE_F'].value  ]  your_output = (5, 4, 0)  desired_output = (12, 4, 0)  (0/2)
-      [  input = Meter(4, 4.0)  ]  your_output = <Meter: 4/4.0>  desired_output = $exception$  (0/2)
-
-      [  input = Key(-8, 'lydian')  ]  your_output = <Key: Bff-Lydian (8 flats)>  desired_output = $exception$  (0/2)
-      [  input = Key(10, 'major')  ]  your_output = <Key: As-Major (10 sharps)>  desired_output = $exception$  (0/2)
