@@ -19,25 +19,25 @@ BOTTOM_LINE = 0
 class Clef (Enum):
     # Create enums here...
 
-    ALTO = (0, MIDDLE_LINE, 0)
-    BARITONE = (1, TOP_LINE, 0)
-    BARITONE_F = (2, MIDDLE_LINE, 0)
-    BASS = (3, UPPER_MIDDLE_LINE, 0)
-    BASS_15MA = (4, UPPER_MIDDLE_LINE, -15)
-    BASS_8VA = (5, UPPER_MIDDLE_LINE, -8)
-    FRENCH_VIOLIN = (6, BOTTOM_LINE, 0)
-    MEZZO_SOPRANO = (7, LOWER_MIDDLE_LINE, 0)
-    PERCUSSION = (8, MIDDLE_LINE, 0)
-    SOPRANO = (9, BOTTOM_LINE, 0)
-    SUB_BASS = (10, TOP_LINE, 0)
-    TENOR = (11, UPPER_MIDDLE_LINE, 0)
-    TENOR_TREBLE = (12, None, 0)  # what is this?
-    TREBLE = (13, LOWER_MIDDLE_LINE, 0)
-    TREBLE_15MA = (14, LOWER_MIDDLE_LINE, 15)
-    TREBLE_8VA = (15, LOWER_MIDDLE_LINE, 8)
+    ALTO = (3, MIDDLE_LINE, 0)
+    BARITONE = (12, TOP_LINE, 0)
+    BARITONE_F = (5, MIDDLE_LINE, 0)
+    BASS = (6, UPPER_MIDDLE_LINE, 0)
+    BASS_15MA = (10, UPPER_MIDDLE_LINE, -15)
+    BASS_8VA = (8, UPPER_MIDDLE_LINE, -8)
+    FRENCH_VIOLIN = (14, BOTTOM_LINE, 0)
+    MEZZO_SOPRANO = (2, LOWER_MIDDLE_LINE, 0)
+    PERCUSSION = (15, MIDDLE_LINE, 0)
+    SOPRANO = (1, BOTTOM_LINE, 0)
+    SUB_BASS = (13, TOP_LINE, 0)
+    TENOR = (4, UPPER_MIDDLE_LINE, 0)
+    TENOR_TREBLE = (11, LOWER_MIDDLE_LINE, -8)
+    TREBLE = (0, LOWER_MIDDLE_LINE, 0)
+    TREBLE_15MA = (9, LOWER_MIDDLE_LINE, 15)
+    TREBLE_8VA = (7, LOWER_MIDDLE_LINE, 8)
 
     def linespace(self):
-        return self[1]
+        return self.value[1]
 
     def transposition(self):
-        return self[2]
+        return self.value[2]
