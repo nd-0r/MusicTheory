@@ -13,7 +13,7 @@ class Key:
 
     def __init__(self, signum, mode):
         if (isinstance(signum, int)):
-            if (-7 > signum > 7):
+            if (signum > 7 or signum < -7):
                 raise ValueError(f'Cannot use signum {signum}')
             self.signum = signum
             if (isinstance(mode, Mode)):
