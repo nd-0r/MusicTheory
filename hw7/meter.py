@@ -10,7 +10,7 @@ class Meter:
     def __init__(self, num, den):
         if num not in range(1, 17):
             raise ValueError(f'Invalid numerator: {num}')
-        elif den in [2 ** i for i in range(0, 5)]:
+        elif den not in {2 ** i for i in range(0, 6)}:
             raise ValueError(f'Invalid denominator: {den}')
         try:
             self.num = num

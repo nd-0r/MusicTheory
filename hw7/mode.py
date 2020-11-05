@@ -7,18 +7,18 @@ from enum import IntEnum
 
 class Mode (IntEnum):
     # Create enums here...
-    IONIAN = 0
+    MAJOR = 0
     DORIAN = 1
     PHRYGIAN = 2
     LYDIAN = 3
     MIXOLYDIAN = 4
-    AEOLIAN = 5
+    MINOR = 5
     LOCRIAN = 6
-    MAJOR = IONIAN
-    MINOR = AEOLIAN
+    IONIAN = MAJOR
+    AEOLIAN = MINOR
 
     def short_name(self):
-        return Mode(self).name[0: 3]  # I dunno...
+        return self.name[0: 3]
 
     def tonic_degree(self):
         return self.value
