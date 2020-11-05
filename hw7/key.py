@@ -9,7 +9,7 @@ from .interval import Interval
 
 class Key:
 
-    _diatonic_intervals = ['P1', 'M2', 'm3', 'P4', 'P5', 'M6', 'M7']
+    _diatonic_intervals = ['P1', 'M2', 'M3', 'P4', 'P5', 'M6', 'M7']
 
     def __init__(self, signum, mode):
         if (isinstance(signum, int)):
@@ -54,9 +54,9 @@ class Key:
 
     def get_base_pitch(self):
         if (self.signum < -1):
-            return Pitch.from_keynum(60 + ((self.signum * 7) % -12))
+            return Pitch.from_keynum(60 + ((self.signum * 7) % -12), 'b')
         elif (self.signum > 5):
-            return Pitch.from_keynum(60 + ((self.signum * 7) % 12))
+            return Pitch.from_keynum(60 + ((self.signum * 7) % 12), 's')
         elif (self.signum == -1):
             return Pitch.from_keynum(60 + ((self.signum * 7) % -12))
         return Pitch.from_keynum(60 + ((self.signum * 7) % 12))
