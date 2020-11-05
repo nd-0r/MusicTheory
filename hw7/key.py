@@ -26,15 +26,28 @@ class Key:
         else:
             raise TypeError("signum must be an int")
 
+    # '<Key: C-Major (0 sharps or flats) 0x10c03c050>'
     def __str__(self):
-        return ''
+        if (signum == 0):
+            s_or_f = f'(0 sharps or flats)'
+        elif (signum < -1):
+            s_or_f = f'({signum} flats)'
+        elif (signum < 0):
+            s_or_f = f'(1 flat)'
+        elif (signum > 1):
+            s_or_f = f'({signum} sharps)'
+        else:
+            s_or_f = f'(1 sharp)'
+        # return str(f'<Key: {self.string()} {s_or_f} {hex(id(self))}>')
+        return str(f'<Key: {self.string()} {s_or_f}>')
 
+    # 'Key(4, "Dorian")'
     def __repr__(self):
-        return ''
+        f'Key({self.signum}, "{self.mode.name.title()}")'
 
     def string(self):
         k = self.tonic().name
-        m = self.mode.name.lower()
+        m = self.mode.name.title()
         if ('n' in k):
             k = k[:-1]
         return (k + '-' + m)
