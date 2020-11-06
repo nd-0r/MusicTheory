@@ -1,4 +1,4 @@
-============= aorals2.hw7 transcript [test] (2020-11-05 23:00:27.465155) =============
+============= aorals2.hw7 transcript [test] (2020-11-06 00:00:27.471483) =============
   module: barline
     [import]: success  (1/1)
       [  input = len(Barline)  ]  your_output = 11  desired_output = 11  (2/2)
