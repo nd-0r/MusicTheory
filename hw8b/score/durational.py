@@ -7,10 +7,12 @@ from .ratio import Ratio
 class Durational:
 
     def __init__(self, dur):
-        pass
+        if (not isinstance(dur, Ratio)):
+            raise TypeError(f'cannot initialize duration to an object of type: ' {type(dur)})
+        self.dur = dur
 
     def string(self):
-        pass
+        return dur.string()
 
     def get_pvid(self):
         pass

@@ -7,7 +7,12 @@ from .voice import Voice
 class Bar:
 
     def __init__(self, bid, clef=None, key=None, meter=None, barline=None, partial=False):
-        pass
+        self.bid = bid
+        self.clef = clef
+        self.key = key
+        self.meter = meter
+        self.barline = barline
+        self.partial = partial
 
     def __str__(self):
         return ""
