@@ -7,19 +7,23 @@ from .durational import Durational
 class Voice:
 
     def __init__(self, voiceid):
-        pass
+        self.id = voiceid
+        self.bar = []
+        self.notes = []
 
     def __str__(self):
-        return ""
+        return str(f'<Voice: {self.id} {hex(id(self))}')
 
     def __repr__(self):
-        return ""
+        return str(f'<Voice: {self.id}>')
 
     def __iter__(self):
-        pass
+        return iter(self.notes)
 
     def add_note(self, note):
-        pass
+        if (not isinstance(note, Durational)):
+            raise TypeError(f'Invalid type: {type(note)}')
+        self.notes.append(note)
 
     def dur(self):
         pass

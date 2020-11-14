@@ -7,7 +7,6 @@ from .note import Note
 
 class Chord(Durational):
 
-
     def __init__(self, notes):
         pass
 

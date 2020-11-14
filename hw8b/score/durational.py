@@ -8,7 +8,7 @@ class Durational:
 
     def __init__(self, dur):
         if (not isinstance(dur, Ratio)):
-            raise TypeError(f'cannot initialize duration to an object of type: ' {type(dur)})
+            raise TypeError(f'cannot initialize duration to an object of type: {type(dur)}')
         self.dur = dur
 
     def string(self):
@@ -16,4 +16,3 @@ class Durational:
 
     def get_pvid(self):
         pass
-
