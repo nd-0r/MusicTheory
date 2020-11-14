@@ -1,4 +1,4 @@
-============= aorals2.hw8b transcript [test] (2020-11-14 16:00:30.659979) =============
+============= aorals2.hw8b transcript [test] (2020-11-14 17:00:30.452952) =============
   module: score
     [import]: failed  (0/1)
       [  input = disp=import_score('sample.xml').print_all_repr()  ]  your_output = $exception$  desired_output = None  (0/2)
