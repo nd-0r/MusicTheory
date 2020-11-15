@@ -80,6 +80,7 @@ class Score:
                         reprs += 4*indent + repr(v)
                         for n in v.notes:
                             reprs += 5*indent + repr(n)
+        return reprs
 
     def print(self):
         print('\n'.join(self.print_all_repr()))

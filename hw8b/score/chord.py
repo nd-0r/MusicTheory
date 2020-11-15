@@ -32,5 +32,5 @@ class Chord(Durational):
         out = '('
         for element in l[:-1]:
             out += str(element) + ', '
-        out += l[-1] + ')'
+        out += str(l[-1]) + ')'
         return out
