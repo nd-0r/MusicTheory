@@ -15,4 +15,4 @@ class Durational:
         return dur.string()
 
     def get_pvid(self):
-        
+        return 'P' + str(self.partid) + '.' + str(self.id)

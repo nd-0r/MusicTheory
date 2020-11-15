@@ -26,8 +26,11 @@ class Voice:
         self.notes.append(note)
 
     def dur(self):
-        out = sum(self.notes.dur)
+        out = Ratio(0)
+        for n in self.notes:
+            out += n.dur
+        return out
 
     def get_pvid(self):
-        pass
+        return 'P' + str(self.partid) + '.' + str(self.id)
 
