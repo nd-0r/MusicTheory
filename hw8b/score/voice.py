@@ -26,7 +26,7 @@ class Voice:
         self.notes.append(note)
 
     def dur(self):
-        pass
+        out = sum(self.notes.dur)
 
     def get_pvid(self):
         pass
