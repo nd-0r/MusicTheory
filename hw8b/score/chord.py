@@ -31,6 +31,6 @@ class Chord(Durational):
     def list_string(l):
         out = '('
         for element in l[:-1]:
-            out += str(element.pitch.string()) + ', '
-        out += str(l[-1]) + ')'
+            out += str(element.pitch.string()[:-1]) + ', '
+        out += str(l[-1].pitch.string()[:-1]) + ')'
         return out
