@@ -1,6 +1,6 @@
 ###############################################################################
 
-# Do not alter, add, or delete import statements
+# Do not alter, add, or delete import statements 
 from .durational import Durational
 from .note import Note
 
