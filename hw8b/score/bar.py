@@ -20,13 +20,13 @@ class Bar:
     def __str__(self):
         temp = self.get_strings()
         assert(len(temp) == 4)
-        return str(f'<Bar: {self.bid} {temp[0]} {temp[1]} {temp[2]} {temp[3]} {hex(id(self))}>')
+        return str(f'<Bar: {self.bid}{temp[0]}{temp[1]}{temp[2]}{temp[3]} {hex(id(self))}>')
 
     # <Bar: 0 Treble A-Major 2/4 STANDARD>
     def __repr__(self):
         temp = self.get_strings()
         assert(len(temp) == 4)
-        return str(f'<Bar: {self.bid} {temp[0]} {temp[1]} {temp[2]} {temp[3]}>')
+        return str(f'<Bar: {self.bid}{temp[0]}{temp[1]}{temp[2]}{temp[3]}>')
 
     def __iter__(self):
         return iter(voices)
@@ -45,19 +45,19 @@ class Bar:
     def get_strings(self):
         out = []
         try:
-            out.append(self.clef.name.title())
+            out.append(' ' + self.clef.name.title())
         except Exception:
             out.append('')
         try:
-            out.append(self.key.string())
+            out.append(' ' + self.key.string())
         except Exception:
             out.append('')
         try:
-            out.append(self.meter.string())
+            out.append(' ' + self.meter.string())
         except Exception:
             out.append('')
         try:
-            out.append(self.barline.name)
+            out.append(' ' + self.barline.name)
         except Exception:
             out.append('')        
         return out
