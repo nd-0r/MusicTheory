@@ -18,11 +18,11 @@ class Bar:
 
     # <Bar: 0 Treble A-Major 2/4 STANDARD 0x109667790>
     def __str__(self):
-        return str(f'<{self.__class__}: {self.bid} {self.clef.string()} {self.key.string()} {self.meter.string()} {self.barline.string()} {hex(id(self))}>')
+        return str(f'<{self.__class__}: {self.bid} {str(self.clef)} {str(self.key)} {str(self.meter)} {str(self.barline)} {hex(id(self))}>')
 
     # <Bar: 0 Treble A-Major 2/4 STANDARD>
     def __repr__(self):
-        return str(f'<{self.__class__}: {self.bid} {self.clef.string()} {self.key.string()} {self.meter.string()} {self.barline.string()}>')
+        return str(f'<{self.__class__}: {self.bid} {str(self.clef)} {str(self.key)} {str(self.meter)} {str(self.barline)}>')
 
     def __iter__(self):
         return iter(voices)

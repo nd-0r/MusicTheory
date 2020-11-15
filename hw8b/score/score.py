@@ -76,8 +76,10 @@ class Score:
                 reprs += 2*indent + repr(s)
                 for b in s.bars:
                     reprs += 3*indent + repr(b)
-                    for n in b.notes:
-                        reprs += 4*indent + repr(n)
+                    for v in b.voices:
+                        reprs += 4*indent + repr(v)
+                        for n in v.notes:
+                            reprs += 5*indent + repr(n)
 
     def print(self):
         print('\n'.join(self.print_all_repr()))
