@@ -24,7 +24,7 @@ class Score:
                 title = self.metadata['movement_title']
             except KeyError:
                 title = '(untitled)'
-        return str(f'<{self.__class__}: S{title} {hex(id(self))}>')
+        return str(f'<Score: S{title} {hex(id(self))}>')
 
     def __repr__(self):
         try:
@@ -34,7 +34,7 @@ class Score:
                 title = self.metadata['movement_title']
             except KeyError:
                 title = '(untitled)'
-        return str(f'<{self.__class__}: S{title}>')
+        return str(f'<Score: S{title}>')
 
     def __iter__(self):
         return iter(self.parts)
@@ -71,15 +71,15 @@ class Score:
         indent = '  '
         reprs.append(repr(self))
         for p in self.parts:
-            reprs += indent + repr(p)
+            reprs.append(indent + repr(p))
             for s in p.staffs:
-                reprs += 2*indent + repr(s)
+                reprs.append(2*indent + repr(s))
                 for b in s.bars:
-                    reprs += 3*indent + repr(b)
+                    reprs.append(3*indent + repr(b))
                     for v in b.voices:
-                        reprs += 4*indent + repr(v)
+                        reprs.append(4*indent + repr(v))
                         for n in v.notes:
-                            reprs += 5*indent + repr(n)
+                            reprs.append(5*indent + repr(n))
         return reprs
 
     def print(self):

@@ -13,10 +13,10 @@ class Rest (Durational):
         self.voice = None
 
     def __str__(self):
-        return str(f'<{self.__class__}: {self.dur.string()} {hex(id(self))}>')
+        return str(f'<Rest: {self.dur.string()} {hex(id(self))}>')
 
     def __repr__(self):
-        return str(f'<{self.__class__}: {self.dur.string()}>')
+        return str(f'<Rest: {self.dur.string()}>')
 
     def string(self):
         return str(f'R {self.dur.string()}')

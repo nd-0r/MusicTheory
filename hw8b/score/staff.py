@@ -11,10 +11,10 @@ class Staff:
         self.part = None
 
     def __str__(self):
-        return str(f'<{self.__class__}: S{self.id} {hex(id(self))}>')
+        return str(f'<Staff: S{self.id} {hex(id(self))}>')
 
     def __repr__(self):
-        return str(f'<{self.__class__}: S{self.id}>')
+        return str(f'<Staff: S{self.id}>')
 
     def __iter__(self):
         return iter(bars)

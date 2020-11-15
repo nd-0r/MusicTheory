@@ -19,10 +19,10 @@ class Chord(Durational):
         super().__init__(notes[0].dur)
 
     def __str__(self):
-        return str(f'<{self.__class__}: {self.string()} {hex(id(self))}>')
+        return str(f'<Chord: {self.string()} {hex(id(self))}>')
 
     def __repr__(self):
-        return str(f'<{self.__class__}: {self.string()}>')
+        return str(f'<Chord: {self.string()}>')
 
     def string(self):
         return str(f'{Chord.list_string(self.notes)} {self.dur.string()}')

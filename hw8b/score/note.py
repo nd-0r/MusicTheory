@@ -17,10 +17,10 @@ class Note (Durational):
         self.voice = None
 
     def __str__(self):
-        return str(f'<{self.__class__}: {self.string()} {hex(id(self))}>')
+        return str(f'<Note: {self.string()} {hex(id(self))}>')
 
     def __repr__(self):
-        return str(f'<{self.__class__}: {self.string()}>')
+        return str(f'<Note: {self.string()}>')
 
     def __lt__(self, other):
         return self.pitch.__lt__(other)

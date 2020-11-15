@@ -14,10 +14,10 @@ class Part:
         self.score = None
 
     def __str__(self):
-        return str(f'<{self.__class__}: P{self.partid} {hex(id(self))}>')
+        return str(f'<Part: P{self.partid} {hex(id(self))}>')
 
     def __repr__(self):
-        return str(f'<{self.__class__}: P{self.partid}>')
+        return str(f'<Part: P{self.partid}>')
 
     def __iter__(self):
         return iter(self.staffs)
