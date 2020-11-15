@@ -24,7 +24,7 @@ class Score:
                 title = self.metadata['movement_title']
             except KeyError:
                 title = '(untitled)'
-        return str(f'<Score: S{title} {hex(id(self))}>')
+        return str(f'<Score: {title} {hex(id(self))}>')
 
     def __repr__(self):
         try:
@@ -34,7 +34,7 @@ class Score:
                 title = self.metadata['movement_title']
             except KeyError:
                 title = '(untitled)'
-        return str(f'<Score: S{title}>')
+        return str(f'<Score: {title}>')
 
     def __iter__(self):
         return iter(self.parts)
