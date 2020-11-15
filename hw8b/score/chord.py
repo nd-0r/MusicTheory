@@ -18,4 +18,3 @@ class Chord(Durational):
 
     def string(self):
         pass
-

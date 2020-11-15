@@ -8,39 +8,77 @@ from .part import Part
 class Score:
 
     def __init__(self, metadata={}, parts=[]):
-        pass
+        import score
+        if (not isinstance(metadata, dict)):
+            raise TypeError(f'Invalid metadata type: {type(metadata)}')
+        self.metadata = metadata
+        self.parts = []
+        for p in parts:
+            self.add_part(p)
+
 
     def __str__(self):
-        return ""
+        try:
+            title = self.metadata['work_title']
+        except KeyError:
+            try:
+                title = self.metadata['movement_title']
+            except KeyError:
+                title = '(untitled)'
+        return str(f'<{self.__class__}: S{title} {hex(id(self))}>')
 
     def __repr__(self):
-        return ""
+        try:
+            title = self.metadata['work_title']
+        except KeyError:
+            try:
+                title = self.metadata['movement_title']
+            except KeyError:
+                title = '(untitled)'
+        return str(f'<{self.__class__}: S{title}>')
 
     def __iter__(self):
-        pass
+        return iter(self.parts)
 
     def get_metadata(self, key, default=None):
-        pass
+        try:
+            return self.metadata[key]
+        except KeyError:
+            return default
 
     def set_metadata(self, key, value):
-        pass
+        self.metadata[key] = value
+        return value
 
     def add_part(self, part):
-        pass
+        if (not isinstance(part, Part)):
+            raise TypeError(f'Invalid part type: {type(part)}')
+        self.parts.append(part)
 
     def part_ids(self):
-        pass
+        return [p.id for p in self.parts]
 
     def num_parts(self):
-        pass
+        return len(self.parts)
 
     def get_part(self, pid):
-        pass
+        for p in self.parts:
+            if (p.partid == pid):
+                return p
+        return None
 
     def print_all_repr(self):
         reprs = []
         indent = '  '
-        # Add your code here, don't forget to return the reprs list!
+        reprs.append(repr(self))
+        for p in self.parts:
+            reprs += indent + repr(p)
+            for s in p.staffs:
+                reprs += 2*indent + repr(s)
+                for b in s.bars:
+                    reprs += 3*indent + repr(b)
+                    for n in b.notes:
+                        reprs += 4*indent + repr(n)
 
     def print(self):
         print('\n'.join(self.print_all_repr()))

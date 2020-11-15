@@ -6,22 +6,26 @@ from .bar import Bar
 class Staff:
 
     def __init__(self, staffid):
-        pass
+        self.id = staffid
+        self.bars = []
+        self.part = None
 
     def __str__(self):
-        return ""
+        return str(f'<{self.__class__}: S{self.id} {hex(id(self))}>')
 
     def __repr__(self):
-        return ""
+        return str(f'<{self.__class__}: S{self.id}>')
 
     def __iter__(self):
-        pass
+        return iter(bars)
 
     def add_bar(self, bar):
-        pass
+        if (not isinstance(bar, Bar)):
+            raise TypeError(f'Invalid type: {type(bar)}')
+        self.bars.append(bar)
 
     def bar_ids(self):
-        pass
+        return [b.id for b in self.bars]
 
     def num_bars(self):
-        pass
+        return len(self.bars)

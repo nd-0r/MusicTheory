@@ -29,5 +29,3 @@ class Rest (Durational):
 
     def is_pad(self):
         return self.pad
-
-

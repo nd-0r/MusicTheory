@@ -28,7 +28,7 @@ class Part:
         self.staffs.append(staff)
 
     def staff_ids(self):
-        return len(staffs)
+        return [s.id for s in staffs]
 
     def num_staffs(self):
-        return [s.id for s in staffs]
+        return len(staffs)
