@@ -25,7 +25,7 @@ class Chord(Durational):
         return str(f'<{self.__class__}: {self.string()}>')
 
     def string(self):
-        return str(f'{list_string(self.notes)} {self.dur.string()}')
+        return str(f'{Chord.list_string(self.notes)} {self.dur.string()}')
 
     @staticmethod
     def list_string(l):
