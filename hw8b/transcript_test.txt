@@ -1,6 +1,6 @@
-============= aorals2.hw8b transcript [test] (2020-11-14 19:00:29.547094) =============
+============= aorals2.hw8b transcript [test] (2020-11-14 20:00:29.100729) =============
   module: score
-    [import]: success  (1/1)
+    [import]: failed  (0/1)
       [  input = disp=import_score('sample.xml').print_all_repr()  ]  your_output = $exception$  desired_output = None  (0/2)
       [  input = disp[  0]  ]  your_output = $exception$  desired_output = <Score: "Prelude Op 28 No 20">  (0/2)
       [  input = disp[  1]  ]  your_output = $exception$  desired_output =   <Part: P1>  (0/2)
@@ -224,7 +224,7 @@
       [  input = disp[219]  ]  your_output = $exception$  desired_output =       <Bar: 13 FINAL_DOUBLE>  (0/2)
       [  input = disp[220]  ]  your_output = $exception$  desired_output =         <Voice: 5>  (0/2)
       [  input = disp[221]  ]  your_output = $exception$  desired_output =           <Chord: (C3, G3) 1/1>  (0/2)
-Total raw score: (1/447)
+Total raw score: (0/447)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 1
