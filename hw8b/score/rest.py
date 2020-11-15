@@ -7,7 +7,7 @@ from .durational import Durational
 class Rest (Durational):
 
     def __init__(self, dur):
-        Durational.__init__(dur)
+        super().__init__(dur)
         self.pitch = None
         self.marks = None
         self.voice = None

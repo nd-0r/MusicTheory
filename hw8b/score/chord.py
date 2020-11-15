@@ -10,13 +10,13 @@ class Chord(Durational):
     def __init__(self, notes):
         last = notes[0]
         for n in notes:
-            if ((not isinstance(n, Note)) or (n.dur != last)):
+            if ((not isinstance(n, Note)) or (n.dur != last.dur)):
                 raise TypeError('Invalid list of notes')
             last = n
         self.notes = notes
         # not sure... can a chord be assigned to multiple voices?
         self.voice = []
-        Durational.__init__(notes[0].dur)
+        super().__init__(notes[0].dur)
 
     def __str__(self):
         return str(f'<{self.__class__}: {self.string()} {hex(id(self))}>')

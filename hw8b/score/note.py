@@ -11,7 +11,7 @@ class Note (Durational):
     def __init__(self, pitch, dur, marks=[]):
         if (not isinstance(pitch, Pitch)):
             raise TypeError(f'Invalid pitch type: {Type(pitch)}')
-        Durational.__init__(dur)
+        super().__init__(dur)
         self.pitch = pitch
         self.marks = marks
         self.voice = None

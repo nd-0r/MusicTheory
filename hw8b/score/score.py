@@ -8,7 +8,6 @@ from .part import Part
 class Score:
 
     def __init__(self, metadata={}, parts=[]):
-        import score
         if (not isinstance(metadata, dict)):
             raise TypeError(f'Invalid metadata type: {type(metadata)}')
         self.metadata = metadata
