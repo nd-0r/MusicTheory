@@ -1,8 +1,8 @@
-============= aorals2.hw8c transcript [test] (2020-11-16 01:00:36.158059) =============
+============= aorals2.hw8c transcript [test] (2020-11-16 02:00:35.867802) =============
   module: score
     [import]: success  (1/1)
       [  input = disp=import_score('sample.xml').print_all_repr()  ]  your_output = None  desired_output = None  (2/2)
-      [  input = disp[  0]  ]  your_output = <Score: Prelude Op 28 No 20>  desired_output = <Score: "Prelude Op 28 No 20">  (0/2)
+      [  input = disp[  0]  ]  your_output = <Score: "Prelude Op 28 No 20">  desired_output = <Score: "Prelude Op 28 No 20">  (2/2)
       [  input = disp[  1]  ]  your_output =   <Part: P1>  desired_output =   <Part: P1>  (2/2)
       [  input = disp[  2]  ]  your_output =     <Staff: 1>  desired_output =     <Staff: 1>  (2/2)
       [  input = disp[  3]  ]  your_output =       <Bar: 1 Treble C-Minor 4/4 STANDARD>  desired_output =       <Bar: 1 Treble C-Minor 4/4 STANDARD>  (2/2)
@@ -224,10 +224,10 @@
       [  input = disp[219]  ]  your_output =       <Bar: 13 FINAL_DOUBLE>  desired_output =       <Bar: 13 FINAL_DOUBLE>  (2/2)
       [  input = disp[220]  ]  your_output =         <Voice: 5>  desired_output =         <Voice: 5>  (2/2)
       [  input = disp[221]  ]  your_output =           <Chord: (C3, G3) 1/1>  desired_output =           <Chord: (C3, G3) 1/1>  (2/2)
-Total raw score: (445/447)
+Total raw score: (447/447)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 1
 Extra credit (if applicable): 0
-Adjusted score (Final): 444/446
+Adjusted score (Final): 446/446
 
