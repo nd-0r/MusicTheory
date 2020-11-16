@@ -24,7 +24,7 @@ class Score:
                 title = self.metadata['movement_title']
             except KeyError:
                 title = '(untitled)'
-        return str(f'<Score: {title} {hex(id(self))}>')
+        return str(f'<Score: "{title}" {hex(id(self))}>')
 
     def __repr__(self):
         try:
