@@ -34,7 +34,7 @@ class Score:
                 title = self.metadata['movement_title']
             except KeyError:
                 title = '(untitled)'
-        return str(f'<Score: {title}>')
+        return str(f'<Score: "{title}">')
 
     def __iter__(self):
         return iter(self.parts)
