@@ -1,4 +1,4 @@
-============= aorals2.hw8c transcript [test] (2020-11-25 12:00:26.307967) =============
+============= aorals2.hw8c transcript [test] (2020-11-25 13:00:26.391972) =============
   module: score
     [import]: success  (1/1)
       [  input = disp=import_score('sample.xml').print_all_repr()  ]  your_output = None  desired_output = None  (2/2)
