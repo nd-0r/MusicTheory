@@ -50,30 +50,21 @@ class shapeCheck():
 
 class checkStartNote(Rule):
 
-    # Rule initializer.
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "My very first rule.")
+        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         # Now initialize whatever attributes your rule defines.
-        # ...
 
-    # This is where your rule does all its work. When the work is done you
-    # should update the analysis results with your findings.
     def apply(self):
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
 
-#    # Uncomment this code if you want your rule to print information to the
-#    # the terminal just after it runs...
-#    def display(self, index):
-#        print('-------------------------------------------------------------------')
-#        print(f"Rule {index+1}: {self.title}")
-#        print("I'm here!")
-
-
-# ...ADD MORE RULES HERE!....
+    def display(self, index):
+        print('-------------------------------------------------------------------')
+        print(f"Rule {index+1}: {self.title}")
+        print("I'm here!")
 
 
 # A class representing a melodic analysis of a voice in a score. The class
