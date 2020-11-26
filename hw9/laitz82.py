@@ -339,14 +339,25 @@ class checkUnique(Rule, shapeCheck):
 # Consult the documentation for more information.
 class MyMelodicAnalysis(Analysis):
     def __init__(self, score):
-        # Call the superclass and give it the score. Don't change this line.
         super().__init__(score)
-        # Copy the empty result checks template to this analysis. Don't
-        # change this line
         self.results = copy(melodic_checks)
-        # Create the list of rules this analysis runs. This example just
-        # uses the demo Rule defined above.
-        self.rules = [MyRule(self)]
+        self.rules = [
+            checkStartNote(self),
+            checkCadence(self),
+            checkTessitura(self),
+            checkDiatonic(self),
+            checkStepwise(self),
+            checkConsonant(self),
+            checkSimple(self),
+            checkNumLarge(self),
+            checkNumUnison(self),
+            checkNumSameDir(self),
+            checkRecovery(self),
+            checkNumConsec(self),
+            checkNumClimax(self),
+            checkArchlike(self),
+            checkUnique(self)]
+        
 
     # You can define a cleanup function if you want.
     # def cleanup(self):
