@@ -31,10 +31,24 @@ melodic_checks = {
     'SHAPE_UNIQUE': None
 }
 
-# Here is an example of a rule. You can define as many rules as you like.
-# The purpose of a rule is to perform some analytical check(s) and
-# then update the self.analysis.results dictionary with its findings.
-class MyRule(Rule):
+# superclass for pitch checks
+class pitchCheck():
+    pass
+
+# superclass for melodic checks
+class melodicIntervalCheck():
+    pass
+
+# superclass for leap checks
+class leapCheck():
+    pass
+
+# superclass for shape checks
+class shapeCheck():
+    pass
+
+
+class checkStartNote(Rule):
 
     # Rule initializer.
     def __init__(self, analysis):
