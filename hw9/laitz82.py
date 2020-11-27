@@ -31,22 +31,6 @@ melodic_checks = {
     'SHAPE_UNIQUE': None
 }
 
-# superclass for pitch checks
-class pitchCheck():
-    pass
-
-# superclass for melodic checks
-class melodicIntervalCheck():
-    pass
-
-# superclass for leap checks
-class leapCheck():
-    pass
-
-# superclass for shape checks
-class shapeCheck():
-    pass
-
 
 # ------------------Rules------------------ #
 class checkStartNote(Rule, pitchCheck):
@@ -68,7 +52,7 @@ class checkStartNote(Rule, pitchCheck):
         print("I'm here!")
 
 
-class checkCadence(Rule, pitchCheck):
+class checkCadence(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -87,7 +71,7 @@ class checkCadence(Rule, pitchCheck):
         print("I'm here!")
 
 
-class checkTessitura(Rule, pitchCheck):
+class checkTessitura(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -106,7 +90,7 @@ class checkTessitura(Rule, pitchCheck):
         print("I'm here!")
 
 
-class checkDiatonic(Rule, pitchCheck):
+class checkDiatonic(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -125,7 +109,7 @@ class checkDiatonic(Rule, pitchCheck):
         print("I'm here!")
 
 
-class checkStepwise(Rule, melodicIntervalCheck):
+class checkStepwise(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -144,7 +128,7 @@ class checkStepwise(Rule, melodicIntervalCheck):
         print("I'm here!")
 
 
-class checkConsonant(Rule, melodicIntervalCheck):
+class checkConsonant(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -163,7 +147,7 @@ class checkConsonant(Rule, melodicIntervalCheck):
         print("I'm here!")
 
 
-class checkSimple(Rule, melodicIntervalCheck):
+class checkSimple(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -182,7 +166,7 @@ class checkSimple(Rule, melodicIntervalCheck):
         print("I'm here!")
 
 
-class checkNumLarge(Rule, melodicIntervalCheck):
+class checkNumLarge(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -201,7 +185,7 @@ class checkNumLarge(Rule, melodicIntervalCheck):
         print("I'm here!")
 
 
-class checkNumUnison(Rule, melodicIntervalCheck):
+class checkNumUnison(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -220,7 +204,7 @@ class checkNumUnison(Rule, melodicIntervalCheck):
         print("I'm here!")
 
 
-class checkNumSameDir(Rule, melodicIntervalCheck):
+class checkNumSameDir(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -239,7 +223,7 @@ class checkNumSameDir(Rule, melodicIntervalCheck):
         print("I'm here!")
 
 
-class checkRecovery(Rule, leapCheck):
+class checkRecovery(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -258,7 +242,7 @@ class checkRecovery(Rule, leapCheck):
         print("I'm here!")
 
 
-class checkNumConsec(Rule, leapCheck):
+class checkNumConsec(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -277,7 +261,7 @@ class checkNumConsec(Rule, leapCheck):
         print("I'm here!")
 
 
-class checkNumClimax(Rule, shapeCheck):
+class checkNumClimax(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -296,7 +280,7 @@ class checkNumClimax(Rule, shapeCheck):
         print("I'm here!")
 
 
-class checkArchlike(Rule, shapeCheck):
+class checkArchlike(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -315,7 +299,7 @@ class checkArchlike(Rule, shapeCheck):
         print("I'm here!")
 
 
-class checkUnique(Rule, shapeCheck):
+class checkUnique(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
