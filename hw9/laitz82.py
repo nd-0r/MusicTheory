@@ -33,7 +33,7 @@ melodic_checks = {
 
 
 # ------------------Rules------------------ #
-class checkStartNote(Rule, pitchCheck):
+class pitchChecks(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -52,7 +52,7 @@ class checkStartNote(Rule, pitchCheck):
         print("I'm here!")
 
 
-class checkCadence(Rule):
+class intervalChecks(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -71,7 +71,7 @@ class checkCadence(Rule):
         print("I'm here!")
 
 
-class checkTessitura(Rule):
+class leapChecks(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -90,216 +90,7 @@ class checkTessitura(Rule):
         print("I'm here!")
 
 
-class checkDiatonic(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkStepwise(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkConsonant(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkSimple(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkNumLarge(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkNumUnison(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkNumSameDir(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkRecovery(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkNumConsec(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkNumClimax(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkArchlike(Rule):
-
-    def __init__(self, analysis):
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
-
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
-
-
-class checkUnique(Rule):
+class shapeChecks(Rule):
 
     def __init__(self, analysis):
         # Always set the rule's back pointer to its analysis!
@@ -326,21 +117,10 @@ class MyMelodicAnalysis(Analysis):
         super().__init__(score)
         self.results = copy(melodic_checks)
         self.rules = [
-            checkStartNote(self),
-            checkCadence(self),
-            checkTessitura(self),
-            checkDiatonic(self),
-            checkStepwise(self),
-            checkConsonant(self),
-            checkSimple(self),
-            checkNumLarge(self),
-            checkNumUnison(self),
-            checkNumSameDir(self),
-            checkRecovery(self),
-            checkNumConsec(self),
-            checkNumClimax(self),
-            checkArchlike(self),
-            checkUnique(self)]
+            pitchChecks(self),
+            intervalChecks(self),
+            leapChecks(self),
+            shapeChecks(self)]
         
 
     # You can define a cleanup function if you want.
