@@ -61,6 +61,8 @@ class pitchChecks(Rule):
 class intervalChecks(Rule):
 
     def __init__(self, analysis):
+        if (self.tps == self.melodic_id == self.trns == self.key == None):
+            raise AttributeError("Setup has not been run yet!")
         # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         # Now initialize whatever attributes your rule defines.
@@ -80,6 +82,8 @@ class intervalChecks(Rule):
 class leapChecks(Rule):
 
     def __init__(self, analysis):
+        if (self.tps == self.melodic_id == self.trns == self.key == None):
+            raise AttributeError("Setup has not been run yet!")
         # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         # Now initialize whatever attributes your rule defines.
@@ -99,6 +103,8 @@ class leapChecks(Rule):
 class shapeChecks(Rule):
 
     def __init__(self, analysis):
+        if (self.tps == self.melodic_id == self.trns == self.key == None):
+            raise AttributeError("Setup has not been run yet!")
         # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         # Now initialize whatever attributes your rule defines.
