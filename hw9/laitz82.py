@@ -36,9 +36,15 @@ melodic_checks = {
 class pitchChecks(Rule):
 
     def __init__(self, analysis):
+        if (self.tps == self.melodic_id == self.trns == self.key == None):
+            raise AttributeError("Setup has not been run yet!")
         # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         # Now initialize whatever attributes your rule defines.
+        self.pitches = []
+        for tp in self.tps:
+            assert (type(tp[self.melodic_id]) == Pitch), "Voice is not a melodic line!"
+            self.pitches.append(tp[self.melodic_id])
 
     def apply(self):
         # ... do some analysis...
