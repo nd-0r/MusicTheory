@@ -187,18 +187,14 @@ class MyMelodicAnalysis(Analysis):
         self.trns = None
         self.key = None
 
-    # You can define a cleanup function if you want.
     # def cleanup(self):
     #     self.melody, self.intervals, self.motions = [], [], []
 
-    # You MUST define a setup function. A first few steps are
-    # done for you, you can add more steps as you wish.
     def setup(self, args, kwargs):
         assert len(args) == 1, "Usage: analyze(<pvid>), pass the pvid of the voice to analyze."
-        # melodic_id is the voice to analyze passed in by the caller.
-        # you will want to use this when you access the timepoints
         self.melodic_id = args[0]
         self.tps = timepoints(self.score, span=True, measures=False, trace=True)
+        self.trns = [Transition(a, b) for a,b in zip(self.tps, self.tps[1])]
         # set the key to the main_key in the metadata of the score. Else, set
         # the key to the key of the first bar in the score
         try:
@@ -209,12 +205,8 @@ class MyMelodicAnalysis(Analysis):
         except Exception:
             self.key = Key(0, Mode.MAJOR)
             print('Setting key to C major; no valid key could be extracted from the score.')
-        # TODO - implement transitions
 
-    # This function is given to you, it returns your analysis results
-    # for the autograder to check.  You can also use this function as
-    # a top level call for testing. Just make sure that it always returns
-    # self.results after the analysis has been performed!
+    # can also use this function as a top-level call for testing
     def submit_to_grading(self):
         # Call analyze() and pass it the pvid used in all the Laitz scores.
         self.analyze('P1.1')
