@@ -46,7 +46,7 @@ class pitchChecks(Rule):
     def apply(self):
         self.analysis.results['MEL_START_NOTE'] = True if self.check_start_note() else []
         self.analysis.results['MEL_CADENCE'] = True if self.check_mel_cadence() else []
-        self.analysis.results['MEL_TESSITURA'] = True if self.check_mel_tessitura() else []
+        self.analysis.results['MEL_TESSITURA'] = True if self.check_mel_tessitura(Interval('M6')) else []
         self.analysis.results['MEL_DIATONIC'] = True if self.check_mel_diatonic() == [] else self.check_mel_diatonic()
 
     # MEL_START_NOTE
@@ -65,13 +65,14 @@ class pitchChecks(Rule):
         return False
 
     # MEL_TESSITURA
-    def check_mel_tessitura(self):
+    def check_mel_tessitura(self, center_inter):
         max_midi = max(self.pitches).keynum()
         min_midi = min(self.pitches).keynum()
         median = (max_midi + min_midi) // 2
-        # M6 is 9 semitones; 4 and 5 away from the median
-        span_min = math.max(median - 4, min_midi)
-        span_max = math.min(median + 5, max_midi)
+        low = center_inter.semitones() // 2
+        high = center_inter.semitones() - low
+        span_min = math.max(median - low, min_midi)
+        span_max = math.min(median + high, max_midi)
         count = sum(x.keynum() in range(span_min, span_max + 1) for x in self.pitches)
         if (count / len(self.pitches) >= 0.75):
             return True
