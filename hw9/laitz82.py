@@ -96,6 +96,7 @@ class shapeChecks(Rule):
         # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         # Now initialize whatever attributes your rule defines.
+        self.notes = self.score.getPart()
 
     def apply(self):
         # ... do some analysis...
@@ -133,8 +134,9 @@ class MyMelodicAnalysis(Analysis):
         assert len(args) == 1, "Usage: analyze(<pvid>), pass the pvid of the voice to analyze."
         # melodic_id is the voice to analyze passed in by the caller.
         # you will want to use this when you access the timepoints
-        melodic_id = args[0]
-        tps = timepoints(self.score, span=True, measures=False)
+        self.melodic_id = args[0]
+        self.tps = timepoints(self.score, span=True, measures=False)
+        # add transitions
 
     # This function is given to you, it returns your analysis results
     # for the autograder to check.  You can also use this function as
