@@ -3,7 +3,7 @@
 ## You can import from score, theory and any python module you want to use.
 
 from .score import Pitch, Interval, Mode, import_score, Key
-from .theory import Analysis, Rule, TimePoint, timepoints
+from .theory import Analysis, Rule, TimePoint, timepoints, Transition
 from copy import copy
 import math
 
