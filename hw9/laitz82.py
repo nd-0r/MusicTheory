@@ -2,8 +2,8 @@
 
 ## You can import from score, theory and any python module you want to use.
 
-from .score import Pitch, Interval, Mode, import_score
-from .theory import Analysis, Rule, timepoints
+from .score import Pitch, Interval, Mode, import_score, Key
+from .theory import Analysis, Rule, TimePoint, timepoints
 from copy import copy
 
 # A template directory that is copied into your analysis.
