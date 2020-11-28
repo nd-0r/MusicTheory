@@ -31,7 +31,6 @@ melodic_checks = {
     'SHAPE_UNIQUE': None
 }
 
-
 # ------------------Rules------------------ #
 class pitchChecks(Rule):
 
@@ -47,6 +46,7 @@ class pitchChecks(Rule):
             self.pitches.append(tp[self.melodic_id])
 
     def apply(self):
+        # TODO - apply rule
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
@@ -68,10 +68,19 @@ class intervalChecks(Rule):
         # Now initialize whatever attributes your rule defines.
 
     def apply(self):
+        # TODO - apply rule
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
+
+    # TODO - int_stepwise
+    # TODO - int_coinsonant
+    # TODO - INT_SIMPLE
+    # TODO - IMT_NUM_LARGE
+    # TODO - INT NUM UNISON
+    # TODO - INT NUM SAMEDIR
+
 
     def display(self, index):
         print('-------------------------------------------------------------------')
@@ -89,10 +98,14 @@ class leapChecks(Rule):
         # Now initialize whatever attributes your rule defines.
 
     def apply(self):
+        # TODO - apply rule
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
+
+    # TODO - LEAP RECOVERY
+    # TODO - LEAP NUMCONSEC
 
     def display(self, index):
         print('-------------------------------------------------------------------')
@@ -111,10 +124,15 @@ class shapeChecks(Rule):
         self.notes = self.score.getPart()
 
     def apply(self):
+        # TODO - apply rule
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
+
+    # TODO - SHAPE NUM CLIMAX
+    # TODO - SHAPE ARCHLIKE
+    # TODO - SHAPE UNIQUE
 
     def display(self, index):
         print('-------------------------------------------------------------------')
@@ -163,7 +181,7 @@ class MyMelodicAnalysis(Analysis):
         except Exception:
             self.key = Key(0, Mode.MAJOR)
             print('Setting key to C major; no valid key could be extracted from the score.')
-        # add transitions
+        # TODO - implement transitions
 
     # This function is given to you, it returns your analysis results
     # for the autograder to check.  You can also use this function as
