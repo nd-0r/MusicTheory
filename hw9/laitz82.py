@@ -134,6 +134,11 @@ class MyMelodicAnalysis(Analysis):
             intervalChecks(self),
             leapChecks(self),
             shapeChecks(self)]
+        self.melodic_id = None
+        self.tps = None
+        self.trns = None
+        self.key = None
+        # be sure to get the transition iterator inside the rules classes
         
 
     # You can define a cleanup function if you want.
@@ -147,7 +152,17 @@ class MyMelodicAnalysis(Analysis):
         # melodic_id is the voice to analyze passed in by the caller.
         # you will want to use this when you access the timepoints
         self.melodic_id = args[0]
-        self.tps = timepoints(self.score, span=True, measures=False)
+        self.tps = timepoints(self.score, span=True, measures=False, trace=True)
+        # set the key to the main_key in the metadata of the score. Else, set
+        # the key to the key of the first bar in the score
+        try:
+            self.key = self.score.metadata['main_key']
+        except KeyError:
+            self.key = self.score.get_part('P' + args[0]).staffs[int(args[0][-1:]) - 1].key
+            assert (type(self.key) == Key), "Could not get key from input. Cannot continue analysis."
+        except Exception:
+            self.key = Key(0, Mode.MAJOR)
+            print('Setting key to C major; no valid key could be extracted from the score.')
         # add transitions
 
     # This function is given to you, it returns your analysis results
