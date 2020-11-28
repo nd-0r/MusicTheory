@@ -37,44 +37,58 @@ class pitchChecks(Rule):
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
             raise AttributeError("Setup has not been run yet!")
-        # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
         self.pitches = []
         for tp in self.tps:
             assert (type(tp[self.melodic_id]) == Pitch), "Voice is not a melodic line!"
             self.pitches.append(tp[self.melodic_id])
 
     def apply(self):
-        # TODO - apply rule
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+        self.analysis.results['MEL_START_NOTE'] = True if self.check_start_note() else []
+        self.analysis.results['MEL_CADENCE'] = True if self.check_mel_cadence() else []
+        self.analysis.results['MEL_TESSITURA'] = True if self.check_mel_tessitura() else []
+        self.analysis.results['MEL_DIATONIC'] = True if self.check_mel_diatonic() == [] else self.check_mel_diatonic()
 
     # MEL_START_NOTE
     def check_start_note(self):
-        if (self.pitches[0].pnum in {self.key.scale()[0], self.key.scale()[2], self.key.scale()[4]}):
+        if (self.pitches[0].pnum() in {self.key.scale()[0], self.key.scale()[2], self.key.scale()[4]}):
             return True
         return False
 
     # MEL_CADENCE
     def check_mel_cadence(self):
-        last_2_melody = (self.pitches[-2].pnum, self.pitches[-1].pnum)
+        last_2_melody = (self.pitches[-2].pnum(), self.pitches[-1].pnum())
         scale_2_1 = (self.key.scale()[1], self.key.scale()[0])
         scale_7_1 = (self.key.scale()[6], self.key.scale()[0])
         if (last_2_melody == scale_2_1 or last_2_melody == scale_7_1):
             return True
         return False
 
-    # TODO - MEL_CADENCE
-    # TODO - mel_tessitura
-    # TODO - mel_diatonic
+    # MEL_TESSITURA
+    def check_mel_tessitura(self):
+        max_midi = max(self.pitches).keynum()
+        min_midi = min(self.pitches).keynum()
+        median = (max_midi + min_midi) // 2
+        # M6 is 9 semitones; 4 and 5 away from the median
+        span_min = math.max(median - 4, min_midi)
+        span_max = math.min(median + 5, max_midi)
+        count = sum(x.keynum() in range(span_min, span_max + 1) for x in self.pitches)
+        if (count / len(self.pitches) >= 0.75):
+            return True
+        return False
+
+    # MEL_DIATONIC
+    def check_mel_diatonic(self):
+        out = []
+        for i,p in enumerate(self.pitches):
+            if (p.pnum() not in self.key.scale()):
+                # note positions start on 1 NOT 0
+                out.append(i + 1)
+        return out
 
     def display(self, index):
         print('-------------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
 
 
 class intervalChecks(Rule):
