@@ -52,6 +52,12 @@ class pitchChecks(Rule):
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
 
+    # MEL_START_NOTE
+    def check_start_note(self):
+        if (self.pitches[0].pnum in {self.key.scale()[0], self.key.scale()[2], self.key.scale()[4]}):
+            return True
+        return False
+
     def display(self, index):
         print('-------------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
