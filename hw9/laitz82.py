@@ -5,9 +5,7 @@
 from .score import Pitch, Interval, Mode, import_score, Key
 from .theory import Analysis, Rule, TimePoint, timepoints
 from copy import copy
-
-# A template directory that is copied into your analysis.
-# Consult the documentation for more information.
+import math
 
 melodic_checks = {
     # Pitch checks
@@ -108,7 +106,7 @@ class intervalChecks(Rule):
         pass
 
     # TODO - int_stepwise
-    # TODO - int_coinsonant
+    # TODO - int_consonant
     # TODO - INT_SIMPLE
     # TODO - IMT_NUM_LARGE
     # TODO - INT NUM UNISON
@@ -173,9 +171,6 @@ class shapeChecks(Rule):
         print("I'm here!")
 
 
-# A class representing a melodic analysis of a voice in a score. The class
-# has three attributes to begin with, you will likely add more attributes.
-# Consult the documentation for more information.
 class MyMelodicAnalysis(Analysis):
     def __init__(self, score):
         super().__init__(score)
@@ -189,8 +184,6 @@ class MyMelodicAnalysis(Analysis):
         self.tps = None
         self.trns = None
         self.key = None
-        # be sure to get the transition iterator inside the rules classes
-        
 
     # You can define a cleanup function if you want.
     # def cleanup(self):
