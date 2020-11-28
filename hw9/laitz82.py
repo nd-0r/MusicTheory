@@ -34,7 +34,9 @@ class pitchChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
+            # TODO - fix AttributeErrors
             raise AttributeError("Setup has not been run yet!")
+        # TODO - fix titles
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         self.pitches = []
         for tp in self.tps:
