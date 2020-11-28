@@ -58,6 +58,19 @@ class pitchChecks(Rule):
             return True
         return False
 
+    # MEL_CADENCE
+    def check_mel_cadence(self):
+        last_2_melody = (self.pitches[-2].pnum, self.pitches[-1].pnum)
+        scale_2_1 = (self.key.scale()[1], self.key.scale()[0])
+        scale_7_1 = (self.key.scale()[6], self.key.scale()[0])
+        if (last_2_melody == scale_2_1 or last_2_melody == scale_7_1):
+            return True
+        return False
+
+    # TODO - MEL_CADENCE
+    # TODO - mel_tessitura
+    # TODO - mel_diatonic
+
     def display(self, index):
         print('-------------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
