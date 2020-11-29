@@ -238,6 +238,9 @@ class IntervalChecks(Rule):
 
 class ShapeChecks(Rule):
 
+    CLIMAX_PERCENT_OF_MAX = 0.9
+    MAX_REPITITION = 0.5
+
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
             raise AttributeError("Setup has not been run yet!")
