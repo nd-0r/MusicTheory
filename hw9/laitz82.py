@@ -117,6 +117,8 @@ class IntervalChecks(Rule):
         self.analysis.results['INT_NUM_LARGE'] = True if self.check_num_large(Interval('P5')) == [] else self.check_num_large(Interval('P5'))
         self.analysis.results['INT_NUM_UNISON'] = True if self.check_inter_size('is_unison') == [] else self.check_inter_size('is_unison')
         self.analysis.results['INT_NUM_SAMEDIR'] = True if self.check_samedir() == [] else self.check_samedir()
+        self.analysis.results['LEAP_RECOVERY'] = True if self.check_leap_recovery() == [] else self.check_leap_recovery()
+        self.analysis.results['LEAP_NUM_CONSEC'] = True if self.check_num_consec() == [] else self.check_num_consec()
     
     # INT_STEPWISE
     def check_stepwise(self):
