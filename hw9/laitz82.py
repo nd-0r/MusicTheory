@@ -261,10 +261,9 @@ class MyMelodicAnalysis(Analysis):
         super().__init__(score)
         self.results = copy(melodic_checks)
         self.rules = [
-            pitchChecks(self),
-            intervalChecks(self),
-            leapChecks(self),
-            shapeChecks(self)]
+            PitchChecks(self),
+            IntervalChecks(self),
+            ShapeChecks(self)]
         self.melodic_id = None
         self.tps = None
         self.trns = None
