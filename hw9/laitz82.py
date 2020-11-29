@@ -172,26 +172,48 @@ class IntervalChecks(Rule):
                     # i + 1 since we are starting at index 1 of the intervals list
                     out.append(self.indices[i + 1] + 1)
 
-    def display(self, index):
-        print('-------------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-
-
-class leapChecks(Rule):
-
-    def __init__(self, analysis):
-        if (self.tps == self.melodic_id == self.trns == self.key == None):
-            raise AttributeError("Setup has not been run yet!")
-        # Always set the rule's back pointer to its analysis!
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
-
-    def apply(self):
-        # TODO - apply rule
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+    # LEAP_RECOVERY
+    # wouldn't it be wonderful if this worked..
+    def check_leap_recovery(self):
+        out = []
+        bucket = deque()
+        running_total = 0
+        last = self.intervals[0]
+        leap_iter = zip(self.trns[1:], self.intervals[1:])
+        for trans,inter in leap_iter:
+            while (last.is_ascending() == inter.is_ascending() == True):
+                running_total += inter.semitones()
+                bucket.append(trans.from_tp)
+                try:
+                    trans,inter = next(leap_iter)
+                except StopIteration:
+                    break
+            while (last.is_descending() == inter.is_descending() == True):
+                running_total -= inter.semitones()
+                bucket.append(trans.from_tp)
+                try:
+                    trans,inter = next(leap_iter)
+                except StopIteration:
+                    break
+            if ((running_total > 7 and not (inter.is_descending() and inter.is_second()))
+                or (running_total < -7 and not (inter.is_ascending() and inter.is_second()))):
+                while True:
+                    try:
+                        popped = bucket.pop()
+                        out.append(popped.index + 1)
+                        popped.index = -popped.index
+                    except IndexError:
+                        break
+            if ((running_total == 5 and not (inter.is_descending()))
+                or (running_total == -5 and not (inter.is_ascending()))):
+                while True:
+                    try:
+                        out.append(bucket.pop().index + 1)
+                    except IndexError:
+                        break
+            bucket = deque()
+            running_total = 0
+        return out
 
     # TODO - LEAP RECOVERY
     # TODO - LEAP NUMCONSEC
