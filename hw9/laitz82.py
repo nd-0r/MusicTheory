@@ -243,9 +243,8 @@ class ShapeChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
-            raise AttributeError("Setup has not been run yet!")
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        self.notes = self.score.getPart()
+            raise AttributeError(SETUP_WARNING)
+        super().__init__(analysis, "Do various analyses relating to the overall contour of the melody")
 
     def apply(self):
         # TODO - apply rule
