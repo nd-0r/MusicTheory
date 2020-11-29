@@ -253,8 +253,6 @@ class ShapeChecks(Rule):
 
     # climax helper method
     def get_climaxes(self):
-        # average_midi = sum(tp.nmap[self.melodic_id].keynum() for tp in self.tps) / len(self.tps)
-        # diffs = [tp.nmap[self.melodic_id].keynum() - average_midi for tp in self.tps]
         midi_notes = [tp.nmap[self.melodic_id].keynum() for tp in self.tps]
         percents_of_max = [note / max(midi_notes) for note in midi_notes]
 
