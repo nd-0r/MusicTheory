@@ -6,6 +6,7 @@ from .score import Pitch, Interval, Mode, import_score, Key
 from .theory import Analysis, Rule, TimePoint, timepoints, Transition
 from copy import copy
 import math
+from collections import deque
 
 melodic_checks = {
     # Pitch checks
