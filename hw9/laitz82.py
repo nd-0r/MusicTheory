@@ -38,14 +38,12 @@ class PitchChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
-            # TODO - fix AttributeErrors
-            raise AttributeError("Setup has not been run yet!")
-        # TODO - fix titles
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
+            raise AttributeError(SETUP_WARNING)
+        super().__init__(analysis, "Do various analyses relating to the pitches in the melody")
         self.pitches = []
         self.indices = []
         for tp in self.tps:
-            assert (type(tp[self.melodic_id]) == Pitch), "Voice is not a melodic line!"
+            assert (type(tp[self.melodic_id]) == Pitch), MELODY_ERROR
             self.pitches.append(tp.nmap[self.melodic_id])
             self.indices.append(tp.index)
 
@@ -101,14 +99,14 @@ class IntervalChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
-            raise AttributeError("Setup has not been run yet!")
-        super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
+            raise AttributeError(SETUP_WARNING)
+        super().__init__(analysis, "Do various analyses relating to the intervals between the pitches in the melody")
         self.intervals = []
         self.indices = [i.index for i in self.tps]
         for t in self.trns:
             from_note = t.from_tp.nmap[self.melodic_id]
             to_note = t.to_tp.nmap[self.melodic_id]
-            assert (type(from_note) == type(to_note) == Pitch), "Voice is not a melodic line!"
+            assert (type(from_note) == type(to_note) == Pitch), MELODY_ERROR
             self.intervals.append(Interval(from_note, to_note))
             # the indices of the first note in each interval
             self.indices.append(t.from_tp.index)
@@ -272,8 +270,8 @@ class MyMelodicAnalysis(Analysis):
         self.trns = None
         self.key = None
 
-    # def cleanup(self):
-    #     self.melody, self.intervals, self.motions = [], [], []
+    def cleanup(self):
+        self.melodic_id = self.tps = self.trns = self.key = None, None, None, None
 
     def setup(self, args, kwargs):
         assert len(args) == 1, "Usage: analyze(<pvid>), pass the pvid of the voice to analyze."
