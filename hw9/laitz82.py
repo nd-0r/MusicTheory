@@ -116,6 +116,12 @@ class intervalChecks(Rule):
         self.analysis.results['INT_NUM_LARGE'] = True if self.check_num_large(Interval('P5')) == [] else self.check_num_large(Interval('P5'))
         self.analysis.results['INT_NUM_UNISON'] = True if self.check_inter_size('is_unison') == [] else self.check_inter_size('is_unison')
         self.analysis.results['INT_NUM_SAMEDIR'] = True if self.check_samedir() == [] else self.check_samedir()
+    
+    # INT_STEPWISE
+    def check_stepwise(self):
+        if (all(i.semitones() <= 2 for i in self.intervals)):
+            return True
+        return False
 
     # TODO - int_stepwise
     # TODO - int_consonant
