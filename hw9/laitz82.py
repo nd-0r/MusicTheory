@@ -98,9 +98,16 @@ class intervalChecks(Rule):
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
             raise AttributeError("Setup has not been run yet!")
-        # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
+        self.intervals = []
+        self.indices = [i.index for i in self.tps]
+        for t in self.trns:
+            from_note = t.from_tp.nmap[self.melodic_id]
+            to_note = t.to_tp.nmap[self.melodic_id]
+            assert (type(from_note) == type(to_note) == Pitch), "Voice is not a melodic line!"
+            self.intervals.append(Interval(from_note, to_note))
+            # the indices of the first note in each interval
+            self.indices.append(t.from_tp.index)
 
     def apply(self):
         # TODO - apply rule
