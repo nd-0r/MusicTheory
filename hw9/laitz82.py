@@ -39,9 +39,11 @@ class pitchChecks(Rule):
         # TODO - fix titles
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
         self.pitches = []
+        self.indices = []
         for tp in self.tps:
             assert (type(tp[self.melodic_id]) == Pitch), "Voice is not a melodic line!"
-            self.pitches.append(tp[self.melodic_id])
+            self.pitches.append(tp.nmap[self.melodic_id])
+            self.indices.append(tp.index)
 
     def apply(self):
         self.analysis.results['MEL_START_NOTE'] = True if self.check_start_note() else []
@@ -83,8 +85,7 @@ class pitchChecks(Rule):
         out = []
         for i,p in enumerate(self.pitches):
             if (p.pnum() not in self.key.scale()):
-                # note positions start on 1 NOT 0
-                out.append(i + 1)
+                out.append(self.indices[i] + 1)
         return out
 
     def display(self, index):
