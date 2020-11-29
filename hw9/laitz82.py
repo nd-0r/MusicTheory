@@ -123,18 +123,57 @@ class intervalChecks(Rule):
             return True
         return False
 
-    # TODO - int_stepwise
-    # TODO - int_consonant
-    # TODO - INT_SIMPLE
-    # TODO - IMT_NUM_LARGE
-    # TODO - INT NUM UNISON
-    # TODO - INT NUM SAMEDIR
+    # INT_CONSONANT
+    # INT_SIMPLE
+    def check_inter_type(self, inter_check):
+        out = []
+        for i,inter in enumerate(self.intervals):
+            fct = getattr(inter, str(inter_check))
+            if not fct():
+                out.append(self.indices[i] + 1)
+        return out
 
+    # INT_NUM_LARGE
+    def check_num_large(self, inter_to_check):
+        out = []
+        count = 0
+        for i,inter in enumerate(self.intervals):
+            if i.semitones() > inter_to_check.semitones():
+                count += 1
+                if (count > 1):
+                    out.append(self.indices[i] + 1)
+        return out
+
+    # INT_NUM_UNISON
+    def check_inter_size(self, inter_check):
+        out = []
+        count = 0
+        for i,inter in enumerate(self.intervals):
+            fct = getattr(inter, str(inter_check))
+            if fct():
+                count += 1
+                if (count > 1):
+                    out.append(self.indices[i] + 1)
+        return out
+
+    # INT_NUM_SAMEDIR
+    def check_samedir(self):
+        out = []
+        count = 0
+        last = self.intervals[0]
+        for i,inter in enumerate(self.intervals[1:]):
+            if ((last.is_ascending() == inter.is_ascending() == True
+                and last.is_second() == inter.is_second() == True)
+                or (last.is_descending() == inter.is_descending() == True
+                and last.is_second() == inter.is_second() == True)):
+                count += 1
+                if (count > 3):
+                    # i + 1 since we are starting at index 1 of the intervals list
+                    out.append(self.indices[i + 1] + 1)
 
     def display(self, index):
         print('-------------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
 
 
 class leapChecks(Rule):
