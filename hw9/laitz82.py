@@ -31,7 +31,7 @@ melodic_checks = {
 }
 
 # ------------------Rules------------------ #
-class pitchChecks(Rule):
+class PitchChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
@@ -94,7 +94,7 @@ class pitchChecks(Rule):
         print(f"Rule {index+1}: {self.title}")
 
 
-class intervalChecks(Rule):
+class IntervalChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
