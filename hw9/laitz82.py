@@ -233,24 +233,18 @@ class IntervalChecks(Rule):
     def display(self, index):
         print('-------------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
 
 
-class shapeChecks(Rule):
+class ShapeChecks(Rule):
 
     def __init__(self, analysis):
         if (self.tps == self.melodic_id == self.trns == self.key == None):
             raise AttributeError("Setup has not been run yet!")
-        # Always set the rule's back pointer to its analysis!
         super().__init__(analysis, "Check that the starting note is tonic, mediant, or dominant")
-        # Now initialize whatever attributes your rule defines.
         self.notes = self.score.getPart()
 
     def apply(self):
         # TODO - apply rule
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
 
     # TODO - SHAPE NUM CLIMAX
@@ -260,7 +254,6 @@ class shapeChecks(Rule):
     def display(self, index):
         print('-------------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
-        print("I'm here!")
 
 
 class MyMelodicAnalysis(Analysis):
