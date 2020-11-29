@@ -8,6 +8,9 @@ from copy import copy
 import math
 from collections import deque
 
+SETUP_WARNING = "Setup has not been run yet!"
+MELODY_ERROR = "Voice is not a melody!"
+
 melodic_checks = {
     # Pitch checks
     'MEL_START_NOTE': None,
