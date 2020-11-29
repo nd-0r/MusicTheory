@@ -215,8 +215,20 @@ class IntervalChecks(Rule):
             running_total = 0
         return out
 
-    # TODO - LEAP RECOVERY
-    # TODO - LEAP NUMCONSEC
+    # LEAP_NUM_CONSEC
+    def check_num_consec(self):
+        out = []
+        count = 0
+        last = self.intervals[0]
+        if (last.is_ascending() or last.is_descending()):
+            count += 1
+        for trans,inter in zip(self.trns[1:], self.intervals[1:]):
+            if ((last.is_ascending() == inter.is_ascending() == True)
+                or (last.is_descending() == inter.is_descending() == True)):
+                count += 1
+                if (count > 2):
+                    out.append(trans.from_tp.index)
+        return out
 
     def display(self, index):
         print('-------------------------------------------------------------------')
