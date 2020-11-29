@@ -110,11 +110,12 @@ class intervalChecks(Rule):
             self.indices.append(t.from_tp.index)
 
     def apply(self):
-        # TODO - apply rule
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+        self.analysis.results['INT_STEPWISE'] = True if self.check_stepwise() else []
+        self.analysis.results['INT_CONSONANT'] = True if self.check_inter_type('is_consonant') == [] else self.check_inter_type('is_consonant')
+        self.analysis.results['INT_SIMPLE'] = True if self.check_inter_type('is_simple') == [] else self.check_inter_type('is_simple')
+        self.analysis.results['INT_NUM_LARGE'] = True if self.check_num_large(Interval('P5')) == [] else self.check_num_large(Interval('P5'))
+        self.analysis.results['INT_NUM_UNISON'] = True if self.check_inter_size('is_unison') == [] else self.check_inter_size('is_unison')
+        self.analysis.results['INT_NUM_SAMEDIR'] = True if self.check_samedir() == [] else self.check_samedir()
 
     # TODO - int_stepwise
     # TODO - int_consonant
