@@ -165,10 +165,8 @@ class IntervalChecks(Rule):
         count = 0
         last = self.intervals[0]
         for i,inter in enumerate(self.intervals[1:]):
-            if ((last.is_ascending() == inter.is_ascending() == True
-                and last.is_second() == inter.is_second() == True)
-                or (last.is_descending() == inter.is_descending() == True
-                and last.is_second() == inter.is_second() == True)):
+            if ((last.is_ascending() == inter.is_ascending() == True)
+                or (last.is_descending() == inter.is_descending() == True)):
                 count += 1
                 if (count > 3):
                     # i + 1 since we are starting at index 1 of the intervals list
