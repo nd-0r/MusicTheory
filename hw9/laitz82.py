@@ -247,12 +247,98 @@ class ShapeChecks(Rule):
         super().__init__(analysis, "Do various analyses relating to the overall contour of the melody")
 
     def apply(self):
-        # TODO - apply rule
-        pass
+        self.analysis.results['SHAPE_NUM_CLIMAX'] = True if self.check_num_climax() == [] else self.check_num_climax()
+        self.analysis.results['SHAPE_ARCHLIKE'] = True if self.check_archlike() == [] else self.check_archlike()
+        self.analysis.results['SHAPE_UNIQUE'] = True if self.check_unique() == [] else self.check_unique()
 
-    # TODO - SHAPE NUM CLIMAX
-    # TODO - SHAPE ARCHLIKE
-    # TODO - SHAPE UNIQUE
+    # climax helper method
+    def get_climaxes(self):
+        # average_midi = sum(tp.nmap[self.melodic_id].keynum() for tp in self.tps) / len(self.tps)
+        # diffs = [tp.nmap[self.melodic_id].keynum() - average_midi for tp in self.tps]
+        midi_notes = [tp.nmap[self.melodic_id].keynum() for tp in self.tps]
+        percents_of_max = [note / max(midi_notes) for note in midi_notes]
+
+        relative_maxima = []
+        if (len(midi_notes) < 3):
+            return relative_maxima.append(self.tps[midi_notes.index(max(midi_notes))])
+        
+        count = 1
+        while (count < (len(percents_of_max) - 1)):
+            current = percents_of_max[count]
+            if (percents_of_max[count - 1] < current > percents_of_max[count + 1]
+                and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
+                relative_maxima.append(self.tps[count])
+        return relative_maxima
+        
+    # interval motions helper method
+    def get_interval_motions(self):
+        out = []
+        for tran in self.trns:
+            from_note = tran.from_tp.nmap[self.melodic_id]
+            to_note = tran.to_tp.nmap[self.melodic_id]
+            assert (type(from_note) == type(to_note) == Pitch), MELODY_ERROR
+            current_interval = Interval(from_note, to_note)
+            if (current_interval.is_descending()):
+                out.append(-current_interval.semitones())
+            else:
+                out.append(current_interval.semitones())
+        return out
+
+    # find repetition helper method
+    # returns an array of candidate sequences
+    @staticmethod
+    def find_repetition_int_arr(arr):
+        candidates = []
+        start_pos = 0
+        while (start_pos < len(arr)):
+            sequence_length = 1
+            while (sequence_length <= (len(arr) - start_pos) // 2):
+                i = 0
+                candidate = []
+                while (i <= sequence_length and arr[start_pos:start_pos + i] == arr[start_pos + sequence_length:start_pos + sequence_length + i]):
+                    candidate = arr[start_pos:start_pos + i]
+                    i += 1
+                if (not(candidate == [])):
+                    candidates.append(candidate)
+                sequence_length += 1
+            start_pos += 1
+        return candidates
+
+    # SHAPE_NUM_CLIMAX
+    def check_num_climax(self):
+        climaxes = self.get_climaxes()
+        if (len(climaxes) > 1):
+            return [tp.index for tp in climaxes]
+        return []
+
+    # SHAPE_ARCHLIKE
+    def check_archlike(self):
+        center_third_tps = self.tps[len(self.tps) // 3:len(self.tps) - (len(self.tps) // 3)]
+        climaxes = self.get_climaxes()
+        out = []
+        if (len(climaxes) == 1 and climaxes[0] in center_third_tps):
+            return out
+        elif (len(climaxes) == 1):
+            return climaxes
+        else:
+            for c in climaxes:
+                if c not in center_third_tps:
+                    out.append(c)
+        return out
+
+    # SHAPE_UNIQUE
+    def check_unique(self):
+        sequences = self.get_interval_motions()
+        candidates = ShapeChecks.find_repetition_int_arr(sequences)
+        max_len = max(len(s) for s in sequences)
+        if (max_len > 1):
+            pattern = []
+            for c in candidates:
+                if len(c) == max_len:
+                    pattern = c
+            if (max_len / len(self.tps) > ShapeChecks.MAX_REPETITION):
+                return pattern
+        return []
 
     def display(self, index):
         print('-------------------------------------------------------------------')
