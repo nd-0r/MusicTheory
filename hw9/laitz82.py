@@ -1,11 +1,10 @@
 ###############################################################################
 
-## You can import from score, theory and any python module you want to use.
+# You can import from score, theory and any python module you want to use.
 
-from .score import Pitch, Interval, Mode, import_score, Key
-from .theory import Analysis, Rule, TimePoint, timepoints, Transition
+from .score import Note, Pitch, Interval, Mode, import_score, Key
+from .theory import Analysis, Rule, timepoints, Transition
 from copy import copy
-import math
 from collections import deque
 
 SETUP_WARNING = "Setup has not been run yet!"
@@ -33,18 +32,27 @@ melodic_checks = {
     'SHAPE_UNIQUE': None
 }
 
+
+# My own stupid implementation of the Transition class
+class MyTransition(Transition):
+
+    def __init__(self, from_tp, to_tp):
+        self.from_tp = from_tp
+        self.to_tp = to_tp
+
+
 # ------------------Rules------------------ #
 class PitchChecks(Rule):
 
     def __init__(self, analysis):
-        if (self.tps == self.melodic_id == self.trns == self.key == None):
-            raise AttributeError(SETUP_WARNING)
         super().__init__(analysis, "Do various analyses relating to the pitches in the melody")
+        if (self.analysis.tps == self.analysis.melodic_id == self.analysis.trns == self.analysis.key == None):
+            raise AttributeError(SETUP_WARNING)
         self.pitches = []
         self.indices = []
-        for tp in self.tps:
-            assert (type(tp[self.melodic_id]) == Pitch), MELODY_ERROR
-            self.pitches.append(tp.nmap[self.melodic_id])
+        for tp in self.analysis.tps:
+            assert (type(tp.nmap[self.analysis.melodic_id]) == Note), MELODY_ERROR
+            self.pitches.append(tp.nmap[self.analysis.melodic_id].pitch)
             self.indices.append(tp.index)
 
     def apply(self):
@@ -55,15 +63,15 @@ class PitchChecks(Rule):
 
     # MEL_START_NOTE
     def check_start_note(self):
-        if (self.pitches[0].pnum() in {self.key.scale()[0], self.key.scale()[2], self.key.scale()[4]}):
+        if (self.pitches[0].pnum() in {self.analysis.key.scale()[0], self.analysis.key.scale()[2], self.analysis.key.scale()[4]}):
             return True
         return False
 
     # MEL_CADENCE
     def check_mel_cadence(self):
         last_2_melody = (self.pitches[-2].pnum(), self.pitches[-1].pnum())
-        scale_2_1 = (self.key.scale()[1], self.key.scale()[0])
-        scale_7_1 = (self.key.scale()[6], self.key.scale()[0])
+        scale_2_1 = (self.analysis.key.scale()[1], self.analysis.key.scale()[0])
+        scale_7_1 = (self.analysis.key.scale()[6], self.analysis.key.scale()[0])
         if (last_2_melody == scale_2_1 or last_2_melody == scale_7_1):
             return True
         return False
@@ -75,8 +83,8 @@ class PitchChecks(Rule):
         median = (max_midi + min_midi) // 2
         low = center_inter.semitones() // 2
         high = center_inter.semitones() - low
-        span_min = math.max(median - low, min_midi)
-        span_max = math.min(median + high, max_midi)
+        span_min = max(median - low, min_midi)
+        span_max = min(median + high, max_midi)
         count = sum(x.keynum() in range(span_min, span_max + 1) for x in self.pitches)
         if (count / len(self.pitches) >= 0.75):
             return True
@@ -86,7 +94,7 @@ class PitchChecks(Rule):
     def check_mel_diatonic(self):
         out = []
         for i,p in enumerate(self.pitches):
-            if (p.pnum() not in self.key.scale()):
+            if (p.pnum() not in self.analysis.key.scale()):
                 out.append(self.indices[i] + 1)
         return out
 
@@ -98,16 +106,16 @@ class PitchChecks(Rule):
 class IntervalChecks(Rule):
 
     def __init__(self, analysis):
-        if (self.tps == self.melodic_id == self.trns == self.key == None):
-            raise AttributeError(SETUP_WARNING)
         super().__init__(analysis, "Do various analyses relating to the intervals between the pitches in the melody")
+        if (self.analysis.tps == self.analysis.melodic_id == self.analysis.trns == self.analysis.key == None):
+            raise AttributeError(SETUP_WARNING)
         self.intervals = []
-        self.indices = [i.index for i in self.tps]
-        for t in self.trns:
-            from_note = t.from_tp.nmap[self.melodic_id]
-            to_note = t.to_tp.nmap[self.melodic_id]
-            assert (type(from_note) == type(to_note) == Pitch), MELODY_ERROR
-            self.intervals.append(Interval(from_note, to_note))
+        self.indices = [i.index for i in self.analysis.tps]
+        for t in self.analysis.trns:
+            from_note = t.from_tp.nmap[self.analysis.melodic_id]
+            to_note = t.to_tp.nmap[self.analysis.melodic_id]
+            assert (type(from_note) == type(to_note) == Note), MELODY_ERROR
+            self.intervals.append(Interval(from_note.pitch, to_note.pitch))
             # the indices of the first note in each interval
             self.indices.append(t.from_tp.index)
 
@@ -142,7 +150,7 @@ class IntervalChecks(Rule):
         out = []
         count = 0
         for i,inter in enumerate(self.intervals):
-            if i.semitones() > inter_to_check.semitones():
+            if inter.semitones() > inter_to_check.semitones():
                 count += 1
                 if (count > 1):
                     out.append(self.indices[i] + 1)
@@ -180,7 +188,7 @@ class IntervalChecks(Rule):
         bucket = deque()
         running_total = 0
         last = self.intervals[0]
-        leap_iter = zip(self.trns[1:], self.intervals[1:])
+        leap_iter = zip(self.analysis.trns[1:], self.intervals[1:])
         for trans,inter in leap_iter:
             while (last.is_ascending() == inter.is_ascending() == True):
                 running_total += inter.semitones()
@@ -223,7 +231,7 @@ class IntervalChecks(Rule):
         last = self.intervals[0]
         if (last.is_ascending() or last.is_descending()):
             count += 1
-        for trans,inter in zip(self.trns[1:], self.intervals[1:]):
+        for trans,inter in zip(self.analysis.trns[1:], self.intervals[1:]):
             if ((last.is_ascending() == inter.is_ascending() == True)
                 or (last.is_descending() == inter.is_descending() == True)):
                 count += 1
@@ -239,12 +247,12 @@ class IntervalChecks(Rule):
 class ShapeChecks(Rule):
 
     CLIMAX_PERCENT_OF_MAX = 0.9
-    MAX_REPITITION = 0.5
+    MAX_REPETITION = 0.5
 
     def __init__(self, analysis):
-        if (self.tps == self.melodic_id == self.trns == self.key == None):
-            raise AttributeError(SETUP_WARNING)
         super().__init__(analysis, "Do various analyses relating to the overall contour of the melody")
+        if (self.analysis.tps == self.analysis.melodic_id == self.analysis.trns == self.analysis.key == None):
+            raise AttributeError(SETUP_WARNING)
 
     def apply(self):
         self.analysis.results['SHAPE_NUM_CLIMAX'] = True if self.check_num_climax() == [] else self.check_num_climax()
@@ -253,27 +261,27 @@ class ShapeChecks(Rule):
 
     # climax helper method
     def get_climaxes(self):
-        midi_notes = [tp.nmap[self.melodic_id].keynum() for tp in self.tps]
+        midi_notes = [tp.nmap[self.analysis.melodic_id].pitch.keynum() for tp in self.analysis.tps]
         percents_of_max = [note / max(midi_notes) for note in midi_notes]
 
         relative_maxima = []
         if (len(midi_notes) < 3):
-            return relative_maxima.append(self.tps[midi_notes.index(max(midi_notes))])
+            return relative_maxima.append(self.analysis.tps[midi_notes.index(max(midi_notes))])
         
         count = 1
         while (count < (len(percents_of_max) - 1)):
             current = percents_of_max[count]
-            if (percents_of_max[count - 1] < current > percents_of_max[count + 1]
-                and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
-                relative_maxima.append(self.tps[count])
+            if (percents_of_max[count - 1] < current > percents_of_max[count + 1] and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
+                relative_maxima.append(self.analysis.tps[count])
+            count += 1
         return relative_maxima
         
     # interval motions helper method
     def get_interval_motions(self):
         out = []
-        for tran in self.trns:
-            from_note = tran.from_tp.nmap[self.melodic_id]
-            to_note = tran.to_tp.nmap[self.melodic_id]
+        for tran in self.analysis.trns:
+            from_note = tran.from_tp.nmap[self.analysis.melodic_id].pitch
+            to_note = tran.to_tp.nmap[self.analysis.melodic_id].pitch
             assert (type(from_note) == type(to_note) == Pitch), MELODY_ERROR
             current_interval = Interval(from_note, to_note)
             if (current_interval.is_descending()):
@@ -311,7 +319,7 @@ class ShapeChecks(Rule):
 
     # SHAPE_ARCHLIKE
     def check_archlike(self):
-        center_third_tps = self.tps[len(self.tps) // 3:len(self.tps) - (len(self.tps) // 3)]
+        center_third_tps = self.analysis.tps[len(self.analysis.tps) // 3:len(self.analysis.tps) - (len(self.analysis.tps) // 3)]
         climaxes = self.get_climaxes()
         out = []
         if (len(climaxes) == 1 and climaxes[0] in center_third_tps):
@@ -328,13 +336,13 @@ class ShapeChecks(Rule):
     def check_unique(self):
         sequences = self.get_interval_motions()
         candidates = ShapeChecks.find_repetition_int_arr(sequences)
-        max_len = max(len(s) for s in sequences)
+        max_len = max(len(s) for s in candidates)
         if (max_len > 1):
             pattern = []
             for c in candidates:
                 if len(c) == max_len:
                     pattern = c
-            if (max_len / len(self.tps) > ShapeChecks.MAX_REPETITION):
+            if (max_len / len(self.analysis.tps) > ShapeChecks.MAX_REPETITION):
                 return pattern
         return []
 
@@ -347,14 +355,12 @@ class MyMelodicAnalysis(Analysis):
     def __init__(self, score):
         super().__init__(score)
         self.results = copy(melodic_checks)
-        self.rules = [
-            PitchChecks(self),
-            IntervalChecks(self),
-            ShapeChecks(self)]
         self.melodic_id = None
         self.tps = None
         self.trns = None
         self.key = None
+        self.rules = None
+        
 
     def cleanup(self):
         self.melodic_id = self.tps = self.trns = self.key = None, None, None, None
@@ -363,7 +369,7 @@ class MyMelodicAnalysis(Analysis):
         assert len(args) == 1, "Usage: analyze(<pvid>), pass the pvid of the voice to analyze."
         self.melodic_id = args[0]
         self.tps = timepoints(self.score, span=True, measures=False, trace=True)
-        self.trns = [Transition(a, b) for a,b in zip(self.tps, self.tps[1])]
+        self.trns = [MyTransition(a, b) for a,b in zip(self.tps, self.tps[1:])]
         # set the key to the main_key in the metadata of the score. Else, set
         # the key to the key of the first bar in the score
         try:
@@ -374,6 +380,10 @@ class MyMelodicAnalysis(Analysis):
         except Exception:
             self.key = Key(0, Mode.MAJOR)
             print('Setting key to C major; no valid key could be extracted from the score.')
+        self.rules = [
+             PitchChecks(self),
+             IntervalChecks(self),
+             ShapeChecks(self)]
 
     # can also use this function as a top-level call for testing
     def submit_to_grading(self):
@@ -382,3 +392,15 @@ class MyMelodicAnalysis(Analysis):
         # Return the results to the caller.
         return self.results
 
+
+if __name__ == '__main__':
+    tests = [MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84A.musicxml')).submit_to_grading(),
+             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84B.musicxml')).submit_to_grading(),
+             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84C.musicxml')).submit_to_grading(),
+             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84D.musicxml')).submit_to_grading(),
+             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84E.musicxml')).submit_to_grading(),
+             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84F.musicxml')).submit_to_grading(),
+             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84G.musicxml')).submit_to_grading()]
+    for t in tests:
+        print('-----------------------')
+        print(t)
