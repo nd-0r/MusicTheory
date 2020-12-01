@@ -351,7 +351,7 @@ class ShapeChecks(Rule):
         print(f"Rule {index+1}: {self.title}")
 
 
-class MyMelodicAnalysis(Analysis):
+class MelodicAnalysis(Analysis):
     def __init__(self, score):
         super().__init__(score)
         self.results = copy(melodic_checks)
