@@ -394,13 +394,13 @@ class MelodicAnalysis(Analysis):
 
 
 if __name__ == '__main__':
-    tests = [MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84A.musicxml')).submit_to_grading(),
-             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84B.musicxml')).submit_to_grading(),
-             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84C.musicxml')).submit_to_grading(),
-             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84D.musicxml')).submit_to_grading(),
-             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84E.musicxml')).submit_to_grading(),
-             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84F.musicxml')).submit_to_grading(),
-             MyMelodicAnalysis(import_score('hw9/xmls/Laitz_p84G.musicxml')).submit_to_grading()]
+    tests = [MelodicAnalysis(import_score('hw9/xmls/Laitz_p84A.musicxml')).submit_to_grading(),
+             MelodicAnalysis(import_score('hw9/xmls/Laitz_p84B.musicxml')).submit_to_grading(),
+             MelodicAnalysis(import_score('hw9/xmls/Laitz_p84C.musicxml')).submit_to_grading(),
+             MelodicAnalysis(import_score('hw9/xmls/Laitz_p84D.musicxml')).submit_to_grading(),
+             MelodicAnalysis(import_score('hw9/xmls/Laitz_p84E.musicxml')).submit_to_grading(),
+             MelodicAnalysis(import_score('hw9/xmls/Laitz_p84F.musicxml')).submit_to_grading(),
+             MelodicAnalysis(import_score('hw9/xmls/Laitz_p84G.musicxml')).submit_to_grading()]
     for t in tests:
         print('-----------------------')
         print(t)
