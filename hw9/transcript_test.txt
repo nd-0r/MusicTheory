@@ -1,4 +1,4 @@
-============= aorals2.hw9 transcript [test] (2020-12-02 19:00:32.545946) =============
+============= aorals2.hw9 transcript [test] (2020-12-02 20:00:28.628116) =============
   module: laitz82
     [import]: success  (1/1)
       [  input = s1=import_score('xmls/Laitz_p84A.musicxml')  ]  your_output = None  desired_output = None  (2/2)
@@ -33,7 +33,7 @@
       [  input = d2['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d2['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d2['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
-      [  input = d2['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7fa4776d4f50>]  desired_output = [2]  (0/2)
+      [  input = d2['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7f811e5b1850>]  desired_output = [2]  (0/2)
       [  input = d2['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [-2]  (0/2)
       [  input = s3=import_score('xmls/Laitz_p84C.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d3=MelodicAnalysis(s3).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -50,7 +50,7 @@
       [  input = d3['LEAP_RECOVERY']  ]  your_output = True  desired_output = [2, -5, -7]  (0/2)
       [  input = d3['LEAP_NUM_CONSEC']  ]  your_output = [4, 5, 7]  desired_output = [6, 7]  (0/2)
       [  input = d3['SHAPE_NUM_CLIMAX']  ]  your_output = [2, 6]  desired_output = True  (0/2)
-      [  input = d3['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7fa477b60f50>, <TimePoint 6 0x7fa4776c8c50>]  desired_output = [3]  (0/2)
+      [  input = d3['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7f811e5a59d0>, <TimePoint 6 0x7f811e5a5b50>]  desired_output = [3]  (0/2)
       [  input = d3['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = s4=import_score('xmls/Laitz_p84D.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d4=MelodicAnalysis(s4).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -67,7 +67,7 @@
       [  input = d4['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d4['LEAP_NUM_CONSEC']  ]  your_output = [4, 5, 8, 9, 13]  desired_output = True  (0/2)
       [  input = d4['SHAPE_NUM_CLIMAX']  ]  your_output = [2, 6, 10]  desired_output = True  (0/2)
-      [  input = d4['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7fa4775c8fd0>, <TimePoint 10 0x7fa4775c8f10>]  desired_output = True  (0/2)
+      [  input = d4['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7f811e4a5e50>, <TimePoint 10 0x7f811e4a5ed0>]  desired_output = True  (0/2)
       [  input = d4['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [2, 3, -2, -2]  (0/2)
       [  input = s5=import_score('xmls/Laitz_p84E.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d5=MelodicAnalysis(s5).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -84,7 +84,7 @@
       [  input = d5['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d5['LEAP_NUM_CONSEC']  ]  your_output = [7]  desired_output = True  (0/2)
       [  input = d5['SHAPE_NUM_CLIMAX']  ]  your_output = [1, 8]  desired_output = [9]  (0/2)
-      [  input = d5['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7fa47755ce50>]  desired_output = [2]  (0/2)
+      [  input = d5['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7f811e43ac90>]  desired_output = [2]  (0/2)
       [  input = d5['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [-2]  (0/2)
       [  input = s6=import_score('xmls/Laitz_p84F.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d6=MelodicAnalysis(s6).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -118,7 +118,7 @@
       [  input = d7['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['LEAP_NUM_CONSEC']  ]  your_output = [3, 4, 5, 9]  desired_output = True  (0/2)
       [  input = d7['SHAPE_NUM_CLIMAX']  ]  your_output = [2, 6, 10]  desired_output = True  (0/2)
-      [  input = d7['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7fa47772a350>, <TimePoint 10 0x7fa477582e10>]  desired_output = True  (0/2)
+      [  input = d7['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7f811e45fb90>, <TimePoint 10 0x7f811e45f950>]  desired_output = True  (0/2)
       [  input = d7['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
 Total raw score: (155/239)
 
