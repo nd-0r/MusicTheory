@@ -1,4 +1,4 @@
-============= aorals2.hw9 transcript [test] (2020-12-03 03:00:25.393740) =============
+============= aorals2.hw9 transcript [test] (2020-12-03 04:00:23.255633) =============
   module: laitz82
     [import]: success  (1/1)
       [  input = s1=import_score('xmls/Laitz_p84A.musicxml')  ]  your_output = None  desired_output = None  (2/2)
@@ -14,7 +14,7 @@
       [  input = d1['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d1['INT_NUM_SAMEDIR']  ]  your_output = [5, 6, 7]  desired_output = [5, 6, 7]  (2/2)
       [  input = d1['LEAP_RECOVERY']  ]  your_output = True  desired_output = [-10]  (0/2)
-      [  input = d1['LEAP_NUM_CONSEC']  ]  your_output = [2, 3, 4, 5]  desired_output = True  (0/2)
+      [  input = d1['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d1['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d1['SHAPE_ARCHLIKE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d1['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [2]  (0/2)
@@ -33,7 +33,7 @@
       [  input = d2['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d2['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d2['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
-      [  input = d2['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7f8f650da910>]  desired_output = [2]  (0/2)
+      [  input = d2['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7fae5f9f6590>]  desired_output = [2]  (0/2)
       [  input = d2['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [-2]  (0/2)
       [  input = s3=import_score('xmls/Laitz_p84C.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d3=MelodicAnalysis(s3).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -48,9 +48,9 @@
       [  input = d3['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d3['INT_NUM_SAMEDIR']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d3['LEAP_RECOVERY']  ]  your_output = True  desired_output = [2, -5, -7]  (0/2)
-      [  input = d3['LEAP_NUM_CONSEC']  ]  your_output = [4, 5, 7]  desired_output = [6, 7]  (0/2)
+      [  input = d3['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = [6, 7]  (0/2)
       [  input = d3['SHAPE_NUM_CLIMAX']  ]  your_output = [2, 6]  desired_output = True  (0/2)
-      [  input = d3['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7f8f64fdbdd0>, <TimePoint 6 0x7f8f64fdb850>]  desired_output = [3]  (0/2)
+      [  input = d3['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7fae5f93edd0>, <TimePoint 6 0x7fae5f8fbe10>]  desired_output = [3]  (0/2)
       [  input = d3['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = s4=import_score('xmls/Laitz_p84D.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d4=MelodicAnalysis(s4).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -65,9 +65,9 @@
       [  input = d4['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d4['INT_NUM_SAMEDIR']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d4['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
-      [  input = d4['LEAP_NUM_CONSEC']  ]  your_output = [4, 5, 8, 9, 13]  desired_output = True  (0/2)
+      [  input = d4['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d4['SHAPE_NUM_CLIMAX']  ]  your_output = [2, 6, 10]  desired_output = True  (0/2)
-      [  input = d4['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7f8f64fe8f90>, <TimePoint 10 0x7f8f64fe81d0>]  desired_output = True  (0/2)
+      [  input = d4['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7fae5f906f90>, <TimePoint 10 0x7fae5f9061d0>]  desired_output = True  (0/2)
       [  input = d4['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [2, 3, -2, -2]  (0/2)
       [  input = s5=import_score('xmls/Laitz_p84E.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d5=MelodicAnalysis(s5).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -82,9 +82,9 @@
       [  input = d5['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d5['INT_NUM_SAMEDIR']  ]  your_output = [6, 7, 13]  desired_output = [6, 7, 13]  (2/2)
       [  input = d5['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
-      [  input = d5['LEAP_NUM_CONSEC']  ]  your_output = [7]  desired_output = True  (0/2)
+      [  input = d5['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d5['SHAPE_NUM_CLIMAX']  ]  your_output = [1, 8]  desired_output = [9]  (0/2)
-      [  input = d5['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7f8f64fdbbd0>]  desired_output = [2]  (0/2)
+      [  input = d5['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 1 0x7fae5f8fbd10>]  desired_output = [2]  (0/2)
       [  input = d5['SHAPE_UNIQUE']  ]  your_output = True  desired_output = [-2]  (0/2)
       [  input = s6=import_score('xmls/Laitz_p84F.musicxml')  ]  your_output = None  desired_output = None  (2/2)
       [  input = d6=MelodicAnalysis(s6).submit_to_grading()  ]  your_output = None  desired_output = None  (2/2)
@@ -99,7 +99,7 @@
       [  input = d6['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['INT_NUM_SAMEDIR']  ]  your_output = [6, 10]  desired_output = [6, 10]  (2/2)
       [  input = d6['LEAP_RECOVERY']  ]  your_output = [-7, -6, -5, -4]  desired_output = True  (0/2)
-      [  input = d6['LEAP_NUM_CONSEC']  ]  your_output = [6, 7, 8]  desired_output = True  (0/2)
+      [  input = d6['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['SHAPE_ARCHLIKE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
@@ -116,14 +116,14 @@
       [  input = d7['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['INT_NUM_SAMEDIR']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['LEAP_RECOVERY']  ]  your_output = True  desired_output = True  (2/2)
-      [  input = d7['LEAP_NUM_CONSEC']  ]  your_output = [3, 4, 5, 9]  desired_output = True  (0/2)
+      [  input = d7['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['SHAPE_NUM_CLIMAX']  ]  your_output = [2, 6, 10]  desired_output = True  (0/2)
-      [  input = d7['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7f8f64ff1550>, <TimePoint 10 0x7f8f64ff1890>]  desired_output = True  (0/2)
+      [  input = d7['SHAPE_ARCHLIKE']  ]  your_output = [<TimePoint 2 0x7fae5f90a210>, <TimePoint 10 0x7fae5f90df10>]  desired_output = True  (0/2)
       [  input = d7['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
-Total raw score: (191/239)
+Total raw score: (201/239)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 15
 Extra credit (if applicable): 0
-Adjusted score (Final): 176/224
+Adjusted score (Final): 186/224
 
