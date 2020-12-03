@@ -354,13 +354,11 @@ class ShapeChecks(Rule):
     # SHAPE_ARCHLIKE
     # TODO - 10
     def check_archlike(self):
-        center_third_tps = self.analysis.tps[len(self.analysis.tps) // 3:len(self.analysis.tps) - (len(self.analysis.tps) // 3)]
+        center_third_tps = [t.index + 1 for t in self.analysis.tps[len(self.analysis.tps) // 3 + 1:len(self.analysis.tps) - (len(self.analysis.tps) // 3 - 1)]]
         climaxes = self.get_climaxes()
         out = []
         if (len(climaxes) == 1 and climaxes[0] in center_third_tps):
             return out
-        elif (len(climaxes) == 1):
-            return climaxes
         else:
             for c in climaxes:
                 if c not in center_third_tps:
