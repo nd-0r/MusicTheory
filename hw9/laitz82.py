@@ -312,7 +312,7 @@ class ShapeChecks(Rule):
             current = midi_notes[index]
             if ((midi_notes[index-1] < current > midi_notes[index+1])
                and percents_of_max[index] >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
-                relative_maxima.append(self.analysis.tps[index])
+                relative_maxima.append(self.analysis.tps[index].index + 1)
             index += 1
         return relative_maxima
         
@@ -351,11 +351,10 @@ class ShapeChecks(Rule):
         return candidates
 
     # SHAPE_NUM_CLIMAX
-    # TODO - 8
     def check_num_climax(self):
         climaxes = self.get_climaxes()
         if (len(climaxes) > 1):
-            return [c.index + 1 for c in climaxes[1:]]
+            return climaxes[1:]
             # return [tp.index for tp in climaxes]
         return []
 
