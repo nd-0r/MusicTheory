@@ -147,7 +147,11 @@ class IntervalChecks(Rule):
         out = []
         for i,inter in enumerate(self.intervals):
             fct = getattr(inter, str(inter_check))
-            if not (fct() or inter.is_second()):
+            if (inter_check == 'is_consonant'):
+                fct2 = getattr(inter, 'is_second')
+            else:
+                fct2 = False
+            if not (fct() or fct2()):
                 print(inter.string())
                 out.append(self.indices[i] + 1)
         return out
