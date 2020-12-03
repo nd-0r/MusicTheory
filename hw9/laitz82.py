@@ -261,8 +261,6 @@ class IntervalChecks(Rule):
                 if (count >= 2):
                     print("!!!THIS IS A LEAP!!!")
                     out.append(trans.from_tp.index)
-            else:
-                count = 0
             last = inter
         return out
 
