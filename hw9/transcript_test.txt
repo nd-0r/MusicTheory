@@ -1,4 +1,4 @@
-============= aorals2.hw9 transcript [test] (2020-12-03 13:00:27.386039) =============
+============= aorals2.hw9 transcript [test] (2020-12-03 14:00:25.093915) =============
   module: laitz82
     [import]: success  (1/1)
       [  input = s1=import_score('xmls/Laitz_p84A.musicxml')  ]  your_output = None  desired_output = None  (2/2)
