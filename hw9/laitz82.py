@@ -247,23 +247,18 @@ class IntervalChecks(Rule):
         count = 0
         bad = False
         last = self.intervals[0]
-        # print(self.intervals)
         if ((last.is_ascending() or last.is_descending())
            and abs(last.semitones()) >= 4):
             count += 1
         for trans,inter in zip(self.analysis.trns[1:], self.intervals[1:]):
-            # print("LAST: ", last.string())
-            # print("INTER: ", inter.string())
             if (((last.is_ascending() and inter.is_ascending())
                 or (last.is_descending() and inter.is_descending()))
                 and abs(inter.semitones()) >= 4):
-                # print("INCREMENTING")
                 count += 1
                 if (count >= 2 and not bad):
                     bad = True
                     break
                 elif bad:
-                    # print("!!!ADDING INDEX!!!")
                     out.append(trans.from_tp.index)
             else:
                 count = 0
@@ -327,20 +322,22 @@ class ShapeChecks(Rule):
     # returns an array of candidate sequences
     @staticmethod
     def find_repetition_int_arr(arr):
+        print(arr)
         candidates = []
         start_pos = 0
         while (start_pos < len(arr)):
             sequence_length = 1
+            candidate = []
             while (sequence_length <= (len(arr) - start_pos) // 2):
-                i = 0
+                i = 1
                 candidate = []
                 while (i <= sequence_length and arr[start_pos:start_pos + i] == arr[start_pos + sequence_length:start_pos + sequence_length + i]):
                     candidate = arr[start_pos:start_pos + i]
                     i += 1
-                if (not(candidate == [])):
+                if (not(candidate == []) and candidate not in candidates):
                     candidates.append(candidate)
                 sequence_length += 1
-            start_pos += 1
+            start_pos += max(len(candidate), 1)
         return candidates
 
     # SHAPE_NUM_CLIMAX
@@ -364,19 +361,24 @@ class ShapeChecks(Rule):
         return out
 
     # SHAPE_UNIQUE
-    # TODO - 8
     def check_unique(self):
         sequences = self.get_interval_motions()
         candidates = ShapeChecks.find_repetition_int_arr(sequences)
+        candidates.sort(key=len)
         print(candidates)
-        max_len = max(len(s) for s in candidates)
-        if (max_len > 1):
-            pattern = []
-            for c in candidates:
-                if len(c) == max_len:
-                    pattern = c
-            if (max_len / len(self.analysis.tps) > ShapeChecks.MAX_REPETITION):
-                return pattern
+        if (len(candidates) == 0):
+            return True
+        for c in candidates:
+            count = 0
+            i = 0
+            j = len(c)
+            while (i < len(sequences) and j < len(sequences)):
+                if (sequences[i:j] == c):
+                    count += 1
+                if ((count * len(c)) / len(sequences) >= ShapeChecks.MAX_REPETITION):
+                    return c
+                i += len(c)
+                j += len(c)
         return []
 
     def display(self, index):
