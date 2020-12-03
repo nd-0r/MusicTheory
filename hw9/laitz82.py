@@ -131,7 +131,11 @@ class IntervalChecks(Rule):
     
     # INT_STEPWISE
     def check_stepwise(self):
-        if (all(i.semitones() <= 2 for i in self.intervals)):
+        count = 0
+        for i in self.intervals:
+            if i.semitones() <= 2:
+                count += 1
+        if (count / len(self.intervals)) >= 0.51:
             return True
         return False
 
