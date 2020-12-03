@@ -277,7 +277,7 @@ class IntervalChecks(Rule):
 
 class ShapeChecks(Rule):
 
-    CLIMAX_PERCENT_OF_MAX = 0.9
+    CLIMAX_PERCENT_OF_MAX = 1
     MAX_REPETITION = 0.5
 
     def __init__(self, analysis):
@@ -293,7 +293,9 @@ class ShapeChecks(Rule):
     # climax helper method
     def get_climaxes(self):
         midi_notes = [tp.nmap[self.analysis.melodic_id].pitch.keynum() for tp in self.analysis.tps]
-        percents_of_max = [note / max(midi_notes) for note in midi_notes]
+        max_midi = max(midi_notes)
+        percents_of_max = [note / max_midi for note in midi_notes]
+        print(percents_of_max)
 
         relative_maxima = []
         if (len(midi_notes) < 3):
@@ -302,7 +304,8 @@ class ShapeChecks(Rule):
         count = 1
         while (count < (len(percents_of_max) - 1)):
             current = percents_of_max[count]
-            if (percents_of_max[count - 1] < current > percents_of_max[count + 1] and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
+            if ((percents_of_max[count-1] < current > percents_of_max[count+1])
+               and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
                 relative_maxima.append(self.analysis.tps[count])
             count += 1
         return relative_maxima
