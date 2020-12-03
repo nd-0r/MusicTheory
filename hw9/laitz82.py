@@ -245,22 +245,28 @@ class IntervalChecks(Rule):
     def check_num_consec(self):
         out = []
         count = 0
+        bad = False
         last = self.intervals[0]
         print(self.intervals)
         if ((last.is_ascending() or last.is_descending())
-           and abs(last.semitones()) >= 7):
+           and abs(last.semitones()) >= 4):
             count += 1
         for trans,inter in zip(self.analysis.trns[1:], self.intervals[1:]):
             print("LAST: ", last.string())
             print("INTER: ", inter.string())
             if (((last.is_ascending() and inter.is_ascending())
                 or (last.is_descending() and inter.is_descending()))
-                and abs(inter.semitones()) >= 7):
+                and abs(inter.semitones()) >= 4):
                 print("INCREMENTING")
                 count += 1
-                if (count >= 2):
-                    print("!!!THIS IS A LEAP!!!")
+                if (count >= 2 and not bad):
+                    bad = True
+                    break
+                elif bad:
+                    print("!!!ADDING INDEX!!!")
                     out.append(trans.from_tp.index)
+            else:
+                count = 0
             last = inter
         return out
 
