@@ -295,7 +295,6 @@ class ShapeChecks(Rule):
         midi_notes = [tp.nmap[self.analysis.melodic_id].pitch.keynum() for tp in self.analysis.tps]
         max_midi = max(midi_notes)
         percents_of_max = [note / max_midi for note in midi_notes]
-        print(percents_of_max)
 
         relative_maxima = []
         if (len(midi_notes) < 3):
@@ -318,10 +317,7 @@ class ShapeChecks(Rule):
             to_note = tran.to_tp.nmap[self.analysis.melodic_id].pitch
             assert (type(from_note) == type(to_note) == Pitch), MELODY_ERROR
             current_interval = Interval(from_note, to_note)
-            if (current_interval.is_descending()):
-                out.append(-current_interval.semitones())
-            else:
-                out.append(current_interval.semitones())
+            out.append(current_interval.semitones())
         return out
 
     # find repetition helper method
@@ -352,7 +348,6 @@ class ShapeChecks(Rule):
         return []
 
     # SHAPE_ARCHLIKE
-    # TODO - 10
     def check_archlike(self):
         center_third_tps = [t.index + 1 for t in self.analysis.tps[len(self.analysis.tps) // 3 + 1:len(self.analysis.tps) - (len(self.analysis.tps) // 3 - 1)]]
         climaxes = self.get_climaxes()
@@ -370,6 +365,7 @@ class ShapeChecks(Rule):
     def check_unique(self):
         sequences = self.get_interval_motions()
         candidates = ShapeChecks.find_repetition_int_arr(sequences)
+        print(candidates)
         max_len = max(len(s) for s in candidates)
         if (max_len > 1):
             pattern = []
