@@ -301,13 +301,19 @@ class ShapeChecks(Rule):
         if (len(midi_notes) < 3):
             return relative_maxima.append(self.analysis.tps[midi_notes.index(max(midi_notes))])
         
-        count = 1
-        while (count < (len(percents_of_max) - 1)):
-            current = percents_of_max[count]
-            if ((percents_of_max[count-1] < current > percents_of_max[count+1])
-               and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
-                relative_maxima.append(self.analysis.tps[count])
-            count += 1
+        index = 1
+        # while (count < (len(percents_of_max) - 1)):
+        #     current = percents_of_max[count]
+        #     if ((percents_of_max[count-1] < current > percents_of_max[count+1])
+        #        and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
+        #         relative_maxima.append(self.analysis.tps[count])
+        #     count += 1
+        while (index < (len(midi_notes) - 1)):
+            current = midi_notes[index]
+            if ((midi_notes[index-1] < current > midi_notes[index+1])
+               and percents_of_max[index] >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
+                relative_maxima.append(self.analysis.tps[index])
+            index += 1
         return relative_maxima
         
     # interval motions helper method
@@ -349,7 +355,8 @@ class ShapeChecks(Rule):
     def check_num_climax(self):
         climaxes = self.get_climaxes()
         if (len(climaxes) > 1):
-            return [tp.index for tp in climaxes]
+            return [c.index + 1 for c in climaxes[1:]]
+            # return [tp.index for tp in climaxes]
         return []
 
     # SHAPE_ARCHLIKE
