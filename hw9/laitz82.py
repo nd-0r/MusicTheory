@@ -91,6 +91,7 @@ class PitchChecks(Rule):
         return False
 
     # MEL_DIATONIC
+    # TODO - 2
     def check_mel_diatonic(self):
         out = []
         for i,p in enumerate(self.pitches):
@@ -141,6 +142,7 @@ class IntervalChecks(Rule):
 
     # INT_CONSONANT
     # INT_SIMPLE
+    # TODO - 12
     def check_inter_type(self, inter_check):
         out = []
         for i,inter in enumerate(self.intervals):
@@ -150,6 +152,7 @@ class IntervalChecks(Rule):
         return out
 
     # INT_NUM_LARGE
+    # TODO - 2
     def check_num_large(self, inter_to_check):
         out = []
         count = 0
@@ -173,6 +176,7 @@ class IntervalChecks(Rule):
         return out
 
     # INT_NUM_SAMEDIR
+    # TODO - 14
     def check_samedir(self):
         out = []
         count = 0
@@ -181,12 +185,18 @@ class IntervalChecks(Rule):
             if ((last.is_ascending() == inter.is_ascending() == True)
                 or (last.is_descending() == inter.is_descending() == True)):
                 count += 1
-                if (count > 3):
+                if (count >= 3):
+                    print("CONSEC INTERVAL COUNT: ", count)
                     # i + 1 since we are starting at index 1 of the intervals list
-                    out.append(self.indices[i + 1] + 1)
+                    out.append(self.indices[i + 1] + 2)
+            else:
+                count = 0
+            last = inter
+        return out
 
     # LEAP_RECOVERY
     # wouldn't it be wonderful if this worked..
+    # TODO - 6
     def check_leap_recovery(self):
         out = []
         bucket = deque()
@@ -229,6 +239,7 @@ class IntervalChecks(Rule):
         return out
 
     # LEAP_NUM_CONSEC
+    # TODO - 12
     def check_num_consec(self):
         out = []
         count = 0
@@ -315,6 +326,7 @@ class ShapeChecks(Rule):
         return candidates
 
     # SHAPE_NUM_CLIMAX
+    # TODO - 8
     def check_num_climax(self):
         climaxes = self.get_climaxes()
         if (len(climaxes) > 1):
@@ -322,6 +334,7 @@ class ShapeChecks(Rule):
         return []
 
     # SHAPE_ARCHLIKE
+    # TODO - 10
     def check_archlike(self):
         center_third_tps = self.analysis.tps[len(self.analysis.tps) // 3:len(self.analysis.tps) - (len(self.analysis.tps) // 3)]
         climaxes = self.get_climaxes()
@@ -337,6 +350,7 @@ class ShapeChecks(Rule):
         return out
 
     # SHAPE_UNIQUE
+    # TODO - 8
     def check_unique(self):
         sequences = self.get_interval_motions()
         candidates = ShapeChecks.find_repetition_int_arr(sequences)
