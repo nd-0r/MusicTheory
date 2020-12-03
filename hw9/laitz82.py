@@ -302,12 +302,6 @@ class ShapeChecks(Rule):
             return relative_maxima.append(self.analysis.tps[midi_notes.index(max(midi_notes))])
         
         index = 1
-        # while (count < (len(percents_of_max) - 1)):
-        #     current = percents_of_max[count]
-        #     if ((percents_of_max[count-1] < current > percents_of_max[count+1])
-        #        and current >= ShapeChecks.CLIMAX_PERCENT_OF_MAX):
-        #         relative_maxima.append(self.analysis.tps[count])
-        #     count += 1
         while (index < (len(midi_notes) - 1)):
             current = midi_notes[index]
             if ((midi_notes[index-1] < current > midi_notes[index+1])
@@ -355,7 +349,6 @@ class ShapeChecks(Rule):
         climaxes = self.get_climaxes()
         if (len(climaxes) > 1):
             return climaxes[1:]
-            # return [tp.index for tp in climaxes]
         return []
 
     # SHAPE_ARCHLIKE
