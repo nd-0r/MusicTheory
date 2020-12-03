@@ -147,7 +147,8 @@ class IntervalChecks(Rule):
         out = []
         for i,inter in enumerate(self.intervals):
             fct = getattr(inter, str(inter_check))
-            if not fct():
+            if not (fct() or inter.is_second()):
+                print(inter.string())
                 out.append(self.indices[i] + 1)
         return out
 
@@ -176,7 +177,6 @@ class IntervalChecks(Rule):
         return out
 
     # INT_NUM_SAMEDIR
-    # TODO - 14
     def check_samedir(self):
         out = []
         count = 0
@@ -386,7 +386,7 @@ class MelodicAnalysis(Analysis):
     def setup(self, args, kwargs):
         assert len(args) == 1, "Usage: analyze(<pvid>), pass the pvid of the voice to analyze."
         self.melodic_id = args[0]
-        self.tps = timepoints(self.score, span=True, measures=False, trace=True)
+        self.tps = timepoints(self.score, span=True, measures=False, trace=False)
         self.trns = [MyTransition(a, b) for a,b in zip(self.tps, self.tps[1:])]
         # set the key to the main_key in the metadata of the score. Else, set
         # the key to the key of the first bar in the score
