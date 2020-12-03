@@ -142,7 +142,6 @@ class IntervalChecks(Rule):
 
     # INT_CONSONANT
     # INT_SIMPLE
-    # TODO - 12
     def check_inter_type(self, inter_check):
         out = []
         for i,inter in enumerate(self.intervals):
@@ -190,7 +189,6 @@ class IntervalChecks(Rule):
                 or (last.is_descending() == inter.is_descending() == True)):
                 count += 1
                 if (count >= 3):
-                    print("CONSEC INTERVAL COUNT: ", count)
                     # i + 1 since we are starting at index 1 of the intervals list
                     out.append(self.indices[i + 1] + 2)
             else:
@@ -248,14 +246,24 @@ class IntervalChecks(Rule):
         out = []
         count = 0
         last = self.intervals[0]
-        if (last.is_ascending() or last.is_descending()):
+        print(self.intervals)
+        if ((last.is_ascending() or last.is_descending())
+           and abs(last.semitones()) >= 7):
             count += 1
         for trans,inter in zip(self.analysis.trns[1:], self.intervals[1:]):
-            if ((last.is_ascending() == inter.is_ascending() == True)
-                or (last.is_descending() == inter.is_descending() == True)):
+            print("LAST: ", last.string())
+            print("INTER: ", inter.string())
+            if (((last.is_ascending() and inter.is_ascending())
+                or (last.is_descending() and inter.is_descending()))
+                and abs(inter.semitones()) >= 7):
+                print("INCREMENTING")
                 count += 1
-                if (count > 2):
+                if (count >= 2):
+                    print("!!!THIS IS A LEAP!!!")
                     out.append(trans.from_tp.index)
+            else:
+                count = 0
+            last = inter
         return out
 
     def display(self, index):
