@@ -317,7 +317,10 @@ class ShapeChecks(Rule):
             to_note = tran.to_tp.nmap[self.analysis.melodic_id].pitch
             assert (type(from_note) == type(to_note) == Pitch), MELODY_ERROR
             current_interval = Interval(from_note, to_note)
-            out.append(current_interval.semitones())
+            if (current_interval.is_descending()):
+                out.append(-current_interval.lines_and_spaces())
+            else:
+                out.append(current_interval.lines_and_spaces())
         return out
 
     # find repetition helper method
