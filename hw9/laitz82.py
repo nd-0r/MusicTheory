@@ -156,7 +156,6 @@ class IntervalChecks(Rule):
         return out
 
     # INT_NUM_LARGE
-    # TODO - 2
     def check_num_large(self, inter_to_check):
         print(self.intervals)
         out = []
@@ -238,28 +237,19 @@ class IntervalChecks(Rule):
         return out
 
     # LEAP_NUM_CONSEC
-    # TODO - 2
     def check_num_consec(self):
         out = []
         count = 0
-        bad = False
         last = self.intervals[0]
-        if ((last.is_ascending() or last.is_descending())
-           and abs(last.semitones()) >= 4):
-            count += 1
         for trans,inter in zip(self.analysis.trns[1:], self.intervals[1:]):
-            if (((last.is_ascending() and inter.is_ascending())
-                or (last.is_descending() and inter.is_descending()))
-                and abs(inter.semitones()) >= 4):
+            if (abs(last.semitones()) >= 3 and abs(inter.semitones()) >= 3):
                 count += 1
-                if (count >= 2 and not bad):
-                    bad = True
-                    break
-                elif bad:
-                    out.append(trans.from_tp.index)
             else:
                 count = 0
+            if (count >= 2):
+                    out.append(trans.from_tp.index + 1)
             last = inter
+            print(count)
         return out
 
     def display(self, index):
