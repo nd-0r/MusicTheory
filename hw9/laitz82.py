@@ -200,28 +200,33 @@ class IntervalChecks(Rule):
     # wouldn't it be wonderful if this worked..
     # TODO - 6
     def check_leap_recovery(self):
+        print(self.intervals)
         out = []
         bucket = deque()
         running_total = 0
         last = self.intervals[0]
         leap_iter = zip(self.analysis.trns[1:], self.intervals[1:])
         for trans,inter in leap_iter:
-            while (last.is_ascending() == inter.is_ascending() == True):
+            while (last.is_ascending() and inter.is_ascending()):
                 running_total += inter.semitones()
                 bucket.append(trans.from_tp)
                 try:
+                    last = inter
                     trans,inter = next(leap_iter)
                 except StopIteration:
                     break
-            while (last.is_descending() == inter.is_descending() == True):
+            while (last.is_descending() and inter.is_descending()):
                 running_total -= inter.semitones()
                 bucket.append(trans.from_tp)
                 try:
+                    last = inter
                     trans,inter = next(leap_iter)
                 except StopIteration:
                     break
-            if ((running_total > 7 and not (inter.is_descending() and inter.is_second()))
-                or (running_total < -7 and not (inter.is_ascending() and inter.is_second()))):
+            print(bucket)
+            print("CURRENT INTER: ", inter)
+            if ((running_total >= 7 and not (inter.is_descending() and inter.is_second()))
+               or (running_total <= -7 and not (inter.is_ascending() and inter.is_second()))):
                 while True:
                     try:
                         popped = bucket.pop()
@@ -230,7 +235,7 @@ class IntervalChecks(Rule):
                     except IndexError:
                         break
             if ((running_total == 5 and not (inter.is_descending()))
-                or (running_total == -5 and not (inter.is_ascending()))):
+               or (running_total == -5 and not (inter.is_ascending()))):
                 while True:
                     try:
                         out.append(bucket.pop().index + 1)
@@ -238,6 +243,7 @@ class IntervalChecks(Rule):
                         break
             bucket = deque()
             running_total = 0
+        print("OUTPUT: ", out)
         return out
 
     # LEAP_NUM_CONSEC
@@ -322,7 +328,6 @@ class ShapeChecks(Rule):
     # returns an array of candidate sequences
     @staticmethod
     def find_repetition_int_arr(arr):
-        print(arr)
         candidates = []
         start_pos = 0
         while (start_pos < len(arr)):
@@ -365,7 +370,6 @@ class ShapeChecks(Rule):
         sequences = self.get_interval_motions()
         candidates = ShapeChecks.find_repetition_int_arr(sequences)
         candidates.sort(key=len)
-        print(candidates)
         if (len(candidates) == 0):
             return True
         for c in candidates:
@@ -403,7 +407,7 @@ class MelodicAnalysis(Analysis):
     def setup(self, args, kwargs):
         assert len(args) == 1, "Usage: analyze(<pvid>), pass the pvid of the voice to analyze."
         self.melodic_id = args[0]
-        self.tps = timepoints(self.score, span=True, measures=False, trace=True)
+        self.tps = timepoints(self.score, span=True, measures=False, trace=False)
         self.trns = [MyTransition(a, b) for a,b in zip(self.tps, self.tps[1:])]
         # set the key to the main_key in the metadata of the score. Else, set
         # the key to the key of the first bar in the score
