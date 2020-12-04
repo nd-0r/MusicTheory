@@ -162,7 +162,7 @@ class IntervalChecks(Rule):
         out = []
         count = 0
         for i,inter in enumerate(self.intervals):
-            if inter.semitones() > inter_to_check.semitones():
+            if abs(inter.semitones()) > inter_to_check.semitones():
                 count += 1
                 if (count > 1):
                     out.append(self.indices[i] + 1)
