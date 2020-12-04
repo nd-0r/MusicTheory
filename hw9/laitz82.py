@@ -202,48 +202,50 @@ class IntervalChecks(Rule):
     def check_leap_recovery(self):
         print(self.intervals)
         out = []
-        bucket = deque()
         running_total = 0
         last = self.intervals[0]
-        leap_iter = zip(self.analysis.trns[1:], self.intervals[1:])
-        for trans,inter in leap_iter:
-            while (last.is_ascending() and inter.is_ascending()):
-                running_total += inter.semitones()
-                bucket.append(trans.from_tp)
-                try:
-                    last = inter
-                    trans,inter = next(leap_iter)
-                except StopIteration:
-                    break
-            while (last.is_descending() and inter.is_descending()):
-                running_total -= inter.semitones()
-                bucket.append(trans.from_tp)
-                try:
-                    last = inter
-                    trans,inter = next(leap_iter)
-                except StopIteration:
-                    break
-            print(bucket)
-            print("CURRENT INTER: ", inter)
-            if ((running_total >= 7 and not (inter.is_descending() and inter.is_second()))
-               or (running_total <= -7 and not (inter.is_ascending() and inter.is_second()))):
-                while True:
-                    try:
-                        popped = bucket.pop()
-                        out.append(popped.index + 1)
-                        popped.index = -popped.index
-                    except IndexError:
-                        break
+        if (last.is_ascending()):
+            running_total += last.semitones()
+        elif (last.is_descending()):
+            running_total -= last.semitones()
+        count = 1
+        while (count < len(self.intervals)):
+            inter = self.intervals[count]
             if ((running_total == 5 and not (inter.is_descending()))
                or (running_total == -5 and not (inter.is_ascending()))):
-                while True:
-                    try:
-                        out.append(bucket.pop().index + 1)
-                    except IndexError:
-                        break
-            bucket = deque()
+                out.append(count + 1)
+                running_total = 0
+                print("4")
+            if (last.is_ascending() and inter.is_ascending()
+               and abs(inter.semitones() >= 3)):
+                running_total += inter.semitones()
+                print("1")
+            if (last.is_descending() and inter.is_descending()
+               and abs(inter.semitones()) >= 3):
+                running_total += inter.semitones()
+                print("2")
+            if (last.is_ascending() ^ inter.is_ascending()):
+                if ((running_total >= 7 and not (inter.is_descending() and inter.is_second()))
+                   or (running_total <= -7 and not (inter.is_ascending() and inter.is_second()))):
+                    out.append(-(count + 1))
+                    running_total = 0
+                    print("3")
+                if (abs(inter.semitones()) >= 3):
+                    running_total = inter.semitones()
+                else:
+                    running_total = 0
+                print("5")
+            last = inter
+            count += 1
+            print(out)
+        print(running_total)
+        if (running_total >= 7 or running_total <= -7):
+            out.append(-(count + 1))
+            print("3")
+        elif (running_total == 5 or running_total == -5):
+            out.append(count + 1)
             running_total = 0
-        print("OUTPUT: ", out)
+            print("4")
         return out
 
     # LEAP_NUM_CONSEC
