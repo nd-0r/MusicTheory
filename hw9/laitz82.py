@@ -197,10 +197,7 @@ class IntervalChecks(Rule):
         return out
 
     # LEAP_RECOVERY
-    # wouldn't it be wonderful if this worked..
-    # TODO - 6
     def check_leap_recovery(self):
-        print(self.intervals)
         out = []
         running_total = 0
         last = self.intervals[0]
@@ -215,37 +212,29 @@ class IntervalChecks(Rule):
                or (running_total == -5 and not (inter.is_ascending()))):
                 out.append(count + 1)
                 running_total = 0
-                print("4")
             if (last.is_ascending() and inter.is_ascending()
                and abs(inter.semitones() >= 3)):
                 running_total += inter.semitones()
-                print("1")
             if (last.is_descending() and inter.is_descending()
                and abs(inter.semitones()) >= 3):
                 running_total += inter.semitones()
-                print("2")
             if (last.is_ascending() ^ inter.is_ascending()):
                 if ((running_total >= 7 and not (inter.is_descending() and inter.is_second()))
                    or (running_total <= -7 and not (inter.is_ascending() and inter.is_second()))):
                     out.append(-(count + 1))
                     running_total = 0
-                    print("3")
                 if (abs(inter.semitones()) >= 3):
                     running_total = inter.semitones()
                 else:
                     running_total = 0
-                print("5")
             last = inter
             count += 1
-            print(out)
         print(running_total)
         if (running_total >= 7 or running_total <= -7):
             out.append(-(count + 1))
-            print("3")
         elif (running_total == 5 or running_total == -5):
             out.append(count + 1)
             running_total = 0
-            print("4")
         return out
 
     # LEAP_NUM_CONSEC
