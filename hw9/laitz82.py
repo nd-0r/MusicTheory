@@ -90,8 +90,9 @@ class PitchChecks(Rule):
             return True
         return False
 
-    # MEL_DIATONIC
+    # MEL_DIATONIc
     # TODO - 2
+    # FIXME - accomodate melodic minor
     def check_mel_diatonic(self):
         out = []
         for i,p in enumerate(self.pitches):
