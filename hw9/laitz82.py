@@ -152,13 +152,13 @@ class IntervalChecks(Rule):
             else:
                 fct2 = False
             if not (fct() or fct2()):
-                print(inter.string())
                 out.append(self.indices[i] + 1)
         return out
 
     # INT_NUM_LARGE
     # TODO - 2
     def check_num_large(self, inter_to_check):
+        print(self.intervals)
         out = []
         count = 0
         for i,inter in enumerate(self.intervals):
@@ -230,7 +230,6 @@ class IntervalChecks(Rule):
                     running_total = 0
             last = inter
             count += 1
-        print(running_total)
         if (running_total >= 7 or running_total <= -7):
             out.append(-(count + 1))
         elif (running_total == 5 or running_total == -5):
