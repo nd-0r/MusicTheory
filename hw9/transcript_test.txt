@@ -1,4 +1,4 @@
-============= aorals2.hw9 transcript [test] (2020-12-04 17:00:26.498602) =============
+============= aorals2.hw9 transcript [test] (2020-12-04 18:00:26.330853) =============
   module: laitz82
     [import]: success  (1/1)
       [  input = s1=import_score('xmls/Laitz_p84A.musicxml')  ]  your_output = None  desired_output = None  (2/2)
@@ -48,7 +48,7 @@
       [  input = d3['INT_NUM_UNISON']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d3['INT_NUM_SAMEDIR']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d3['LEAP_RECOVERY']  ]  your_output = [2, -5, -7]  desired_output = [2, -5, -7]  (2/2)
-      [  input = d3['LEAP_NUM_CONSEC']  ]  your_output = True  desired_output = [6, 7]  (0/2)
+      [  input = d3['LEAP_NUM_CONSEC']  ]  your_output = [6, 7]  desired_output = [6, 7]  (2/2)
       [  input = d3['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d3['SHAPE_ARCHLIKE']  ]  your_output = [3]  desired_output = [3]  (2/2)
       [  input = d3['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
@@ -120,10 +120,10 @@
       [  input = d7['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['SHAPE_ARCHLIKE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
-Total raw score: (235/239)
+Total raw score: (237/239)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 15
 Extra credit (if applicable): 0
-Adjusted score (Final): 220/224
+Adjusted score (Final): 222/224
 
