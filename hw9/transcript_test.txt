@@ -1,4 +1,4 @@
-============= aorals2.hw9 transcript [test] (2020-12-04 18:00:26.330853) =============
+============= aorals2.hw9 transcript [test] (2020-12-04 19:00:25.154518) =============
   module: laitz82
     [import]: success  (1/1)
       [  input = s1=import_score('xmls/Laitz_p84A.musicxml')  ]  your_output = None  desired_output = None  (2/2)
@@ -91,7 +91,7 @@
       [  input = d6['MEL_START_NOTE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['MEL_CADENCE']  ]  your_output = []  desired_output = []  (2/2)
       [  input = d6['MEL_TESSITURA']  ]  your_output = True  desired_output = True  (2/2)
-      [  input = d6['MEL_DIATONIC']  ]  your_output = [2]  desired_output = True  (0/2)
+      [  input = d6['MEL_DIATONIC']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['INT_STEPWISE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d6['INT_CONSONANT']  ]  your_output = [1]  desired_output = [1]  (2/2)
       [  input = d6['INT_SIMPLE']  ]  your_output = True  desired_output = True  (2/2)
@@ -120,10 +120,10 @@
       [  input = d7['SHAPE_NUM_CLIMAX']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['SHAPE_ARCHLIKE']  ]  your_output = True  desired_output = True  (2/2)
       [  input = d7['SHAPE_UNIQUE']  ]  your_output = True  desired_output = True  (2/2)
-Total raw score: (237/239)
+Total raw score: (239/239)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 15
 Extra credit (if applicable): 0
-Adjusted score (Final): 222/224
+Adjusted score (Final): 224/224
 
