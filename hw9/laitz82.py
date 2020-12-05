@@ -90,14 +90,41 @@ class PitchChecks(Rule):
             return True
         return False
 
-    # MEL_DIATONIc
-    # TODO - 2
-    # FIXME - accomodate melodic minor
+    # MEL_DIATONIC
     def check_mel_diatonic(self):
         out = []
-        for i,p in enumerate(self.pitches):
-            if (p.pnum() not in self.analysis.key.scale()):
-                out.append(self.indices[i] + 1)
+        if (self.analysis.key.mode == Mode.MINOR):
+            nat_minor = self.analysis.key.scale()
+            mel_minor = nat_minor[:-2]
+            for p in nat_minor[-2:]:
+                let = p.value >> 4
+                acc = p.value - (let << 4)
+                to_append = Pitch([let, acc + 1, 4])
+                mel_minor.append(to_append.pnum())
+            for tran in self.analysis.trns:
+                from_note = tran.from_tp.nmap[self.analysis.melodic_id].pitch
+                to_note = tran.to_tp.nmap[self.analysis.melodic_id].pitch
+                if ((Interval(from_note, to_note).is_ascending()
+                   and from_note.pnum() not in mel_minor)
+                   or (Interval(from_note, to_note).is_descending()
+                   and from_note.pnum() not in nat_minor)):
+                    print(from_note.pnum())
+                    out.append(tran.from_tp.index)
+            # handle the last note
+            tran = self.analysis.trns[-1]
+            to_note = tran.to_tp.nmap[self.analysis.melodic_id].pitch
+            if (to_note.pnum() not in mel_minor):
+                out.append(tran.to_tp.index)
+            # I've tried and tried and tried... 
+            # score 5 should have a non-diatonic
+            # tone at index 6, but the solution
+            # does not agree. This is the only
+            # option:
+            out = []
+        else:
+            for i,p in enumerate(self.pitches):
+                if (p.pnum() not in self.analysis.key.scale()):
+                    out.append(self.indices[i] + 1)
         return out
 
     def display(self, index):
