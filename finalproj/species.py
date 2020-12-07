@@ -141,8 +141,6 @@ class SpeciesAnalysis(Analysis):
     
 ###############################################################################
 
-# A short list of files that contain lots of issues (see comments below)
-
 samples1 = ['1-018-C_ajyanez2.musicxml', '1-019-A_ajyanez2.musicxml',
             '1-005-A_hanzhiy2.musicxml', '1-008-C_davidx2.musicxml',
             '1-030_C_chchang6.musicxml', '1-011-B_weikeng2.musicxml',
@@ -155,57 +153,3 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
             '2-009-C_mamn2.musicxml', '2-010-B_mamn2.musicxml',
            '2-034-C_zawang2.musicxml', '2-029-A_hanzhiy2.musicxml',
            '2-009-B_mamn2.musicxml', '2-021-C_erf3.musicxml']
-
-## Direct (parallel) 5ths, 8vas and unisons:
-#     '1-037-A_sz18.musicxml'
-#     '1-030-C_cjrosas2.musicxml'
-#     '2-000-B_sz18.musicxml'
-## Direct motion measure to measure (species 2):
-#     '2-034-C_zawang2.musicxml'
-#     '2-021-C_erf3.musicxml'
-## Indirect (hidden) 5ths and 8vas:
-#     '1-030_C_chchang6.musicxml'
-#     '1-008-C_davidx2.musicxml'
-#     '1-030-C_cjrosas2.musicxml'
-#     '1-011-B_weikeng2.musicxml'
-## Voice overlap:
-#     '1-005-A_hanzhiy2.musicxml'
-#     '1-019-A_ajyanez2.musicxml'
-## Maximum parallel interval:
-#     '1-037-A_sz18.musicxml'
-## Voice crossing:
-#     '1-019-A_ajyanez2.musicxml'
-## Disjunction:
-#     '1-008-C_davidx2.musicxml'
-## Weak beat dissonance not passing tone (species 2):
-#     '2-000-B_sz18.musicxml'
-#     '2-034-C_zawang2.musicxml'
-#     '2-021-C_erf3.musicxml'
-## Strong beat dissonance (species 1 and 2):
-#     '2-000-B_sz18.musicxml'
-#     '2-034-C_zawang2.musicxml'
-## Wrong durations:
-#     '2-009-C_mamn2.musicxml'
-#     '2-034-A_zawang2.musicxml'
-#     '2-021-B_erf3.musicxml'
-#     '2-009-B_mamn2.musicxml'
-#     '2-021-C_erf3.musicxml'
-## Not diatonic:
-#     '1-018-C_ajyanez2.musicxml'
-#     '2-003-A_cjrosas2.musicxml'
-#     '2-003_A_chchang6.musicxml'
-## Starting pitch:
-#     '2-028-C_hanzhiy2.musicxml'
-#     '1-012-B_erf3.musicxml'
-## Melodic cadence:
-#     '1-018-C_ajyanez2.musicxml'
-#     '1-030_C_chchang6.musicxml'
-#     '2-034-A_zawang2.musicxml'
-## Too many 'x':
-#     '2-029-A_hanzhiy2.musicxml'
-#     '2-003_A_chchang6.musicxml'
-#     '2-010-B_mamn2.musicxml'
-## Reverse after leap:
-#     '2-029-A_hanzhiy2.musicxml'
-#     '2-010-B_mamn2.musicxml'
-
