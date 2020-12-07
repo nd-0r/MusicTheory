@@ -86,7 +86,7 @@ result_strings = [
     'At #{}: too many leaps of a seventh',      # 'MAX_7TH' setting
     'At #{}: too many leaps of an octave',      # 'MAX_8VA' setting
     'At #{}: too many large leaps',             # 'MAX_LRG' setting
-    'At #{}: too many consecutive leaps'        # 'MAX_CONSEC_LEAP' setting
+    'At #{}: too many consecutive leaps,'        # 'MAX_CONSEC_LEAP' setting
     'At #{}: too many consecutive intervals in same direction', # 'MAX_SAMEDIR' setting
     'At #{}: missing reverse by step recovery', # 'STEP_THRESHOLD' setting
     'At #{}: forbidden compound melodic interval',
