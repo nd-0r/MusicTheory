@@ -10,6 +10,7 @@ from math import inf
 ## Settings for a species 1 analysis. Pass this to SpeciesAnalysis() if you
 # are analyzing a species 1 score. See also: SpeciesAnalysis.
 s1_settings = {
+    # section 1: melodic tests
     ## Maximum number of melodic unisons allowed.
     'MAX_UNI': 1,
     ## Maximum number of melodic 4ths allowed.
@@ -26,12 +27,18 @@ s1_settings = {
     'MAX_LRG': 2,
     ## Maximum number of consecutive melodic intervals moving in same direction.
     'MAX_SAMEDIR': 3,
+
+    # section 2: harmonic tests
     ## Maximum number of parallel consecutive harmonic 3rds/6ths.
     'MAX_PARALLEL': 3,
+
+    # section 3: leap tests
     ## Maximum number of consecutive leaps of any type.
     'MAX_CONSEC_LEAP': 2,
     ## Smallest leap demanding recovery step in opposite direction.
     'STEP_THRESHOLD': 5,
+
+    # section 4: pitch checks
     # List of allowed starting scale degrees of a CP that is above the CF.
     'START_ABOVE': [1, 5],
     # List of allowed starting scale degrees of a CP that is below the CF.
@@ -91,6 +98,9 @@ result_strings = [
     'At #{}: missing reverse by step recovery', # 'STEP_THRESHOLD' setting
     'At #{}: forbidden compound melodic interval',
     ]
+
+# Rules
+
 
 
 ## A class that implements a species counterpoint analysis of a given score.
