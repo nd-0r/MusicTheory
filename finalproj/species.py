@@ -1,8 +1,11 @@
 ###############################################################################
 
 # You can import from score, theory, and any python system modules you want.
+# if it's not a whole note, it's wrong
+# only one rest allowed, and it must be in the first position
+# raised leading tone and raised 6th has to be at the end in minor
 
-from .score import Note, Pitch, Rest, Interval, Ratio, Mode, import_score
+from .score import Note, Pitch, Rest, Interval, Ratio, Key, Mode, import_score
 from .theory import Analysis, Rule, timepoints
 from copy import copy
 from math import inf
@@ -94,14 +97,152 @@ result_strings = [
     'At #{}: too many leaps of a seventh',      # 'MAX_7TH' setting
     'At #{}: too many leaps of an octave',      # 'MAX_8VA' setting
     'At #{}: too many large leaps',             # 'MAX_LRG' setting
-    'At #{}: too many consecutive leaps,'        # 'MAX_CONSEC_LEAP' setting
+    'At #{}: too many consecutive leaps',        # 'MAX_CONSEC_LEAP' setting
     'At #{}: too many consecutive intervals in same direction',
     'At #{}: missing reverse by step recovery',  # 'STEP_THRESHOLD' setting
     'At #{}: forbidden compound melodic interval',
     ]
 
-# Rules
 
+# Rules
+SETUP_WARNING = "Setup has not been run yet!"
+MELODY_ERROR = "Voice is not a melody!"
+
+
+class MelodicNoteChecks(Rule):
+
+    def __init__(self, analysis):
+        super().__init__(analysis, "My very first rule.")
+        if (self.analysis.tps == self.analysis.melodic_id == self.analysis.trns == self.analysis.key == None):
+            raise AttributeError(SETUP_WARNING)
+        self.pitches = []
+        self.indices = []
+        for tp in self.analysis.tps:
+            assert (type(tp.nmap[self.analysis.melodic_id]) == Note), MELODY_ERROR
+            self.pitches.append(tp.nmap[self.analysis.melodic_id].pitch)
+            self.indices.append(tp.index)
+
+    def apply(self):
+        # ... do some analysis...
+        # ... update the analysis results, for example:
+        # self.analysis.results['MEL_START_NOTE'] = True if success else []
+        pass
+
+    # TODO
+    def check_start_pitch(self):
+        pass
+
+    # TODO
+    def check_rests(self):
+        pass
+
+    # TODO
+    def check_durations(self):
+        pass
+
+    # TODO
+    def check_mel_cadence(self):
+        pass
+
+    # TODO
+    def check_diatonic(self):
+        pass
+
+    # TODO
+    def display(self, index):
+        print('--------------------------------------------------------------')
+        print(f"Rule {index+1}: {self.title}")
+
+
+class MelodicIntChecks(Rule):
+
+    def __init__(self, analysis):
+        super().__init__(analysis, "My very first rule.")
+
+    def apply(self):
+        # ... do some analysis...
+        # ... update the analysis results, for example:
+        # self.analysis.results['MEL_START_NOTE'] = True if success else []
+        pass
+
+    # TODO
+    def check_num_int(self, inter, num):
+        pass
+
+    # TODO
+    def check_consec_leap(self, num):
+        pass
+
+    # TODO
+    def check_consec_int_samedir(self, num):
+        pass
+
+    # TODO
+    def check_int_reverse(self, threshold):
+        pass
+
+    # TODO
+    def display(self, index):
+        print('--------------------------------------------------------------')
+        print(f"Rule {index+1}: {self.title}")
+
+
+class HarmonicStaticIntChecks(Rule):
+
+    def __init__(self, analysis):
+        super().__init__(analysis, "My very first rule.")
+
+    def apply(self):
+        # ... do some analysis...
+        # ... update the analysis results, for example:
+        # self.analysis.results['MEL_START_NOTE'] = True if success else []
+        pass
+
+    # TODO
+    def check_voice_overlap(self):
+        pass
+
+    # TODO
+    def check_voice_cross(self):
+        pass
+
+    # TODO
+    def check_dis_int(self, strong=True):
+        pass
+
+    # TODO
+    def display(self, index):
+        print('--------------------------------------------------------------')
+        print(f"Rule {index+1}: {self.title}")
+
+
+class HarmonicMovingIntChecks(Rule):
+
+    def __init__(self, analysis):
+        super().__init__(analysis, "My very first rule.")
+
+    def apply(self):
+        # ... do some analysis...
+        # ... update the analysis results, for example:
+        # self.analysis.results['MEL_START_NOTE'] = True if success else []
+        pass
+
+    # TODO
+    def check_consec_ints(self):
+        pass
+
+    # TODO
+    def check_direct_ints(self):
+        pass
+
+    # TODO
+    def check_consec_parallel(self):
+        pass
+
+    # TODO
+    def display(self, index):
+        print('--------------------------------------------------------------')
+        print(f"Rule {index+1}: {self.title}")
 
 
 # A class that implements a species counterpoint analysis of a given score.
@@ -133,14 +274,19 @@ class SpeciesAnalysis(Analysis):
         self.species = species
         # A local copy of the analysis settings.
         self.settings = copy(s1_settings) if species == 1 else copy(s2_settings)
-        # Add your rules to this list.
-        self.rules = []
         # A list of strings that represent the findings of your analysis.
         self.results = []
+        self.cp_voice = self.key = self.timepoints = self.rules = None
 
     # Use this function to perform whatever setup actions your rules require.
     def setup(self, args, kwargs):
-        pass
+        self.key = self.score.metadata['main_key']
+        if (self.key == Key(0, Mode.MAJOR) or self.key == Key(-1, Mode.MINOR)):
+            self.cp_voice = 'P1.1'
+        elif (self.key == Key(-3, Mode.MAJOR) or self.key == Key(0, Mode.MINOR)):
+            self.cp_voice = 'P2.1'
+        self.timepoints = timepoints(self.score)
+        self.rules = []
     # This function is given to you, it returns your analysis results
     # for the autograder to check.  You can also use this function as
     # a top level call for testing. Just make sure that it always returns
@@ -167,3 +313,11 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
             '2-009-C_mamn2.musicxml', '2-010-B_mamn2.musicxml',
             '2-034-C_zawang2.musicxml', '2-029-A_hanzhiy2.musicxml',
             '2-009-B_mamn2.musicxml', '2-021-C_erf3.musicxml']
+
+if __name__ == '__main__':
+    import os
+    DIREC = os.path.dirname(__file__)
+    for name in samples1:
+        s = import_score(f'{DIREC}/Species/{name}')
+        a = SpeciesAnalysis(s, 1)
+        a.submit_to_grading()
