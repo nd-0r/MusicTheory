@@ -113,13 +113,16 @@ class MelodicNoteChecks(Rule):
 
     def __init__(self, analysis):
         super().__init__(analysis, "My very first rule.")
-        if (self.analysis.tps == self.analysis.melodic_id == self.analysis.trns == self.analysis.key == None):
+        # TODO - add other instance vars
+        if (self.analysis.tps is self.analysis.cp_voice
+           is self.analysis.trns is self.analysis.key is None):
             raise AttributeError(SETUP_WARNING)
         self.pitches = []
         self.indices = []
         for tp in self.analysis.tps:
-            assert (type(tp.nmap[self.analysis.melodic_id]) == Note), MELODY_ERROR
-            self.pitches.append(tp.nmap[self.analysis.melodic_id].pitch)
+            current_tp = tp.nmap[self.analysis.cp_voice]
+            assert (isinstance(current_tp, Note)), MELODY_ERROR
+            self.pitches.append(current_tp.pitch)
             self.indices.append(tp.index)
 
     def apply(self):
@@ -128,9 +131,15 @@ class MelodicNoteChecks(Rule):
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
 
-    # TODO
+    # might need to fix this later to accomodate the "above the cf" case
     def check_start_pitch(self):
-        pass
+        if (isinstance(self.analysis.tps[0].nmap[self.analysis.cf_voice], Note)
+                and self.pitches[0].pnum() in {self.analysis.key.scale()[0],
+                                               self.analysis.key.scale()[4]}):
+            return True
+        if self.pitches[0].pnum() == self.analysis.key.scale()[0]:
+            return True
+        return False
 
     # TODO
     def check_rests(self):
@@ -276,16 +285,25 @@ class SpeciesAnalysis(Analysis):
         self.settings = copy(s1_settings) if species == 1 else copy(s2_settings)
         # A list of strings that represent the findings of your analysis.
         self.results = []
-        self.cp_voice = self.key = self.timepoints = self.rules = None
+        self.cp_voice = None
+        self.cf_voice = None
+        self.key = None
+        self.timepoints = None
+        self.rules = None
+        self.tps = None
 
     # Use this function to perform whatever setup actions your rules require.
     def setup(self, args, kwargs):
         self.key = self.score.metadata['main_key']
         if (self.key == Key(0, Mode.MAJOR) or self.key == Key(-1, Mode.MINOR)):
             self.cp_voice = 'P1.1'
-        elif (self.key == Key(-3, Mode.MAJOR) or self.key == Key(0, Mode.MINOR)):
+            self.cf_voice = 'P2.1'
+        elif (self.key == Key(-3, Mode.MAJOR)
+              or self.key == Key(0, Mode.MINOR)):
             self.cp_voice = 'P2.1'
-        self.timepoints = timepoints(self.score)
+            self.cf_voice = 'P1.1'
+        self.timepoints = timepoints(self.score, measures=False,
+                                     trace=False)
         self.rules = []
     # This function is given to you, it returns your analysis results
     # for the autograder to check.  You can also use this function as
