@@ -152,6 +152,9 @@ class MelodicNoteChecks(Rule):
         if tests['check_rests'] != []:
             for index in tests['check_rests']:
                 self.analysis.results.append(result_strings[15].format(index))
+        if tests['check_durations'] != []:
+            for index in tests['check_durations']:
+                self.analysis.results.append(result_strings[16].format(index))
 
     def check_start_pitch(self):
         if (isinstance(self.analysis.tps[0].nmap[self.analysis.cf_voice], Note)
@@ -162,18 +165,21 @@ class MelodicNoteChecks(Rule):
             return True
         return False
 
-    # TODO
     def check_rests(self):
         out = []
-        for tp in self.analysis.tps:
-            current_tp = tp.nmap[self.analysis.cp_voice]
+        for timepoint in self.analysis.tps:
+            current_tp = timepoint.nmap[self.analysis.cp_voice]
             if isinstance(current_tp, Rest):
-                out.append(tp.index + 1)
+                out.append(timepoint.index + 1)
         return out
 
-    # TODO
     def check_durations(self):
-        pass
+        out = []
+        for timepoint in self.analysis.tps:
+            current_tp = timepoint.nmap[self.analysis.cp_voice]
+            if current_tp.dur != Ratio('1/1'):
+                out.append(timepoint.index + 1)
+        return out
 
     # TODO
     def check_mel_cadence(self):
