@@ -1,12 +1,17 @@
 ###############################################################################
 
+# autograding:
+# autograder starts saturday or sunday
+# autograder will run for a few days
+# autograder will run for earlier projects
+
 # You can import from score, theory, and any python system modules you want.
 # if it's not a whole note, it's wrong
 # only one rest allowed, and it must be in the first position
 # raised leading tone and raised 6th has to be at the end in minor
 
 from .score import Note, Pitch, Rest, Interval, Ratio, Key, Mode, import_score
-from .theory import Analysis, Rule, timepoints
+from .theory import Analysis, Rule, timepoints, Transition
 from copy import copy
 from math import inf
 
@@ -68,40 +73,48 @@ s2_settings['MAX_UNI'] = 0    # no melodic unisons allowed
 # it simply contains the list of all the result strings ;)
 result_strings = [
     # VERTICAL RESULTS
-    'At #{}: consecutive unisons',
-    'At #{}: consecutive fifths',
-    'At #{}: consecutive octaves',
-    'At #{}: direct unisons',
-    'At #{}: direct fifths',
-    'At #{}: direct octaves',
-    'At #{}: consecutive unisons in cantus firmus notes',  # if species 2
-    'At #{}: consecutive fifths in cantus firmus notes',   # if species 2
-    'At #{}: consecutive octaves in cantus firmus notes',  # if species 2
-    'At #{}: voice overlap',
-    'At #{}: voice crossing',
-    'At #{}: forbidden weak beat dissonance',   # vertical dissonance
-    'At #{}: forbidden strong beat dissonance',  # vertical dissonance
-    'At #{}: too many consecutive parallel intervals',  # parallel vert ints
+    'At #{0}: consecutive unisons',
+    'At #{0}: consecutive fifths',
+    'At #{0}: consecutive octaves',
+    'At #{0}: direct unisons',
+    'At #{0}: direct fifths',
+    'At #{0}: direct octaves',
+    'At #{0}: consecutive unisons in cantus firmus notes',  # if species 2
+    'At #{0}: consecutive fifths in cantus firmus notes',   # if species 2
+    'At #{0}: consecutive octaves in cantus firmus notes',  # if species 2
+    'At #{0}: voice overlap',
+    'At #{0}: voice crossing',
+    'At #{0}: forbidden weak beat dissonance',   # vertical dissonance
+    'At #{0}: forbidden strong beat dissonance',  # vertical dissonance
+    'At #{0}: too many consecutive parallel intervals',  # parallel vert ints
 
     # MELODIC RESULTS
-    'At #{}: forbidden starting pitch',
-    'At #{}: forbidden rest',
-    'At #{}: forbidden duration',
-    'At #{}: missing melodic cadence',
-    'At #{}: forbidden non-diatonic pitch',
-    'At #{}: dissonant melodic interval',
-    'At #{}: too many melodic unisons',         # 'MAX_UNI' setting
-    'At #{}: too many leaps of a fourth',       # 'MAX_4TH' setting
-    'At #{}: too many leaps of a fifth',        # 'MAX_5TH' setting
-    'At #{}: too many leaps of a sixth',        # 'MAX_6TH' setting
-    'At #{}: too many leaps of a seventh',      # 'MAX_7TH' setting
-    'At #{}: too many leaps of an octave',      # 'MAX_8VA' setting
-    'At #{}: too many large leaps',             # 'MAX_LRG' setting
-    'At #{}: too many consecutive leaps',        # 'MAX_CONSEC_LEAP' setting
-    'At #{}: too many consecutive intervals in same direction',
-    'At #{}: missing reverse by step recovery',  # 'STEP_THRESHOLD' setting
-    'At #{}: forbidden compound melodic interval',
+    'At #{0}: forbidden starting pitch',
+    'At #{0}: forbidden rest',
+    'At #{0}: forbidden duration',
+    'At #{0}: missing melodic cadence',
+    'At #{0}: forbidden non-diatonic pitch',
+    'At #{0}: dissonant melodic interval',
+    'At #{0}: too many melodic unisons',         # 'MAX_UNI' setting
+    'At #{0}: too many leaps of a fourth',       # 'MAX_4TH' setting
+    'At #{0}: too many leaps of a fifth',        # 'MAX_5TH' setting
+    'At #{0}: too many leaps of a sixth',        # 'MAX_6TH' setting
+    'At #{0}: too many leaps of a seventh',      # 'MAX_7TH' setting
+    'At #{0}: too many leaps of an octave',      # 'MAX_8VA' setting
+    'At #{0}: too many large leaps',             # 'MAX_LRG' setting
+    'At #{0}: too many consecutive leaps',        # 'MAX_CONSEC_LEAP' setting
+    'At #{0}: too many consecutive intervals in same direction',
+    'At #{0}: missing reverse by step recovery',  # 'STEP_THRESHOLD' setting
+    'At #{0}: forbidden compound melodic interval',
     ]
+
+
+# My own stupid implementation of the Transition class
+class MyTransition(Transition):
+
+    def __init__(self, from_tp, to_tp):
+        self.from_tp = from_tp
+        self.to_tp = to_tp
 
 
 # Rules
@@ -129,9 +142,16 @@ class MelodicNoteChecks(Rule):
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+        tests = {
+            'check_start_pitch': self.check_start_pitch(),
+            'check_rests': self.check_rests(),
+            'check_durations': self.check_durations(),
+            'check_mel_cadence': self.check_mel_cadence(),
+            'check_diatonic': self.check_diatonic()
+        }
+        if not tests['check_start_pitch']:
+            self.analysis.results.append(result_strings[14].format('1'))
 
-    # might need to fix this later to accomodate the "above the cf" case
     def check_start_pitch(self):
         if (isinstance(self.analysis.tps[0].nmap[self.analysis.cf_voice], Note)
                 and self.pitches[0].pnum() in {self.analysis.key.scale()[0],
@@ -157,7 +177,6 @@ class MelodicNoteChecks(Rule):
     def check_diatonic(self):
         pass
 
-    # TODO
     def display(self, index):
         print('--------------------------------------------------------------')
         print(f"Rule {index+1}: {self.title}")
@@ -278,7 +297,7 @@ class SpeciesAnalysis(Analysis):
         # Call the superclass and give it the score.
         super().__init__(score)
         if species not in [1, 2]:
-            raise ValueError(f"'{species}' is not a valid species number 1 or 2.")
+            raise ValueError(f"'{species}' is not a valid species number.")
         # The integer species number for the analysis.
         self.species = species
         # A local copy of the analysis settings.
@@ -291,20 +310,26 @@ class SpeciesAnalysis(Analysis):
         self.timepoints = None
         self.rules = None
         self.tps = None
+        self.trns = None
 
     # Use this function to perform whatever setup actions your rules require.
     def setup(self, args, kwargs):
         self.key = self.score.metadata['main_key']
-        if (self.key == Key(0, Mode.MAJOR) or self.key == Key(-1, Mode.MINOR)):
+        if ((self.key.string() == Key(0, Mode.MAJOR).string())
+                or (self.key.string() == Key(-1, Mode.MINOR).string())):
             self.cp_voice = 'P1.1'
             self.cf_voice = 'P2.1'
-        elif (self.key == Key(-3, Mode.MAJOR)
-              or self.key == Key(0, Mode.MINOR)):
+        elif ((self.key.string() == Key(-3, Mode.MAJOR).string())
+              or (self.key.string() == Key(0, Mode.MINOR).string())):
             self.cp_voice = 'P2.1'
             self.cf_voice = 'P1.1'
-        self.timepoints = timepoints(self.score, measures=False,
-                                     trace=False)
-        self.rules = []
+        self.tps = timepoints(self.score, measures=False,
+                              trace=False)
+        self.trns = [MyTransition(a, b) for a, b in zip(self.tps, self.tps[1:])]
+        self.rules = [MelodicNoteChecks(self),
+                      MelodicIntChecks(self),
+                      HarmonicStaticIntChecks(self),
+                      HarmonicMovingIntChecks(self)]
     # This function is given to you, it returns your analysis results
     # for the autograder to check.  You can also use this function as
     # a top level call for testing. Just make sure that it always returns
@@ -337,5 +362,6 @@ if __name__ == '__main__':
     DIREC = os.path.dirname(__file__)
     for name in samples1:
         s = import_score(f'{DIREC}/Species/{name}')
+        print(name)
         a = SpeciesAnalysis(s, 1)
-        a.submit_to_grading()
+        print(a.submit_to_grading())
