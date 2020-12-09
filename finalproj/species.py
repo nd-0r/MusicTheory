@@ -126,7 +126,6 @@ class MelodicNoteChecks(Rule):
 
     def __init__(self, analysis):
         super().__init__(analysis, "My very first rule.")
-        # TODO - add other instance vars
         if (self.analysis.tps is self.analysis.cp_voice
            is self.analysis.trns is self.analysis.key is None):
             raise AttributeError(SETUP_WARNING)
@@ -134,7 +133,6 @@ class MelodicNoteChecks(Rule):
         self.indices = []
         for tp in self.analysis.tps:
             current_tp = tp.nmap[self.analysis.cp_voice]
-            assert (isinstance(current_tp, Note)), MELODY_ERROR
             self.pitches.append(current_tp.pitch)
             self.indices.append(tp.index)
 
@@ -151,6 +149,9 @@ class MelodicNoteChecks(Rule):
         }
         if not tests['check_start_pitch']:
             self.analysis.results.append(result_strings[14].format('1'))
+        if tests['check_rests'] != []:
+            for index in tests['check_rests']:
+                self.analysis.results.append(result_strings[15].format(index))
 
     def check_start_pitch(self):
         if (isinstance(self.analysis.tps[0].nmap[self.analysis.cf_voice], Note)
@@ -163,7 +164,12 @@ class MelodicNoteChecks(Rule):
 
     # TODO
     def check_rests(self):
-        pass
+        out = []
+        for tp in self.analysis.tps:
+            current_tp = tp.nmap[self.analysis.cp_voice]
+            if isinstance(current_tp, Rest):
+                out.append(tp.index + 1)
+        return out
 
     # TODO
     def check_durations(self):
