@@ -137,14 +137,11 @@ class MelodicNoteChecks(Rule):
             self.indices.append(tp.index)
 
     def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
         tests = {
-            'check_start_pitch': self.check_start_pitch(),
+            'check_start_pitch': self.check_start_pitch(s1_settings),
             'check_rests': self.check_rests(),
             'check_durations': self.check_durations(),
-            'check_mel_cadence': self.check_mel_cadence(),
+            'check_mel_cadence': self.check_mel_cadence(s1_settings),
             'check_diatonic': self.check_diatonic()
         }
         if not tests['check_start_pitch']:
@@ -155,13 +152,16 @@ class MelodicNoteChecks(Rule):
         if tests['check_durations'] != []:
             for index in tests['check_durations']:
                 self.analysis.results.append(result_strings[16].format(index))
+        if tests['check_mel_cadence'] != []:
+            for index in tests['check_mel_cadence']:
+                self.analysis.results.append(result_strings[17].format(index))
 
-    def check_start_pitch(self):
-        if (isinstance(self.analysis.tps[0].nmap[self.analysis.cf_voice], Note)
-                and self.pitches[0].pnum() in {self.analysis.key.scale()[0],
-                                               self.analysis.key.scale()[4]}):
-            return True
-        if self.pitches[0].pnum() == self.analysis.key.scale()[0]:
+    def check_start_pitch(self, sets):
+        if self.analysis.cp_voice == 'P1.1':
+            pits = [self.analysis.key.scale()[i - 1] for i in sets['START_ABOVE']]
+        else:
+            pits = [self.analysis.key.scale()[i - 1] for i in sets['START_BELOW']]
+        if (self.pitches[0].pnum() in pits):
             return True
         return False
 
@@ -181,17 +181,71 @@ class MelodicNoteChecks(Rule):
                 out.append(timepoint.index + 1)
         return out
 
-    # TODO
-    def check_mel_cadence(self):
-        pass
+    def check_mel_cadence(self, sets):
+        out = []
+        final_int = Interval(self.pitches[-2], self.pitches[-1])
+        if self.analysis.key.mode == Mode.MINOR:
+            nat_minor = self.analysis.key.scale()
+            mel_minor = nat_minor[:-2]
+            for p in nat_minor[-2:]:
+                let = p.value >> 4
+                acc = p.value - (let << 4)
+                to_append = Pitch([let, acc + 1, 4])
+                mel_minor.append(to_append.pnum())
+            try:
+                if final_int.is_ascending():
+                    cadence = [mel_minor.index(p.pnum()) + 1 for p in self.pitches[-2:]]
+                else:
+                    cadence = [nat_minor.index(p.pnum()) + 1 for p in self.pitches[-2:]]
+            except ValueError:
+                out.append(self.indices[-2] + 1)
+        else:
+            scale = self.analysis.key.scale()
+            try:
+                cadence = [scale.index(p.pnum()) + 1 for p in self.pitches[-2:]]
+                print(cadence)
+            except ValueError:
+                out.append(self.indices[-2] + 1)
+                return out
+            if not (cadence in sets['CADENCE_PATTERNS'] and self.check_diatonic() == []):
+                out.append(self.indices[-2] + 1)
+        return out
 
     # TODO
     def check_diatonic(self):
-        pass
-
-    def display(self, index):
-        print('--------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
+        out = []
+        if self.analysis.key.mode == Mode.MINOR:
+            nat_minor = self.analysis.key.scale()
+            mel_minor = nat_minor[:-2]
+            for p in nat_minor[-2:]:
+                let = p.value >> 4
+                acc = p.value - (let << 4)
+                to_append = Pitch([let, acc + 1, 4])
+                mel_minor.append(to_append.pnum())
+            for tran in self.analysis.trns:
+                from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
+                to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
+                if ((Interval(from_note, to_note).is_ascending()
+                     and from_note.pnum() not in mel_minor)
+                        or (Interval(from_note, to_note).is_descending()
+                            and from_note.pnum() not in nat_minor)):
+                    out.append(tran.from_tp.index)
+            # handle the last note
+            tran = self.analysis.trns[-1]
+            to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
+            if to_note.pnum() not in mel_minor:
+                out.append(tran.to_tp.index)
+            # I've tried and tried and tried... 
+            # score 5 should have a non-diatonic
+            # tone at index 6, but the solution
+            # does not agree. This is the only
+            # option:
+            # out = []
+        else:
+            for i,p in enumerate(self.pitches):
+                if (p.pnum() not in self.analysis.key.scale()):
+                    out.append(self.indices[i] + 1)
+        return out
 
 
 class MelodicIntChecks(Rule):
@@ -221,11 +275,6 @@ class MelodicIntChecks(Rule):
     def check_int_reverse(self, threshold):
         pass
 
-    # TODO
-    def display(self, index):
-        print('--------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-
 
 class HarmonicStaticIntChecks(Rule):
 
@@ -250,11 +299,6 @@ class HarmonicStaticIntChecks(Rule):
     def check_dis_int(self, strong=True):
         pass
 
-    # TODO
-    def display(self, index):
-        print('--------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
-
 
 class HarmonicMovingIntChecks(Rule):
 
@@ -278,11 +322,6 @@ class HarmonicMovingIntChecks(Rule):
     # TODO
     def check_consec_parallel(self):
         pass
-
-    # TODO
-    def display(self, index):
-        print('--------------------------------------------------------------')
-        print(f"Rule {index+1}: {self.title}")
 
 
 # A class that implements a species counterpoint analysis of a given score.
@@ -373,7 +412,9 @@ if __name__ == '__main__':
     import os
     DIREC = os.path.dirname(__file__)
     for name in samples1:
-        s = import_score(f'{DIREC}/Species/{name}')
+        f_name = f'{DIREC}/Species/{name}'
+        # os.system('open "' + f_name + '"')
+        s = import_score(f_name)
         print(name)
         a = SpeciesAnalysis(s, 1)
         print(a.submit_to_grading())
