@@ -89,11 +89,11 @@ result_strings = [
     'At #{0}: too many consecutive parallel intervals',  # parallel vert ints
 
     # MELODIC RESULTS
-    'At #{0}: forbidden starting pitch',
-    'At #{0}: forbidden rest',
-    'At #{0}: forbidden duration',
-    'At #{0}: missing melodic cadence',
-    'At #{0}: forbidden non-diatonic pitch',
+    'At #{0}: forbidden starting pitch',        # DONE
+    'At #{0}: forbidden rest',                  # DONE
+    'At #{0}: forbidden duration',              # DONE
+    'At #{0}: missing melodic cadence',         # DONE
+    'At #{0}: forbidden non-diatonic pitch',    # DONE
     'At #{0}: dissonant melodic interval',
     'At #{0}: too many melodic unisons',         # 'MAX_UNI' setting
     'At #{0}: too many leaps of a fourth',       # 'MAX_4TH' setting
@@ -118,7 +118,6 @@ class MyTransition(Transition):
 
 
 # Rules
-SETUP_WARNING = "Setup has not been run yet!"
 MELODY_ERROR = "Voice is not a melody!"
 
 
@@ -126,9 +125,6 @@ class MelodicNoteChecks(Rule):
 
     def __init__(self, analysis):
         super().__init__(analysis, "My very first rule.")
-        if (self.analysis.tps is self.analysis.cp_voice
-           is self.analysis.trns is self.analysis.key is None):
-            raise AttributeError(SETUP_WARNING)
         self.pitches = []
         self.indices = []
         for tp in self.analysis.tps:
@@ -155,6 +151,9 @@ class MelodicNoteChecks(Rule):
         if tests['check_mel_cadence'] != []:
             for index in tests['check_mel_cadence']:
                 self.analysis.results.append(result_strings[17].format(index))
+        if tests['check_diatonic'] != []:
+            for index in tests['check_diatonic']:
+                self.analysis.results.append(result_strings[18].format(index))
 
     def check_start_pitch(self, sets):
         if self.analysis.cp_voice == 'P1.1':
@@ -211,10 +210,11 @@ class MelodicNoteChecks(Rule):
                 out.append(self.indices[-2] + 1)
         return out
 
-    # TODO
+    # TODO - check with autograder
     def check_diatonic(self):
         out = []
         if self.analysis.key.mode == Mode.MINOR:
+            print('HERE')
             nat_minor = self.analysis.key.scale()
             mel_minor = nat_minor[:-2]
             for p in nat_minor[-2:]:
@@ -225,22 +225,18 @@ class MelodicNoteChecks(Rule):
             for tran in self.analysis.trns:
                 from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
                 to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
+                # print(from_note.pnum(), ' ', from_note.pnum() in nat_minor, ' ', from_note.pnum() in mel_minor)
                 if ((Interval(from_note, to_note).is_ascending()
-                     and from_note.pnum() not in mel_minor)
+                     and (from_note.pnum() not in mel_minor)
+                     and (not Interval(from_note, to_note).is_unison()))
                         or (Interval(from_note, to_note).is_descending()
-                            and from_note.pnum() not in nat_minor)):
-                    out.append(tran.from_tp.index)
+                            and (from_note.pnum() not in nat_minor))):
+                    out.append(tran.from_tp.index + 1)
             # handle the last note
             tran = self.analysis.trns[-1]
             to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
             if to_note.pnum() not in mel_minor:
-                out.append(tran.to_tp.index)
-            # I've tried and tried and tried... 
-            # score 5 should have a non-diatonic
-            # tone at index 6, but the solution
-            # does not agree. This is the only
-            # option:
-            # out = []
+                out.append(tran.to_tp.index + 1)
         else:
             for i,p in enumerate(self.pitches):
                 if (p.pnum() not in self.analysis.key.scale()):
@@ -252,12 +248,27 @@ class MelodicIntChecks(Rule):
 
     def __init__(self, analysis):
         super().__init__(analysis, "My very first rule.")
+        self.intervals = []
+        self.indices = [i.index for i in self.analysis.tps]
+        for t in self.analysis.trns:
+            from_note = t.from_tp.nmap[self.analysis.melodic_id]
+            to_note = t.to_tp.nmap[self.analysis.melodic_id]
+            assert (type(from_note) == type(to_note) == Note), MELODY_ERROR
+            self.intervals.append(Interval(from_note.pitch, to_note.pitch))
+            # the indices of the first note in each interval
+            self.indices.append(t.from_tp.index)
 
     def apply(self):
         # ... do some analysis...
         # ... update the analysis results, for example:
         # self.analysis.results['MEL_START_NOTE'] = True if success else []
         pass
+
+    def check_consonant(self):
+        out = []
+        for i, inter in enumerate(self.intervals()):
+            if not inter.is_consonant():
+                out.append(self.indices[i])
 
     # TODO
     def check_num_int(self, inter, num):
