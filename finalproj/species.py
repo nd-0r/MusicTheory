@@ -73,20 +73,20 @@ s2_settings['MAX_UNI'] = 0    # no melodic unisons allowed
 # it simply contains the list of all the result strings ;)
 result_strings = [
     # VERTICAL RESULTS
-    'At #{0}: consecutive unisons',
-    'At #{0}: consecutive fifths',
-    'At #{0}: consecutive octaves',
-    'At #{0}: direct unisons',
-    'At #{0}: direct fifths',
-    'At #{0}: direct octaves',
+    'At #{0}: consecutive unisons',             # DONE
+    'At #{0}: consecutive fifths',              # DONE
+    'At #{0}: consecutive octaves',             # DONE
+    'At #{0}: direct unisons',                  # TODO
+    'At #{0}: direct fifths',                   # TODO
+    'At #{0}: direct octaves',                  # TODO
     'At #{0}: consecutive unisons in cantus firmus notes',  # if species 2
     'At #{0}: consecutive fifths in cantus firmus notes',   # if species 2
     'At #{0}: consecutive octaves in cantus firmus notes',  # if species 2
-    'At #{0}: voice overlap',
-    'At #{0}: voice crossing',
-    'At #{0}: forbidden weak beat dissonance',   # vertical dissonance
-    'At #{0}: forbidden strong beat dissonance',  # vertical dissonance
-    'At #{0}: too many consecutive parallel intervals',  # parallel vert ints
+    'At #{0}: voice overlap',                   # DONE
+    'At #{0}: voice crossing',                  # DONE
+    'At #{0}: forbidden weak beat dissonance',   # TODO vertical dissonance
+    'At #{0}: forbidden strong beat dissonance',  # TODO vertical dissonance
+    'At #{0}: too many consecutive parallel intervals',  # TODO parallel vert ints
 
     # MELODIC RESULTS
     'At #{0}: forbidden starting pitch',        # DONE
@@ -94,18 +94,18 @@ result_strings = [
     'At #{0}: forbidden duration',              # DONE
     'At #{0}: missing melodic cadence',         # DONE
     'At #{0}: forbidden non-diatonic pitch',    # DONE
-    'At #{0}: dissonant melodic interval',
-    'At #{0}: too many melodic unisons',         # 'MAX_UNI' setting
-    'At #{0}: too many leaps of a fourth',       # 'MAX_4TH' setting
-    'At #{0}: too many leaps of a fifth',        # 'MAX_5TH' setting
-    'At #{0}: too many leaps of a sixth',        # 'MAX_6TH' setting
-    'At #{0}: too many leaps of a seventh',      # 'MAX_7TH' setting
-    'At #{0}: too many leaps of an octave',      # 'MAX_8VA' setting
-    'At #{0}: too many large leaps',             # 'MAX_LRG' setting
-    'At #{0}: too many consecutive leaps',        # 'MAX_CONSEC_LEAP' setting
-    'At #{0}: too many consecutive intervals in same direction',
-    'At #{0}: missing reverse by step recovery',  # 'STEP_THRESHOLD' setting
-    'At #{0}: forbidden compound melodic interval',
+    'At #{0}: dissonant melodic interval',      # DONE
+    'At #{0}: too many melodic unisons',         # DONE 'MAX_UNI' setting
+    'At #{0}: too many leaps of a fourth',       # DONE 'MAX_4TH' setting
+    'At #{0}: too many leaps of a fifth',        # DONE 'MAX_5TH' setting
+    'At #{0}: too many leaps of a sixth',        # DONE 'MAX_6TH' setting
+    'At #{0}: too many leaps of a seventh',      # DONE 'MAX_7TH' setting
+    'At #{0}: too many leaps of an octave',      # DONE 'MAX_8VA' setting
+    'At #{0}: too many large leaps',             # DONE 'MAX_LRG' setting
+    'At #{0}: too many consecutive leaps',        # DONE 'MAX_CONSEC_LEAP' setting
+    'At #{0}: too many consecutive intervals in same direction', # DONE
+    'At #{0}: missing reverse by step recovery',  # DONE 'STEP_THRESHOLD' setting
+    'At #{0}: forbidden compound melodic interval', # TODO
     ]
 
 
@@ -210,7 +210,7 @@ class MelodicNoteChecks(Rule):
                 out.append(self.indices[-2] + 1)
         return out
 
-    # TODO - check with autograder
+    # TODO - only check penultimate and final measures
     def check_diatonic(self):
         out = []
         if self.analysis.key.mode == Mode.MINOR:
@@ -251,40 +251,94 @@ class MelodicIntChecks(Rule):
         self.intervals = []
         self.indices = [i.index for i in self.analysis.tps]
         for t in self.analysis.trns:
-            from_note = t.from_tp.nmap[self.analysis.melodic_id]
-            to_note = t.to_tp.nmap[self.analysis.melodic_id]
+            from_note = t.from_tp.nmap[self.analysis.cp_voice]
+            to_note = t.to_tp.nmap[self.analysis.cp_voice]
             assert (type(from_note) == type(to_note) == Note), MELODY_ERROR
             self.intervals.append(Interval(from_note.pitch, to_note.pitch))
             # the indices of the first note in each interval
             self.indices.append(t.from_tp.index)
 
     def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+        tests = {
+            'check_consonant': self.check_num_int('is_consonant', 0),
+            'max_uni': self.check_num_int('is_unison', s1_settings['MAX_UNI']),
+            'max_4th': self.check_num_int('is_fourth', s1_settings['MAX_4TH']),
+            'max_5th': self.check_num_int('is_fifth', s1_settings['MAX_5TH']),
+            'max_6th': self.check_num_int('is_sixth', s1_settings['MAX_6TH']),
+            'max_7th': self.check_num_int('is_seventh', s1_settings['MAX_7TH']),
+            'max_8va': self.check_num_int('is_octave', s1_settings['MAX_8VA']),
+            'check_num_large': self.check_num_int('is_octave', s1_settings['MAX_LRG']),
+            'check_consec': self.check_consec_leap(4, s1_settings['MAX_CONSEC_LEAP']),
+            'check_consec_int_samedir': self.check_consec_int_samedir(s1_settings),
+            'check_int_reverse': self.check_int_reverse()
+        }
+        # TODO - finish apply
+        if tests['check_consonant'] != []:
+            for index in tests['check_consonant']:
+                self.analysis.results.append(result_strings[19].format(index))
 
-    def check_consonant(self):
+    def check_num_int(self, attr, num):
         out = []
-        for i, inter in enumerate(self.intervals()):
-            if not inter.is_consonant():
-                out.append(self.indices[i])
+        count = 0
+        for i, inter in enumerate(self.intervals):
+            fct = getattr(inter, str(attr))
+            if not fct():
+                count += 1
+                if count > num:
+                    out.append(self.indices[i] + 1)
+        return out
 
-    # TODO
-    def check_num_int(self, inter, num):
-        pass
+    def check_num_large(self, size, num):
+        out = []
+        count = 0
+        for i, inter in enumerate(self.intervals):
+            if inter.lines_and_spaces() > size:
+                count += 1
+                if count > num:
+                    out.append(self.indices[i] + 1)
 
-    # TODO
-    def check_consec_leap(self, num):
-        pass
+    def check_consec_leap(self, size, num):
+        out = []
+        count = 0
+        last = self.intervals[0]
+        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
+            if last.lines_and_spaces() > size and inter.lines_and_spaces() > size:
+                count += 1
+            else:
+                count = 0
+            if count >= num:
+                out.append(trans.from_tp.index + 1)
+            last = inter
+        return out
 
-    # TODO
     def check_consec_int_samedir(self, num):
-        pass
+        out = []
+        count = 0
+        last = self.intervals[0]
+        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
+            check = ((last.is_ascending() and inter.is_descending())
+                     or (last.is_descending() and inter.is_descending()))
+            if check and (last.lines_and_spaces() == inter.lines_and_spaces()):
+                count += 1
+            else:
+                count = 0
+            if count >= num:
+                out.append(trans.from_tp.index + 1)
+            last = inter
+        return out
 
-    # TODO
     def check_int_reverse(self, threshold):
-        pass
+        out = []
+        last = self.intervals[0]
+        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
+            check1 = (last.lines_and_spaces() >= threshold and last.is_ascending()
+                      and inter.lines_and_spaces() == 2 and inter.is_descending())
+            check2 = (last.lines_and_spaces() >= threshold and last.is_descending()
+                      and inter.lines_and_spaces() == 2 and inter.is_ascending())
+            if not (last.lines_and_spaces() < threshold or check1 or check2):
+                out.append(trans.from_tp.index + 1)
+            last = inter
+        return out
 
 
 class HarmonicStaticIntChecks(Rule):
@@ -293,18 +347,25 @@ class HarmonicStaticIntChecks(Rule):
         super().__init__(analysis, "My very first rule.")
 
     def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+        tests = {
+            'check_voice_overlap': self.check_num_int('is_consonant', 0),
+            'check_voice_cross': self.check_num_int('is_consonant', 0),
+            'check_dis_int': self.check_num_int('is_consonant', 0)
+        }
+        # TODO - finish apply!!!
 
-    # TODO
-    def check_voice_overlap(self):
-        pass
-
-    # TODO
-    def check_voice_cross(self):
-        pass
+    def check_voice_cross(self, overlap=True):
+        out = []
+        for timepoint in self.analysis.tps:
+            upper_note = timepoint.nmap['P1.1'].pitch.keynum()
+            lower_note = timepoint.nmap['P2.1'].pitch.keynum()
+            if overlap:
+                check = getattr(lower_note, '__eq__')
+            else:
+                check = getattr(lower_note, '__gt__')
+            if check(upper_note):
+                out.append(timepoint.index)
+        return out
 
     # TODO
     def check_dis_int(self, strong=True):
@@ -315,24 +376,58 @@ class HarmonicMovingIntChecks(Rule):
 
     def __init__(self, analysis):
         super().__init__(analysis, "My very first rule.")
+        self.intervals = []
+        self.indices = [i.index for i in self.analysis.tps]
+        for t in self.analysis.trns:
+            cp_note = t.from_tp.nmap[self.analysis.cp_voice]
+            cf_note = t.to_tp.nmap[self.analysis.cf_voice]
+            if self.analysis.cp_voice == 'P1.1':
+                self.intervals.append(Interval(cf_note.pitch, cp_note.pitch))
+            else:
+                self.intervals.append(Interval(cp_note.pitch, cf_note.pitch))
+            # the indices of the first note in each interval
+            self.indices.append(t.from_tp.index)
 
     def apply(self):
-        # ... do some analysis...
-        # ... update the analysis results, for example:
-        # self.analysis.results['MEL_START_NOTE'] = True if success else []
-        pass
+        tests = {
+            'check_consec_uni': self.check_consec_ints('is_unison'),
+            'check_consec_5th': self.check_consec_ints('is_fifth'),
+            'check_consec_8va': self.check_consec_ints('is_octave'),
+            'check_consec_parallel': self.check_consec_parallel(s1_settings['MAX_PARALLEL'])
+        }
+        # TODO - finish apply
+
+    def check_consec_ints(self, attr):
+        out = []
+        last = self.intervals[0]
+        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
+            fct1 = getattr(last, str(attr))
+            fct2 = getattr(inter, str(attr))
+            if fct1() and fct2():
+                out.append(trans.from_tp.index + 1)
+            last = inter
+        return out
 
     # TODO
-    def check_consec_ints(self):
-        pass
-
-    # TODO
+    # if the upper voice leaps and the harmony goes to a perfect interval
+    # and the last interval is not the same as the next
     def check_direct_ints(self):
         pass
 
-    # TODO
-    def check_consec_parallel(self):
-        pass
+    def check_consec_parallel(self, num):
+        out = []
+        count = 0
+        last = self.intervals[0]
+        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
+            if ((last.lines_and_spaces() == inter.lines_and_spaces() == 3) 
+                    or (last.lines_and_spaces() == inter.lines_and_spaces() == 6)):
+                count += 1
+            else:
+                count = 0
+            if count >= num:
+                out.append(trans.from_tp.index + 1)
+            last = inter
+        return out
 
 
 # A class that implements a species counterpoint analysis of a given score.
