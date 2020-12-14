@@ -349,8 +349,8 @@ class HarmonicStaticIntChecks(Rule):
 
     def apply(self):
         tests = {
-            'check_voice_overlap': self.check_num_int('is_consonant', 0),
-            'check_voice_cross': self.check_num_int('is_consonant', 0)
+            'check_voice_overlap': self.check_voice_cross(),
+            'check_voice_cross': self.check_voice_cross(overlap=False)
         }
         # TODO finish and fix indices
         for index, key in enumerate(tests.keys()):
