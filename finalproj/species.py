@@ -269,13 +269,14 @@ class MelodicIntChecks(Rule):
             'max_8va': self.check_num_int('is_octave', s1_settings['MAX_8VA']),
             'check_num_large': self.check_num_int('is_octave', s1_settings['MAX_LRG']),
             'check_consec': self.check_consec_leap(4, s1_settings['MAX_CONSEC_LEAP']),
-            'check_consec_int_samedir': self.check_consec_int_samedir(s1_settings),
-            'check_int_reverse': self.check_int_reverse()
+            'check_consec_int_samedir': self.check_consec_int_samedir(3),
+            'check_int_reverse': self.check_int_reverse(s1_settings['STEP_THRESHOLD'])
         }
-        # TODO - finish apply
-        if tests['check_consonant'] != []:
-            for index in tests['check_consonant']:
-                self.analysis.results.append(result_strings[19].format(index))
+        # TODO fix indices
+        for index, key in enumerate(tests.keys()):
+            if tests[key] != []:
+                for note in tests[key]:
+                    self.analysis.results.append(result_strings[index + 19].format(note))
 
     def check_num_int(self, attr, num):
         out = []
@@ -349,10 +350,13 @@ class HarmonicStaticIntChecks(Rule):
     def apply(self):
         tests = {
             'check_voice_overlap': self.check_num_int('is_consonant', 0),
-            'check_voice_cross': self.check_num_int('is_consonant', 0),
-            'check_dis_int': self.check_num_int('is_consonant', 0)
+            'check_voice_cross': self.check_num_int('is_consonant', 0)
         }
-        # TODO - finish apply!!!
+        # TODO finish and fix indices
+        for index, key in enumerate(tests.keys()):
+            if tests[key] != []:
+                for note in tests[key]:
+                    self.analysis.results.append(result_strings[index + 9].format(note))
 
     def check_voice_cross(self, overlap=True):
         out = []
@@ -396,6 +400,10 @@ class HarmonicMovingIntChecks(Rule):
             'check_consec_parallel': self.check_consec_parallel(s1_settings['MAX_PARALLEL'])
         }
         # TODO - finish apply
+        # for index, key in enumerate(tests.keys()):
+        #     if tests[key] != []:
+        #         for note in tests[key]:
+        #             self.analysis.results.append(result_strings[index + 9].format(note))
 
     def check_consec_ints(self, attr):
         out = []
