@@ -177,7 +177,10 @@ class MelodicNoteChecks(Rule):
 
     def check_mel_cadence(self, sets):
         out = []
-        final_int = Interval(self.pitches[-2], self.pitches[-1])
+        cf_notes = [
+            self.analysis.tps[-2].nmap[self.analysis.cf_voice].pitch,
+            self.analysis.tps[-1].nmap[self.analysis.cf_voice].pitch
+            ]
         if self.analysis.key.mode == Mode.MINOR:
             nat_minor = self.analysis.key.scale()
             mel_minor = nat_minor[:-2]
@@ -187,22 +190,27 @@ class MelodicNoteChecks(Rule):
                 to_append = Pitch([let, acc + 1, 4])
                 mel_minor.append(to_append.pnum())
             try:
-                if final_int.is_ascending():
-                    cadence = [mel_minor.index(p.pnum()) + 1 for p in self.pitches[-2:]]
-                else:
-                    cadence = [nat_minor.index(p.pnum()) + 1 for p in self.pitches[-2:]]
-            except ValueError:
-                out.append(self.indices[-2] + 1)
-        else:
-            scale = self.analysis.key.scale()
-            try:
-                cadence = [scale.index(p.pnum()) + 1 for p in self.pitches[-2:]]
-                print(cadence)
+                cf_cadence = [mel_minor.index(p.pnum()) + 1 for p in cf_notes]
+                cp_cadence = [mel_minor.index(p.pnum()) + 1 for p in self.pitches[-2:]]
             except ValueError:
                 out.append(self.indices[-2] + 1)
                 return out
-            if not (cadence in sets['CADENCE_PATTERNS'] and self.check_diatonic() == []):
+        else:
+            scale = self.analysis.key.scale()
+            try:
+                cf_cadence = [scale.index(p.pnum()) + 1 for p in cf_notes]
+                cp_cadence = [scale.index(p.pnum()) + 1 for p in self.pitches[-2:]]
+            except ValueError:
                 out.append(self.indices[-2] + 1)
+                return out
+        print('CF Cadence: ', cf_cadence)
+        print('CP Cadence: ', cp_cadence)
+        check_1 = (cp_cadence == sets['CADENCE_PATTERNS'][0]
+                   and cf_cadence == sets['CADENCE_PATTERNS'][1])
+        check_2 = (cp_cadence == sets['CADENCE_PATTERNS'][1]
+                   and cf_cadence == sets['CADENCE_PATTERNS'][0])
+        if not ((check_1 or check_2) and self.check_diatonic() == []):
+            out.append(self.indices[-2])
         return out
 
     def check_diatonic(self):
@@ -331,11 +339,11 @@ class MelodicIntChecks(Rule):
         for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
             check = ((last.is_ascending() and inter.is_descending())
                      or (last.is_descending() and inter.is_descending()))
-            if check and (last.lines_and_spaces() == inter.lines_and_spaces()):
+            if check:
                 count += 1
             else:
                 count = 0
-            if count >= num:
+            if count > num:
                 out.append(trans.from_tp.index + 1)
             last = inter
         return out
@@ -417,17 +425,6 @@ class HarmonicMovingIntChecks(Rule):
             for compliance with father Laitz's unbreakable and \
                 indisputable laws of the construction of objectively \
                     perfect music")
-        self.intervals = []
-        self.indices = [i.index for i in self.analysis.tps]
-        for t in self.analysis.trns:
-            cp_note = t.from_tp.nmap[self.analysis.cp_voice]
-            cf_note = t.to_tp.nmap[self.analysis.cf_voice]
-            if self.analysis.cp_voice == 'P1.1':
-                self.intervals.append(Interval(cf_note.pitch, cp_note.pitch))
-            else:
-                self.intervals.append(Interval(cp_note.pitch, cf_note.pitch))
-            # the indices of the first note in each interval
-            self.indices.append(t.from_tp.index + 1)
 
     def apply(self):
         tests = {
@@ -446,12 +443,17 @@ class HarmonicMovingIntChecks(Rule):
 
     def check_consec_ints(self, attr):
         out = []
-        last = self.intervals[0]
-        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
+        first_upper = self.analysis.tps[0].nmap['P1.1'].pitch
+        first_lower = self.analysis.tps[0].nmap['P2.1'].pitch
+        last = Interval(first_lower, first_upper)
+        for timepoint in self.analysis.tps[1:]:
+            upper = timepoint.nmap['P1.1'].pitch
+            lower = timepoint.nmap['P2.1'].pitch
+            inter = Interval(lower, upper)
             fct1 = getattr(last, str(attr))
             fct2 = getattr(inter, str(attr))
             if fct1() and fct2():
-                out.append(trans.from_tp.index + 1)
+                out.append(timepoint.index)
             last = inter
         return out
 
