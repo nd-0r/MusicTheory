@@ -193,7 +193,7 @@ class MelodicNoteChecks(Rule):
                 cf_cadence = [mel_minor.index(p.pnum()) + 1 for p in cf_notes]
                 cp_cadence = [mel_minor.index(p.pnum()) + 1 for p in self.pitches[-2:]]
             except ValueError:
-                out.append(self.indices[-2] + 1)
+                out.append(self.indices[-2])
                 return out
         else:
             scale = self.analysis.key.scale()
@@ -201,15 +201,19 @@ class MelodicNoteChecks(Rule):
                 cf_cadence = [scale.index(p.pnum()) + 1 for p in cf_notes]
                 cp_cadence = [scale.index(p.pnum()) + 1 for p in self.pitches[-2:]]
             except ValueError:
-                out.append(self.indices[-2] + 1)
+                out.append(self.indices[-2])
                 return out
-        print('CF Cadence: ', cf_cadence)
-        print('CP Cadence: ', cp_cadence)
+        # print('CF Cadence: ', cf_cadence)
+        # print('CP Cadence: ', cp_cadence)
+        # print(sets['CADENCE_PATTERNS'][0])
+        # print(sets['CADENCE_PATTERNS'][1])
+        # print(cp_cadence == sets['CADENCE_PATTERNS'][0])
+        # print(cp_cadence == sets['CADENCE_PATTERNS'][1])
         check_1 = (cp_cadence == sets['CADENCE_PATTERNS'][0]
                    and cf_cadence == sets['CADENCE_PATTERNS'][1])
         check_2 = (cp_cadence == sets['CADENCE_PATTERNS'][1]
                    and cf_cadence == sets['CADENCE_PATTERNS'][0])
-        if not ((check_1 or check_2) and self.check_diatonic() == []):
+        if not (check_1 or check_2):
             out.append(self.indices[-2])
         return out
 
@@ -223,16 +227,20 @@ class MelodicNoteChecks(Rule):
                 acc = p.value - (let << 4)
                 to_append = Pitch([let, acc + 1, 4])
                 mel_minor.append(to_append.pnum())
+            current_i = 0
             for i, p in enumerate(self.pitches[:-2]):
-                if (p.pnum() not in nat_minor):
+                if (p.pnum() not in nat_minor and p.pnum() not in mel_minor):
+                    print("Bad minor pitch: ", p.pnum())
                     out.append(self.indices[i] + 1)
-            for i, p in enumerate(self.pitches[-2:]):
-                if (p.pnum() not in mel_minor):
-                    out.append(self.indices[i] + 1)
+                current_i = i
+            for p in self.pitches[-2:]:
+                if (p.pnum() not in mel_minor and p.pnum() not in nat_minor):
+                    print("Bad last measure pitch: ", p.pnum())
+                    out.append(self.indices[current_i] + 1)
+                current_i += 1
             # for num, tran in enumerate(self.analysis.trns):
             #     from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
             #     to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
-            #     # print(from_note.pnum(), ' ', from_note.pnum() in nat_minor, ' ', from_note.pnum() in mel_minor)
             #     if ((Interval(from_note, to_note).is_ascending()
             #          and (from_note.pnum() not in mel_minor)
             #          and (not Interval(from_note, to_note).is_unison()))
@@ -247,6 +255,7 @@ class MelodicNoteChecks(Rule):
         else:
             for i, p in enumerate(self.pitches):
                 if (p.pnum() not in self.analysis.key.scale()):
+                    print("Bad major pitch: ", p.pnum())
                     out.append(self.indices[i] + 1)
         return out
 
@@ -277,8 +286,8 @@ class MelodicIntChecks(Rule):
             23: self.check_num_int('is_sixth', s1_settings['MAX_6TH']),
             24: self.check_num_int('is_seventh', s1_settings['MAX_7TH']),
             25: self.check_num_int('is_octave', s1_settings['MAX_8VA']),
-            26: self.check_num_int('is_octave', s1_settings['MAX_LRG']),
-            27: self.check_consec_leap(4, s1_settings['MAX_CONSEC_LEAP']),
+            26: self.check_num_large(3, s1_settings['MAX_LRG']),
+            27: self.check_consec_leap(3, s1_settings['MAX_CONSEC_LEAP']),
             28: self.check_consec_int_samedir(3),
             29: self.check_int_reverse(s1_settings['STEP_THRESHOLD'])
         }
@@ -301,8 +310,10 @@ class MelodicIntChecks(Rule):
     def check_num_int(self, attr, num):
         out = []
         count = 0
+        print(attr)
         for i, inter in enumerate(self.intervals):
             fct = getattr(inter, str(attr))
+            print(i + 1, " ", inter, " ", fct())
             if fct():
                 count += 1
                 if count > num:
@@ -317,13 +328,15 @@ class MelodicIntChecks(Rule):
                 count += 1
                 if count > num:
                     out.append(self.indices[i] + 1)
+        return out
 
     def check_consec_leap(self, size, num):
         out = []
         count = 0
         last = self.intervals[0]
         for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
-            if last.lines_and_spaces() > size and inter.lines_and_spaces() > size:
+            if last.lines_and_spaces() >= size and inter.lines_and_spaces() >= size:
+                print(trans.from_tp.index + 1, " ", inter.lines_and_spaces())
                 count += 1
             else:
                 count = 0
@@ -337,13 +350,13 @@ class MelodicIntChecks(Rule):
         count = 0
         last = self.intervals[0]
         for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
-            check = ((last.is_ascending() and inter.is_descending())
+            check = ((last.is_ascending() and inter.is_ascending())
                      or (last.is_descending() and inter.is_descending()))
             if check:
                 count += 1
             else:
                 count = 0
-            if count > num:
+            if count >= num:
                 out.append(trans.from_tp.index + 1)
             last = inter
         return out
@@ -356,8 +369,11 @@ class MelodicIntChecks(Rule):
                       and inter.lines_and_spaces() == 2 and inter.is_descending())
             check2 = (last.lines_and_spaces() >= threshold and last.is_descending()
                       and inter.lines_and_spaces() == 2 and inter.is_ascending())
-            if not (last.lines_and_spaces() < threshold or check1 or check2):
-                out.append(trans.from_tp.index + 1)
+            if not (last.lines_and_spaces() < threshold or (check1 or check2)):
+                out.append(trans.from_tp.index)
+            # if ((last.lines_and_spaces() >= threshold and last.is_ascending())
+            #         and not (inter.lines_and_spaces() == 2 and inter.is_descending())):
+            #     out.append(trans.from_tp.index + 1)
             last = inter
         return out
 
@@ -646,7 +662,7 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
 if __name__ == '__main__':
     import os
     DIREC = os.path.dirname(__file__)
-    for name in samples1[2:3]:
+    for name in samples1[10:11]:
         f_name = f'{DIREC}/Species/{name}'
         # os.system('open "' + f_name + '"')
         s = import_score(f_name)
