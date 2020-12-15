@@ -76,17 +76,17 @@ result_strings = [
     'At #{0}: consecutive unisons',             # DONE
     'At #{0}: consecutive fifths',              # DONE
     'At #{0}: consecutive octaves',             # DONE
-    'At #{0}: direct unisons',                  # TODO
-    'At #{0}: direct fifths',                   # TODO
-    'At #{0}: direct octaves',                  # TODO
+    'At #{0}: direct unisons',                  # DONE
+    'At #{0}: direct fifths',                   # DONE
+    'At #{0}: direct octaves',                  # DONE
     'At #{0}: consecutive unisons in cantus firmus notes',  # if species 2
     'At #{0}: consecutive fifths in cantus firmus notes',   # if species 2
     'At #{0}: consecutive octaves in cantus firmus notes',  # if species 2
     'At #{0}: voice overlap',                   # DONE
     'At #{0}: voice crossing',                  # DONE
-    'At #{0}: forbidden weak beat dissonance',   # TODO vertical dissonance
-    'At #{0}: forbidden strong beat dissonance',  # TODO vertical dissonance
-    'At #{0}: too many consecutive parallel intervals',  # TODO parallel vert ints
+    'At #{0}: forbidden weak beat dissonance',   # if species 2 vertical dissonance
+    'At #{0}: forbidden strong beat dissonance',  # DONE vertical dissonance
+    'At #{0}: too many consecutive parallel intervals',  # DONE parallel vert ints
 
     # MELODIC RESULTS
     'At #{0}: forbidden starting pitch',        # DONE
@@ -124,7 +124,10 @@ MELODY_ERROR = "Voice is not a melody!"
 class MelodicNoteChecks(Rule):
 
     def __init__(self, analysis):
-        super().__init__(analysis, "My very first rule.")
+        super().__init__(analysis, "Check the notes of the melody \
+            for compliance with father Laitz's unbreakable and \
+                indisputable laws of the construction of objectively \
+                    perfect music")
         self.pitches = []
         self.indices = []
         for tp in self.analysis.tps:
@@ -134,33 +137,25 @@ class MelodicNoteChecks(Rule):
 
     def apply(self):
         tests = {
-            'check_start_pitch': self.check_start_pitch(s1_settings),
-            'check_rests': self.check_rests(),
-            'check_durations': self.check_durations(),
-            'check_mel_cadence': self.check_mel_cadence(s1_settings),
-            'check_diatonic': self.check_diatonic()
+            14: self.check_start_pitch(s1_settings),
+            15: self.check_rests(),
+            16: self.check_durations(),
+            17: self.check_mel_cadence(s1_settings),
+            18: self.check_diatonic()
         }
-        if not tests['check_start_pitch']:
+        if not tests[14]:
             self.analysis.results.append(result_strings[14].format('1'))
-        if tests['check_rests'] != []:
-            for index in tests['check_rests']:
-                self.analysis.results.append(result_strings[15].format(index))
-        if tests['check_durations'] != []:
-            for index in tests['check_durations']:
-                self.analysis.results.append(result_strings[16].format(index))
-        if tests['check_mel_cadence'] != []:
-            for index in tests['check_mel_cadence']:
-                self.analysis.results.append(result_strings[17].format(index))
-        if tests['check_diatonic'] != []:
-            for index in tests['check_diatonic']:
-                self.analysis.results.append(result_strings[18].format(index))
+        for key in list(tests.keys())[1:]:
+            if tests[key] != []:
+                for note in tests[key]:
+                    self.analysis.results.append(result_strings[key].format(note))
 
     def check_start_pitch(self, sets):
         if self.analysis.cp_voice == 'P1.1':
             pits = [self.analysis.key.scale()[i - 1] for i in sets['START_ABOVE']]
         else:
             pits = [self.analysis.key.scale()[i - 1] for i in sets['START_BELOW']]
-        if (self.pitches[0].pnum() in pits):
+        if self.pitches[0].pnum() in pits:
             return True
         return False
 
@@ -214,7 +209,6 @@ class MelodicNoteChecks(Rule):
     def check_diatonic(self):
         out = []
         if self.analysis.key.mode == Mode.MINOR:
-            print('HERE')
             nat_minor = self.analysis.key.scale()
             mel_minor = nat_minor[:-2]
             for p in nat_minor[-2:]:
@@ -247,7 +241,10 @@ class MelodicNoteChecks(Rule):
 class MelodicIntChecks(Rule):
 
     def __init__(self, analysis):
-        super().__init__(analysis, "My very first rule.")
+        super().__init__(analysis, "Check the intervals of the melody \
+            for compliance with father Laitz's unbreakable and \
+                indisputable laws of the construction of objectively \
+                    perfect music")
         self.intervals = []
         self.indices = [i.index for i in self.analysis.tps]
         for t in self.analysis.trns:
@@ -260,30 +257,40 @@ class MelodicIntChecks(Rule):
 
     def apply(self):
         tests = {
-            'check_consonant': self.check_num_int('is_consonant', 0),
-            'max_uni': self.check_num_int('is_unison', s1_settings['MAX_UNI']),
-            'max_4th': self.check_num_int('is_fourth', s1_settings['MAX_4TH']),
-            'max_5th': self.check_num_int('is_fifth', s1_settings['MAX_5TH']),
-            'max_6th': self.check_num_int('is_sixth', s1_settings['MAX_6TH']),
-            'max_7th': self.check_num_int('is_seventh', s1_settings['MAX_7TH']),
-            'max_8va': self.check_num_int('is_octave', s1_settings['MAX_8VA']),
-            'check_num_large': self.check_num_int('is_octave', s1_settings['MAX_LRG']),
-            'check_consec': self.check_consec_leap(4, s1_settings['MAX_CONSEC_LEAP']),
-            'check_consec_int_samedir': self.check_consec_int_samedir(3),
-            'check_int_reverse': self.check_int_reverse(s1_settings['STEP_THRESHOLD'])
+            19: self.check_mel_consonant(0),
+            20: self.check_num_int('is_unison', s1_settings['MAX_UNI']),
+            21: self.check_num_int('is_fourth', s1_settings['MAX_4TH']),
+            22: self.check_num_int('is_fifth', s1_settings['MAX_5TH']),
+            23: self.check_num_int('is_sixth', s1_settings['MAX_6TH']),
+            24: self.check_num_int('is_seventh', s1_settings['MAX_7TH']),
+            25: self.check_num_int('is_octave', s1_settings['MAX_8VA']),
+            26: self.check_num_int('is_octave', s1_settings['MAX_LRG']),
+            27: self.check_consec_leap(4, s1_settings['MAX_CONSEC_LEAP']),
+            28: self.check_consec_int_samedir(3),
+            29: self.check_int_reverse(s1_settings['STEP_THRESHOLD'])
         }
-        # TODO fix indices
-        for index, key in enumerate(tests.keys()):
+        for key in tests:
             if tests[key] != []:
                 for note in tests[key]:
-                    self.analysis.results.append(result_strings[index + 19].format(note))
+                    self.analysis.results.append(result_strings[key].format(note))
+
+    def check_mel_consonant(self, num):
+        out = []
+        count = 0
+        for i, inter in enumerate(self.intervals):
+            if not (inter.is_consonant()
+                    or (inter.semitones() <= 2 and inter.is_second())):
+                count += 1
+                if count > num:
+                    out.append(self.indices[i] + 1)
+        return out
 
     def check_num_int(self, attr, num):
         out = []
         count = 0
         for i, inter in enumerate(self.intervals):
             fct = getattr(inter, str(attr))
-            if not fct():
+            if fct():
                 count += 1
                 if count > num:
                     out.append(self.indices[i] + 1)
@@ -345,18 +352,21 @@ class MelodicIntChecks(Rule):
 class HarmonicStaticIntChecks(Rule):
 
     def __init__(self, analysis):
-        super().__init__(analysis, "My very first rule.")
+        super().__init__(analysis, "Check the static intervals between the cp/cf \
+            for compliance with father Laitz's unbreakable and \
+                indisputable laws of the construction of objectively \
+                    perfect music")
 
     def apply(self):
         tests = {
-            'check_voice_overlap': self.check_voice_cross(),
-            'check_voice_cross': self.check_voice_cross(overlap=False)
+            9: self.check_voice_cross(),
+            10: self.check_voice_cross(overlap=False),
+            12: self.check_dis_int()
         }
-        # TODO finish and fix indices
-        for index, key in enumerate(tests.keys()):
+        for key in tests:
             if tests[key] != []:
                 for note in tests[key]:
-                    self.analysis.results.append(result_strings[index + 9].format(note))
+                    self.analysis.results.append(result_strings[key].format(note))
 
     def check_voice_cross(self, overlap=True):
         out = []
@@ -371,15 +381,36 @@ class HarmonicStaticIntChecks(Rule):
                 out.append(timepoint.index)
         return out
 
-    # TODO
     def check_dis_int(self, strong=True):
-        pass
+        consonant_ints = [
+            Interval('P8'),
+            Interval('M6'),
+            Interval('m6'),
+            Interval('P5'),
+            Interval('M3'),
+            Interval('m3'),
+            Interval('P1')
+        ]
+        for timepoint in self.analysis.tps:
+            out = []
+            upper_note = timepoint.nmap['P1.1'].pitch
+            lower_note = timepoint.nmap['P2.1'].pitch
+            current_inter = Interval(lower_note, upper_note)
+            current_inter.sign = abs(current_inter.sign)
+            if (((timepoint.beat != Ratio(0)) ^ strong)
+                    and (current_inter not in consonant_ints)):
+                out.append(timepoint.index)
+        return out
+
 
 
 class HarmonicMovingIntChecks(Rule):
 
     def __init__(self, analysis):
-        super().__init__(analysis, "My very first rule.")
+        super().__init__(analysis, "Check the moving intervals between the cp/cf \
+            for compliance with father Laitz's unbreakable and \
+                indisputable laws of the construction of objectively \
+                    perfect music")
         self.intervals = []
         self.indices = [i.index for i in self.analysis.tps]
         for t in self.analysis.trns:
@@ -394,16 +425,18 @@ class HarmonicMovingIntChecks(Rule):
 
     def apply(self):
         tests = {
-            'check_consec_uni': self.check_consec_ints('is_unison'),
-            'check_consec_5th': self.check_consec_ints('is_fifth'),
-            'check_consec_8va': self.check_consec_ints('is_octave'),
-            'check_consec_parallel': self.check_consec_parallel(s1_settings['MAX_PARALLEL'])
+            0: self.check_consec_ints('is_unison'),
+            1: self.check_consec_ints('is_fifth'),
+            2: self.check_consec_ints('is_octave'),
+            3: self.check_direct_ints('is_unison'),
+            4: self.check_direct_ints('is_fifth'),
+            5: self.check_direct_ints('is_octave'),
+            13: self.check_consec_parallel(s1_settings['MAX_PARALLEL'])
         }
-        # TODO - finish apply
-        # for index, key in enumerate(tests.keys()):
-        #     if tests[key] != []:
-        #         for note in tests[key]:
-        #             self.analysis.results.append(result_strings[index + 9].format(note))
+        for key in tests:
+            if tests[key] != []:
+                for note in tests[key]:
+                    self.analysis.results.append(result_strings[key].format(note))
 
     def check_consec_ints(self, attr):
         out = []
@@ -416,26 +449,65 @@ class HarmonicMovingIntChecks(Rule):
             last = inter
         return out
 
-    # TODO
-    # if the upper voice leaps and the harmony goes to a perfect interval
-    # and the last interval is not the same as the next
-    def check_direct_ints(self):
-        pass
+    # if there is SIMILAR motion (not parallel or contrary) and
+    # the soprano moves by skip or leap all to a certain interval
+    def check_direct_ints(self, attr):
+        out = []
+        for tran in self.analysis.trns:
+            upper_from_note = tran.from_tp.nmap['P1.1'].pitch
+            upper_to_note = tran.to_tp.nmap['P1.1'].pitch
+            lower_to_note = tran.to_tp.nmap['P2.1'].pitch
+            sop_int = Interval(upper_from_note, upper_to_note)
+            to_int = Interval(lower_to_note, upper_to_note)
+            check = getattr(to_int, attr)
+            if (HarmonicMovingIntChecks.check_motion_type(tran) == 'SIM'
+                    and sop_int.lines_and_spaces() > 3
+                    and check()):
+                out.append(tran.from_tp.index)
+        return out
 
     def check_consec_parallel(self, num):
         out = []
         count = 0
-        last = self.intervals[0]
-        for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
-            if ((last.lines_and_spaces() == inter.lines_and_spaces() == 3) 
-                    or (last.lines_and_spaces() == inter.lines_and_spaces() == 6)):
+        for tran in self.analysis.trns:
+            # print(HarmonicMovingIntChecks.check_motion_type(tran))
+            if HarmonicMovingIntChecks.check_motion_type(tran) == 'PAR':
                 count += 1
             else:
                 count = 0
             if count >= num:
-                out.append(trans.from_tp.index + 1)
-            last = inter
+                out.append(tran.from_tp.index + 1)
         return out
+
+    @staticmethod
+    def check_motion_type(trans):
+        """a helper function to check the motion type of two voices
+        from the given transition object"""
+        # 1. contrary (CON)
+            # different directions
+        # 2. parallel (PAR)
+            # same direction same intervals
+        # 3. similar (SIM)
+            # same direction different intervals
+        # 4. oblique (OBL)
+            # one voice stationary, other moves
+        upper_left = trans.from_tp.nmap['P1.1']
+        upper_right = trans.to_tp.nmap['P1.1']
+        upper_int = Interval(upper_left.pitch, upper_right.pitch)
+        lower_left = trans.from_tp.nmap['P2.1']
+        lower_right = trans.to_tp.nmap['P2.1']
+        lower_int = Interval(lower_left.pitch, lower_right.pitch)
+        # print(trans.from_tp.index, " :UPPER_INT: ", upper_int)
+        # print(trans.from_tp.index, " :LOWER_INT: ", lower_int)
+        if ((lower_left.pitch == lower_right.pitch)
+                ^ (upper_left.pitch == upper_right.pitch)):
+            return 'OBL'
+        if ((upper_int.is_ascending() and lower_int.is_ascending())
+                ^ (upper_int.is_descending() and lower_int.is_descending())):
+            if upper_int != lower_int:
+                return 'SIM'
+            return 'PAR'
+        return 'CON'
 
 
 # A class that implements a species counterpoint analysis of a given score.
@@ -509,11 +581,49 @@ class SpeciesAnalysis(Analysis):
 ###############################################################################
 
 
-samples1 = ['1-018-C_ajyanez2.musicxml', '1-019-A_ajyanez2.musicxml',
-            '1-005-A_hanzhiy2.musicxml', '1-008-C_davidx2.musicxml',
-            '1-030_C_chchang6.musicxml', '1-011-B_weikeng2.musicxml',
-            '1-037-A_sz18.musicxml', '1-012-B_erf3.musicxml',
-            '1-030-C_cjrosas2.musicxml']
+samples1 = [
+    '1-001-B_zawang2.musicxml',
+    '1-001-C_zawang2.musicxml',
+    '1-005-A_hanzhiy2.musicxml',
+    '1-005-D_hanzhiy2.musicxml',
+    '1-006-B_hanzhiy2.musicxml',
+    '1-006-C_hanzhiy2.musicxml',
+    '1-007-B_davidx2.musicxml',
+    '1-007-C_davidx2.musicxml',
+    '1-008-B_davidx2.musicxml',
+    '1-008-C_davidx2.musicxml',
+    '1-010-B_weikeng2.musicxml',
+    '1-010-C_weikeng2.musicxml',
+    '1-011-B_weikeng2.musicxml',
+    '1-011-C_weikeng2.musicxml',
+    '1-012-B_erf3.musicxml',
+    '1-012-C_erf3.musicxml',
+    '1-013-B_erf3.musicxml',
+    '1-013-C_erf3.musicxml',
+    '1-018-B_ajyanez2.musicxml',
+    '1-018-C_ajyanez2.musicxml',
+    '1-019-A_ajyanez2.musicxml',
+    '1-019-D_ajyanez2.musicxml',
+    '1-022-B_mamn2.musicxml',
+    '1-022-C_mamn2.musicxml',
+    '1-030_B_chchang6.musicxml',
+    '1-030_C_chchang6.musicxml',
+    '1-030-B_cjrosas2.musicxml',
+    '1-030-C_cjrosas2.musicxml',
+    '1-031_B_chchang6.musicxml',
+    '1-031_C_chchang6.musicxml',
+    '1-031-B_cjrosas2.musicxml',
+    '1-031-C_cjrosas2.musicxml',
+    '1-034-A_caleqw2.musicxml',
+    '1-034-B_caleqw2.musicxml',
+    '1-034-C_caleqw2.musicxml',
+    '1-035-B_caleqw2.musicxml',
+    '1-035-C_caleqw2.musicxml',
+    '1-036-B_sz18.musicxml',
+    '1-036-C_sz18.musicxml',
+    '1-037-A_sz18.musicxml',
+    '1-037-D_sz18.musicxml'
+]
 
 samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
             '2-000-B_sz18.musicxml', '2-003-A_cjrosas2.musicxml',
@@ -525,7 +635,7 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
 if __name__ == '__main__':
     import os
     DIREC = os.path.dirname(__file__)
-    for name in samples1:
+    for name in samples1[0:1]:
         f_name = f'{DIREC}/Species/{name}'
         # os.system('open "' + f_name + '"')
         s = import_score(f_name)
