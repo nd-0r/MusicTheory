@@ -205,7 +205,6 @@ class MelodicNoteChecks(Rule):
                 out.append(self.indices[-2] + 1)
         return out
 
-    # TODO - only check penultimate and final measures
     def check_diatonic(self):
         out = []
         if self.analysis.key.mode == Mode.MINOR:
@@ -216,23 +215,29 @@ class MelodicNoteChecks(Rule):
                 acc = p.value - (let << 4)
                 to_append = Pitch([let, acc + 1, 4])
                 mel_minor.append(to_append.pnum())
-            for tran in self.analysis.trns:
-                from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
-                to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
-                # print(from_note.pnum(), ' ', from_note.pnum() in nat_minor, ' ', from_note.pnum() in mel_minor)
-                if ((Interval(from_note, to_note).is_ascending()
-                     and (from_note.pnum() not in mel_minor)
-                     and (not Interval(from_note, to_note).is_unison()))
-                        or (Interval(from_note, to_note).is_descending()
-                            and (from_note.pnum() not in nat_minor))):
-                    out.append(tran.from_tp.index + 1)
-            # handle the last note
-            tran = self.analysis.trns[-1]
-            to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
-            if to_note.pnum() not in mel_minor:
-                out.append(tran.to_tp.index + 1)
+            for i, p in enumerate(self.pitches[:-2]):
+                if (p.pnum() not in nat_minor):
+                    out.append(self.indices[i] + 1)
+            for i, p in enumerate(self.pitches[-2:]):
+                if (p.pnum() not in mel_minor):
+                    out.append(self.indices[i] + 1)
+            # for num, tran in enumerate(self.analysis.trns):
+            #     from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
+            #     to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
+            #     # print(from_note.pnum(), ' ', from_note.pnum() in nat_minor, ' ', from_note.pnum() in mel_minor)
+            #     if ((Interval(from_note, to_note).is_ascending()
+            #          and (from_note.pnum() not in mel_minor)
+            #          and (not Interval(from_note, to_note).is_unison()))
+            #             or (Interval(from_note, to_note).is_descending()
+            #                 and (from_note.pnum() not in nat_minor))):
+            #         out.append(tran.from_tp.index + 1)
+            # # handle the last note
+            # tran = self.analysis.trns[-1]
+            # to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
+            # if to_note.pnum() not in mel_minor:
+            #     out.append(tran.to_tp.index + 1)
         else:
-            for i,p in enumerate(self.pitches):
+            for i, p in enumerate(self.pitches):
                 if (p.pnum() not in self.analysis.key.scale()):
                     out.append(self.indices[i] + 1)
         return out
@@ -391,13 +396,13 @@ class HarmonicStaticIntChecks(Rule):
             Interval('m3'),
             Interval('P1')
         ]
+        out = []
         for timepoint in self.analysis.tps:
-            out = []
             upper_note = timepoint.nmap['P1.1'].pitch
             lower_note = timepoint.nmap['P2.1'].pitch
             current_inter = Interval(lower_note, upper_note)
             current_inter.sign = abs(current_inter.sign)
-            # print(timepoint.index, " :vertical interval: ", current_inter)
+            # print(timepoint.index, " :vertical interval: ", current_inter.string(), " ", lower_note, " ", upper_note)
             if (((timepoint.beat != Ratio(0)) ^ strong)
                     and all(not current_inter.matches(i) for i in consonant_ints)):
                 out.append(timepoint.index + 1)
@@ -429,7 +434,7 @@ class HarmonicMovingIntChecks(Rule):
             0: self.check_consec_ints('is_unison'),
             1: self.check_consec_ints('is_fifth'),
             2: self.check_consec_ints('is_octave'),
-            3: self.check_direct_ints('is_unison'),
+            # 3: self.check_direct_ints('is_unison'),
             4: self.check_direct_ints('is_fifth'),
             5: self.check_direct_ints('is_octave'),
             13: self.check_consec_parallel(s1_settings['MAX_PARALLEL'])
@@ -461,6 +466,9 @@ class HarmonicMovingIntChecks(Rule):
             sop_int = Interval(upper_from_note, upper_to_note)
             to_int = Interval(lower_to_note, upper_to_note)
             check = getattr(to_int, attr)
+            # print(upper_to_note)
+            # print(lower_to_note)
+            # print(tran.from_tp.index, " ", to_int.string())
             if (HarmonicMovingIntChecks.check_motion_type(tran) == 'SIM'
                     and sop_int.lines_and_spaces() > 3
                     and check()):
@@ -638,7 +646,7 @@ if __name__ == '__main__':
     DIREC = os.path.dirname(__file__)
     for name in samples1[2:3]:
         f_name = f'{DIREC}/Species/{name}'
-        os.system('open "' + f_name + '"')
+        # os.system('open "' + f_name + '"')
         s = import_score(f_name)
         print(name)
         a = SpeciesAnalysis(s, 1)
