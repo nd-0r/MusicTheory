@@ -133,7 +133,7 @@ class MelodicNoteChecks(Rule):
         for tp in self.analysis.tps:
             current_tp = tp.nmap[self.analysis.cp_voice]
             self.pitches.append(current_tp.pitch)
-            self.indices.append(tp.index)
+            self.indices.append(tp.index + 1)
 
     def apply(self):
         tests = {
@@ -253,7 +253,7 @@ class MelodicIntChecks(Rule):
             assert (type(from_note) == type(to_note) == Note), MELODY_ERROR
             self.intervals.append(Interval(from_note.pitch, to_note.pitch))
             # the indices of the first note in each interval
-            self.indices.append(t.from_tp.index)
+            self.indices.append(t.from_tp.index + 1)
 
     def apply(self):
         tests = {
@@ -378,7 +378,7 @@ class HarmonicStaticIntChecks(Rule):
             else:
                 check = getattr(lower_note, '__gt__')
             if check(upper_note):
-                out.append(timepoint.index)
+                out.append(timepoint.index + 1)
         return out
 
     def check_dis_int(self, strong=True):
@@ -399,7 +399,7 @@ class HarmonicStaticIntChecks(Rule):
             current_inter.sign = abs(current_inter.sign)
             if (((timepoint.beat != Ratio(0)) ^ strong)
                     and (current_inter not in consonant_ints)):
-                out.append(timepoint.index)
+                out.append(timepoint.index + 1)
         return out
 
 
@@ -421,7 +421,7 @@ class HarmonicMovingIntChecks(Rule):
             else:
                 self.intervals.append(Interval(cp_note.pitch, cf_note.pitch))
             # the indices of the first note in each interval
-            self.indices.append(t.from_tp.index)
+            self.indices.append(t.from_tp.index + 1)
 
     def apply(self):
         tests = {
@@ -463,7 +463,7 @@ class HarmonicMovingIntChecks(Rule):
             if (HarmonicMovingIntChecks.check_motion_type(tran) == 'SIM'
                     and sop_int.lines_and_spaces() > 3
                     and check()):
-                out.append(tran.from_tp.index)
+                out.append(tran.from_tp.index + 1)
         return out
 
     def check_consec_parallel(self, num):
