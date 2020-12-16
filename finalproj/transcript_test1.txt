@@ -1,17 +1,15 @@
-============= aorals2.finalproj transcript [test1] (2020-12-16 13:10:30.063283) =============
+============= aorals2.finalproj transcript [test1] (2020-12-16 14:11:00.890504) =============
   module: species
     [import]: success  (1/1)
       [  input = SpeciesAnalysis(import_score('Species/1-001-B_zawang2.musicxml'), 1).submit_to_grading()  ]  your_output = set()  desired_output = set()  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-001-C_zawang2.musicxml'), 1).submit_to_grading()  ]  your_output = set()  desired_output = set()  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-005-A_hanzhiy2.musicxml'), 1).submit_to_grading()  ]  your_output = {
-'At #10: voice overlap',
 'At #8: forbidden strong beat dissonance',
 'At #8: too many large leaps',
 'At #8: too many leaps of a fourth',
 'At #9: consecutive unisons',
 'At #9: missing melodic cadence',
-'At #9: too many consecutive intervals in same direction',
-'At #9: voice overlap'
+'At #9: too many consecutive intervals in same direction'
 }  desired_output = {
 'At #10: voice overlap',
 'At #8: forbidden strong beat dissonance',
@@ -145,13 +143,12 @@
 'At #7: too many leaps of a sixth'
 }  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-013-B_erf3.musicxml'), 1).submit_to_grading()  ]  your_output = {
-'At #1: voice overlap',
 'At #6: too many consecutive intervals in same direction',
 'At #7: too many consecutive intervals in same direction'
 }  desired_output = {
 'At #6: too many consecutive intervals in same direction',
 'At #7: too many consecutive intervals in same direction'
-}  (0/2)
+}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-013-C_erf3.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #5: too many consecutive intervals in same direction'}  desired_output = {'At #5: too many consecutive intervals in same direction'}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-018-B_ajyanez2.musicxml'), 1).submit_to_grading()  ]  your_output = {
 'At #2: consecutive fifths',
@@ -170,12 +167,12 @@
 'At #2: missing reverse by step recovery',
 'At #3: forbidden strong beat dissonance',
 'At #4: dissonant melodic interval',
+'At #4: forbidden non-diatonic pitch',
 'At #4: forbidden strong beat dissonance',
 'At #4: too many leaps of a fifth',
-'At #5: forbidden non-diatonic pitch',
 'At #5: forbidden strong beat dissonance',
-'At #7: forbidden non-diatonic pitch',
-'At #9: forbidden non-diatonic pitch',
+'At #6: forbidden non-diatonic pitch',
+'At #8: forbidden non-diatonic pitch',
 'At #9: missing melodic cadence'
 }  desired_output = {
 'At #2: missing reverse by step recovery',
@@ -188,13 +185,16 @@
 'At #6: forbidden non-diatonic pitch',
 'At #8: forbidden non-diatonic pitch',
 'At #9: missing melodic cadence'
-}  (0/2)
+}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-019-A_ajyanez2.musicxml'), 1).submit_to_grading()  ]  your_output = {
 'At #4: too many consecutive intervals in same direction',
 'At #4: voice crossing',
+'At #4: voice overlap',
 'At #5: voice crossing',
+'At #5: voice overlap',
 'At #6: too many consecutive leaps',
 'At #6: voice crossing',
+'At #6: voice overlap',
 'At #8: too many consecutive intervals in same direction',
 'At #9: too many consecutive intervals in same direction'
 }  desired_output = {
@@ -208,7 +208,7 @@
 'At #6: voice overlap',
 'At #8: too many consecutive intervals in same direction',
 'At #9: too many consecutive intervals in same direction'
-}  (0/2)
+}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-019-D_ajyanez2.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #5: too many consecutive intervals in same direction'}  desired_output = {'At #5: too many consecutive intervals in same direction'}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-022-B_mamn2.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #6: too many melodic unisons'}  desired_output = {'At #6: too many melodic unisons'}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-022-C_mamn2.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #6: too many consecutive intervals in same direction'}  desired_output = {'At #6: too many consecutive intervals in same direction'}  (2/2)
@@ -244,10 +244,7 @@
 'At #9: too many consecutive intervals in same direction'
 }  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-031_C_chchang6.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #6: too many consecutive intervals in same direction'}  desired_output = {'At #6: too many consecutive intervals in same direction'}  (2/2)
-      [  input = SpeciesAnalysis(import_score('Species/1-034-A_caleqw2.musicxml'), 1).submit_to_grading()  ]  your_output = {
-'At #5: voice overlap',
-'At #6: too many melodic unisons'
-}  desired_output = {'At #6: too many melodic unisons'}  (0/2)
+      [  input = SpeciesAnalysis(import_score('Species/1-034-A_caleqw2.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #6: too many melodic unisons'}  desired_output = {'At #6: too many melodic unisons'}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-034-B_caleqw2.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #3: direct fifths'}  desired_output = {'At #3: direct fifths'}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-034-C_caleqw2.musicxml'), 1).submit_to_grading()  ]  your_output = {'At #5: too many consecutive intervals in same direction'}  desired_output = {'At #5: too many consecutive intervals in same direction'}  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-035-B_caleqw2.musicxml'), 1).submit_to_grading()  ]  your_output = {
@@ -270,10 +267,7 @@
 'At #7: too many consecutive leaps',
 'At #8: too many consecutive intervals in same direction'
 }  (2/2)
-      [  input = SpeciesAnalysis(import_score('Species/1-036-B_sz18.musicxml'), 1).submit_to_grading()  ]  your_output = {
-'At #10: voice overlap',
-'At #1: voice overlap'
-}  desired_output = set()  (0/2)
+      [  input = SpeciesAnalysis(import_score('Species/1-036-B_sz18.musicxml'), 1).submit_to_grading()  ]  your_output = set()  desired_output = set()  (2/2)
       [  input = SpeciesAnalysis(import_score('Species/1-036-C_sz18.musicxml'), 1).submit_to_grading()  ]  your_output = {
 'At #6: dissonant melodic interval',
 'At #8: dissonant melodic interval'
@@ -295,10 +289,10 @@
 'At #5: consecutive fifths'
 }  (0/2)
       [  input = SpeciesAnalysis(import_score('Species/1-037-D_sz18.musicxml'), 1).submit_to_grading()  ]  your_output = set()  desired_output = set()  (2/2)
-Total raw score: (65/83)
+Total raw score: (75/83)
 
 ----------------------
 Base score (if you do nothing but just turn in the starter code): 11
 Extra credit (if applicable): 0
-Adjusted score (Final): 54/72
+Adjusted score (Final): 64/72
 
