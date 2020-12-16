@@ -105,7 +105,7 @@ result_strings = [
     'At #{0}: too many consecutive leaps',        # DONE 'MAX_CONSEC_LEAP' setting
     'At #{0}: too many consecutive intervals in same direction', # DONE
     'At #{0}: missing reverse by step recovery',  # DONE 'STEP_THRESHOLD' setting
-    'At #{0}: forbidden compound melodic interval', # TODO
+    'At #{0}: forbidden compound melodic interval', # not done but who cares
     ]
 
 
@@ -203,12 +203,6 @@ class MelodicNoteChecks(Rule):
             except ValueError:
                 out.append(self.indices[-2])
                 return out
-        # print('CF Cadence: ', cf_cadence)
-        # print('CP Cadence: ', cp_cadence)
-        # print(sets['CADENCE_PATTERNS'][0])
-        # print(sets['CADENCE_PATTERNS'][1])
-        # print(cp_cadence == sets['CADENCE_PATTERNS'][0])
-        # print(cp_cadence == sets['CADENCE_PATTERNS'][1])
         check_1 = (cp_cadence == sets['CADENCE_PATTERNS'][0]
                    and cf_cadence == sets['CADENCE_PATTERNS'][1])
         check_2 = (cp_cadence == sets['CADENCE_PATTERNS'][1]
@@ -231,12 +225,12 @@ class MelodicNoteChecks(Rule):
             for i, p in enumerate(self.pitches[:-2]):
                 if (p.pnum() not in nat_minor and p.pnum() not in mel_minor):
                     print("Bad minor pitch: ", p.pnum())
-                    out.append(self.indices[i] + 1)
+                    out.append(self.indices[i])
                 current_i = i
             for p in self.pitches[-2:]:
                 if (p.pnum() not in mel_minor and p.pnum() not in nat_minor):
                     print("Bad last measure pitch: ", p.pnum())
-                    out.append(self.indices[current_i] + 1)
+                    out.append(self.indices[current_i])
                 current_i += 1
             # for num, tran in enumerate(self.analysis.trns):
             #     from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
@@ -256,7 +250,7 @@ class MelodicNoteChecks(Rule):
             for i, p in enumerate(self.pitches):
                 if (p.pnum() not in self.analysis.key.scale()):
                     print("Bad major pitch: ", p.pnum())
-                    out.append(self.indices[i] + 1)
+                    out.append(self.indices[i])
         return out
 
 
@@ -282,7 +276,7 @@ class MelodicIntChecks(Rule):
             19: self.check_mel_consonant(0),
             20: self.check_num_int('is_unison', s1_settings['MAX_UNI']),
             21: self.check_num_int('is_fourth', s1_settings['MAX_4TH']),
-            22: self.check_num_int('is_fifth', s1_settings['MAX_5TH']),
+            22: self.check_num_int('is_fifth', s1_settings['MAX_5TH']), # TODO 1-008-C_davidx2.musicxml
             23: self.check_num_int('is_sixth', s1_settings['MAX_6TH']),
             24: self.check_num_int('is_seventh', s1_settings['MAX_7TH']),
             25: self.check_num_int('is_octave', s1_settings['MAX_8VA']),
@@ -371,9 +365,6 @@ class MelodicIntChecks(Rule):
                       and inter.lines_and_spaces() == 2 and inter.is_ascending())
             if not (last.lines_and_spaces() < threshold or (check1 or check2)):
                 out.append(trans.from_tp.index)
-            # if ((last.lines_and_spaces() >= threshold and last.is_ascending())
-            #         and not (inter.lines_and_spaces() == 2 and inter.is_descending())):
-            #     out.append(trans.from_tp.index + 1)
             last = inter
         return out
 
@@ -388,8 +379,8 @@ class HarmonicStaticIntChecks(Rule):
 
     def apply(self):
         tests = {
-            9: self.check_voice_cross(),
-            10: self.check_voice_cross(overlap=False),
+            9: self.check_voice_cross(), # TODO 1-013-B_erf3.musicxml, 1-019-A_ajyanez2.musicxml, 1-034-A_caleqw2.musicxml, 1-036-B_sz18.musicxml
+            10: self.check_voice_cross(overlap=False), # TODO 1-019-A_ajyanez2.musicxml
             12: self.check_dis_int()
         }
         for key in tests:
@@ -426,7 +417,6 @@ class HarmonicStaticIntChecks(Rule):
             lower_note = timepoint.nmap['P2.1'].pitch
             current_inter = Interval(lower_note, upper_note)
             current_inter.sign = abs(current_inter.sign)
-            # print(timepoint.index, " :vertical interval: ", current_inter.string(), " ", lower_note, " ", upper_note)
             if (((timepoint.beat != Ratio(0)) ^ strong)
                     and all(not current_inter.matches(i) for i in consonant_ints)):
                 out.append(timepoint.index + 1)
@@ -448,9 +438,9 @@ class HarmonicMovingIntChecks(Rule):
             1: self.check_consec_ints('is_fifth'),
             2: self.check_consec_ints('is_octave'),
             # 3: self.check_direct_ints('is_unison'),
-            4: self.check_direct_ints('is_fifth'),
+            4: self.check_direct_ints('is_fifth'), # TODO 1-011-C_weikeng2.musicxml
             5: self.check_direct_ints('is_octave'),
-            13: self.check_consec_parallel(s1_settings['MAX_PARALLEL'])
+            13: self.check_consec_parallel(s1_settings['MAX_PARALLEL']) # TODO 1-037-A_sz18.musicxml
         }
         for key in tests:
             if tests[key] != []:
@@ -609,47 +599,47 @@ class SpeciesAnalysis(Analysis):
 
 
 samples1 = [
-    '1-001-B_zawang2.musicxml',
-    '1-001-C_zawang2.musicxml',
-    '1-005-A_hanzhiy2.musicxml',
-    '1-005-D_hanzhiy2.musicxml',
-    '1-006-B_hanzhiy2.musicxml',
-    '1-006-C_hanzhiy2.musicxml',
-    '1-007-B_davidx2.musicxml',
-    '1-007-C_davidx2.musicxml',
-    '1-008-B_davidx2.musicxml',
-    '1-008-C_davidx2.musicxml',
-    '1-010-B_weikeng2.musicxml',
-    '1-010-C_weikeng2.musicxml',
-    '1-011-B_weikeng2.musicxml',
-    '1-011-C_weikeng2.musicxml',
-    '1-012-B_erf3.musicxml',
-    '1-012-C_erf3.musicxml',
-    '1-013-B_erf3.musicxml',
-    '1-013-C_erf3.musicxml',
-    '1-018-B_ajyanez2.musicxml',
-    '1-018-C_ajyanez2.musicxml',
-    '1-019-A_ajyanez2.musicxml',
-    '1-019-D_ajyanez2.musicxml',
-    '1-022-B_mamn2.musicxml',
-    '1-022-C_mamn2.musicxml',
-    '1-030_B_chchang6.musicxml',
-    '1-030_C_chchang6.musicxml',
-    '1-030-B_cjrosas2.musicxml',
-    '1-030-C_cjrosas2.musicxml',
-    '1-031_B_chchang6.musicxml',
-    '1-031_C_chchang6.musicxml',
-    '1-031-B_cjrosas2.musicxml',
-    '1-031-C_cjrosas2.musicxml',
-    '1-034-A_caleqw2.musicxml',
-    '1-034-B_caleqw2.musicxml',
-    '1-034-C_caleqw2.musicxml',
-    '1-035-B_caleqw2.musicxml',
-    '1-035-C_caleqw2.musicxml',
-    '1-036-B_sz18.musicxml',
-    '1-036-C_sz18.musicxml',
-    '1-037-A_sz18.musicxml',
-    '1-037-D_sz18.musicxml'
+    '1-001-B_zawang2.musicxml', # 0
+    '1-001-C_zawang2.musicxml', # 1
+    '1-005-A_hanzhiy2.musicxml', # 2
+    '1-005-D_hanzhiy2.musicxml', # 3
+    '1-006-B_hanzhiy2.musicxml', # 4
+    '1-006-C_hanzhiy2.musicxml', # 5
+    '1-007-B_davidx2.musicxml', # 6
+    '1-007-C_davidx2.musicxml', # 7
+    '1-008-B_davidx2.musicxml', # 8
+    '1-008-C_davidx2.musicxml', # 9
+    '1-010-B_weikeng2.musicxml', # 10
+    '1-010-C_weikeng2.musicxml', # 11
+    '1-011-B_weikeng2.musicxml', # 12
+    '1-011-C_weikeng2.musicxml', # 13
+    '1-012-B_erf3.musicxml', # 14
+    '1-012-C_erf3.musicxml', # 15
+    '1-013-B_erf3.musicxml', # 16
+    '1-013-C_erf3.musicxml', # 17
+    '1-018-B_ajyanez2.musicxml', # 18
+    '1-018-C_ajyanez2.musicxml', # 19
+    '1-019-A_ajyanez2.musicxml', # 20
+    '1-019-D_ajyanez2.musicxml', # 21
+    '1-022-B_mamn2.musicxml', # 22
+    '1-022-C_mamn2.musicxml', # 23
+    '1-030_B_chchang6.musicxml', # 24 
+    '1-030_C_chchang6.musicxml', # 25
+    '1-030-B_cjrosas2.musicxml', # 26
+    '1-030-C_cjrosas2.musicxml', # 27
+    '1-031_B_chchang6.musicxml', # 28
+    '1-031_C_chchang6.musicxml', # 29
+    '1-031-B_cjrosas2.musicxml', # 30
+    '1-031-C_cjrosas2.musicxml', # 31
+    '1-034-A_caleqw2.musicxml', # 32
+    '1-034-B_caleqw2.musicxml', # 33
+    '1-034-C_caleqw2.musicxml', # 34
+    '1-035-B_caleqw2.musicxml', # 35
+    '1-035-C_caleqw2.musicxml', # 36
+    '1-036-B_sz18.musicxml', # 37
+    '1-036-C_sz18.musicxml', # 38
+    '1-037-A_sz18.musicxml', # 39
+    '1-037-D_sz18.musicxml' # 40
 ]
 
 samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
@@ -662,9 +652,9 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
 if __name__ == '__main__':
     import os
     DIREC = os.path.dirname(__file__)
-    for name in samples1[10:11]:
+    for name in samples1[19:20]:
         f_name = f'{DIREC}/Species/{name}'
-        # os.system('open "' + f_name + '"')
+        os.system('open "' + f_name + '"')
         s = import_score(f_name)
         print(name)
         a = SpeciesAnalysis(s, 1)
