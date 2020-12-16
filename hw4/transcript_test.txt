@@ -1,4 +1,4 @@
-============= aorals2.hw4 transcript [test] =============
+============= aorals2.hw4 transcript [test] (2020-12-16 09:02:57.621570) =============
   module: ratio
     [import]: success  (1/1)
       [  input = Ratio('2/10')  ]  your_output = <Ratio: 1/5>  desired_output = <Ratio: 1/5>  (2/2)
