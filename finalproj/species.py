@@ -232,20 +232,6 @@ class MelodicNoteChecks(Rule):
                     print("Bad last measure pitch: ", p.pnum())
                     out.append(self.indices[current_i])
                 current_i += 1
-            # for num, tran in enumerate(self.analysis.trns):
-            #     from_note = tran.from_tp.nmap[self.analysis.cp_voice].pitch
-            #     to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
-            #     if ((Interval(from_note, to_note).is_ascending()
-            #          and (from_note.pnum() not in mel_minor)
-            #          and (not Interval(from_note, to_note).is_unison()))
-            #             or (Interval(from_note, to_note).is_descending()
-            #                 and (from_note.pnum() not in nat_minor))):
-            #         out.append(tran.from_tp.index + 1)
-            # # handle the last note
-            # tran = self.analysis.trns[-1]
-            # to_note = tran.to_tp.nmap[self.analysis.cp_voice].pitch
-            # if to_note.pnum() not in mel_minor:
-            #     out.append(tran.to_tp.index + 1)
         else:
             for i, p in enumerate(self.pitches):
                 if (p.pnum() not in self.analysis.key.scale()):
