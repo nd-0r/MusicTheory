@@ -1,4 +1,4 @@
-============= aorals2.finalproj transcript [test2] (2020-12-16 13:11:55.672312) =============
+============= aorals2.finalproj transcript [test2] (2020-12-16 14:12:31.423237) =============
   module: species
     [import]: success  (1/1)
       [  input = SpeciesAnalysis(import_score('Species/2-000-A_sz18.musicxml'), 2).submit_to_grading()  ]  your_output = $exception$  desired_output = {
