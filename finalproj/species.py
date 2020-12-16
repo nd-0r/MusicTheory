@@ -290,10 +290,10 @@ class MelodicIntChecks(Rule):
     def check_num_int(self, attr, num):
         out = []
         count = 0
-        print(attr)
+        # print(attr)
         for i, inter in enumerate(self.intervals):
             fct = getattr(inter, str(attr))
-            print(i + 1, " ", inter, " ", fct())
+            # print(i + 1, " ", inter, " ", fct())
             if fct():
                 count += 1
                 if count > num:
@@ -316,7 +316,7 @@ class MelodicIntChecks(Rule):
         last = self.intervals[0]
         for trans, inter in zip(self.analysis.trns[1:], self.intervals[1:]):
             if last.lines_and_spaces() >= size and inter.lines_and_spaces() >= size:
-                print(trans.from_tp.index + 1, " ", inter.lines_and_spaces())
+                # print(trans.from_tp.index + 1, " ", inter.lines_and_spaces())
                 count += 1
             else:
                 count = 0
@@ -365,8 +365,8 @@ class HarmonicStaticIntChecks(Rule):
 
     def apply(self):
         tests = {
-            9: self.check_voice_cross(), # TODO 1-013-B_erf3.musicxml, 1-019-A_ajyanez2.musicxml, 1-034-A_caleqw2.musicxml, 1-036-B_sz18.musicxml
-            10: self.check_voice_cross(overlap=False), # TODO 1-019-A_ajyanez2.musicxml
+            10: self.check_voice_cross(),
+            9: self.check_voice_overlap(), # TODO 1-019-A_ajyanez2.musicxml
             12: self.check_dis_int()
         }
         for key in tests:
@@ -374,16 +374,25 @@ class HarmonicStaticIntChecks(Rule):
                 for note in tests[key]:
                     self.analysis.results.append(result_strings[key].format(note))
 
-    def check_voice_cross(self, overlap=True):
+    def check_voice_cross(self):
+        out = []
+        for tran in self.analysis.trns:
+            upper_left = tran.from_tp.nmap['P1.1'].pitch.keynum()
+            upper_right = tran.to_tp.nmap['P1.1'].pitch.keynum()
+            lower_left = tran.from_tp.nmap['P2.1'].pitch.keynum()
+            lower_right = tran.to_tp.nmap['P2.1'].pitch.keynum()
+            if (((lower_left < upper_left) and (lower_right > upper_right))
+                    or ((lower_left > upper_left) and (lower_right > upper_right))):
+                print("HERE: ", tran.from_tp.index + 1, " ", tran.from_tp.nmap['P2.1'].pitch.string())
+                out.append(tran.to_tp.index + 1)
+        return out
+
+    def check_voice_overlap(self, overlap=True):
         out = []
         for timepoint in self.analysis.tps:
             upper_note = timepoint.nmap['P1.1'].pitch.keynum()
             lower_note = timepoint.nmap['P2.1'].pitch.keynum()
-            if overlap:
-                check = getattr(lower_note, '__eq__')
-            else:
-                check = getattr(lower_note, '__gt__')
-            if check(upper_note):
+            if lower_note > upper_note:
                 out.append(timepoint.index + 1)
         return out
 
@@ -638,10 +647,13 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
 if __name__ == '__main__':
     import os
     DIREC = os.path.dirname(__file__)
-    for name in samples1[19:20]:
+    for name in samples1[20:21]:
         f_name = f'{DIREC}/Species/{name}'
-        os.system('open "' + f_name + '"')
+        # os.system('open "' + f_name + '"')
         s = import_score(f_name)
         print(name)
         a = SpeciesAnalysis(s, 1)
-        print(a.submit_to_grading())
+        output = a.submit_to_grading()
+        for line in output:
+            print(line, end='\n')
+        print(len(output))
