@@ -366,7 +366,7 @@ class HarmonicStaticIntChecks(Rule):
     def apply(self):
         tests = {
             10: self.check_voice_cross(),
-            9: self.check_voice_overlap(), # TODO 1-019-A_ajyanez2.musicxml
+            9: self.check_voice_overlap(),
             12: self.check_dis_int()
         }
         for key in tests:
