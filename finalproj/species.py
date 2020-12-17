@@ -647,9 +647,9 @@ samples2 = ['2-034-A_zawang2.musicxml', '2-028-C_hanzhiy2.musicxml',
 if __name__ == '__main__':
     import os
     DIREC = os.path.dirname(__file__)
-    for name in samples1[20:21]:
+    for name in samples1[39:40]:
         f_name = f'{DIREC}/Species/{name}'
-        # os.system('open "' + f_name + '"')
+        os.system('open "' + f_name + '"')
         s = import_score(f_name)
         print(name)
         a = SpeciesAnalysis(s, 1)
