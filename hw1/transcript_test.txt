@@ -1,4 +1,4 @@
-============= aorals2.hw1 transcript [test] (2020-12-17 13:00:23.459182) =============
+============= aorals2.hw1 transcript [test] (2020-12-17 14:00:23.164386) =============
   module: pyintro
     [import]: success  (1/1)
     function: power
