@@ -1,4 +1,4 @@
-============= aorals2.hw5 transcript [test] (2020-12-16 21:04:25.746962) =============
+============= aorals2.hw5 transcript [test] (2020-12-16 22:04:21.159968) =============
   module: pitch
     [import]: success  (1/1)
       [  input = Pitch()  ]  your_output = <Pitch: empty>  desired_output = <Pitch: empty>  (2/2)
