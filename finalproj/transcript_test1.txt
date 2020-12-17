@@ -1,4 +1,4 @@
-============= aorals2.finalproj transcript [test1] (2020-12-17 02:10:13.850615) =============
+============= aorals2.finalproj transcript [test1] (2020-12-17 03:10:28.987592) =============
   module: species
     [import]: success  (1/1)
       [  input = SpeciesAnalysis(import_score('Species/1-001-B_zawang2.musicxml'), 1).submit_to_grading()  ]  your_output = set()  desired_output = set()  (2/2)
